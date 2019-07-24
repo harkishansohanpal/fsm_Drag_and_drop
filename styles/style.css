@@ -1,0 +1,68 @@
+h3 {
+  border: 2px solid gray;
+  border-radius: 5px;
+  padding: 5px;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.states {
+  background-color: #9acfea;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  height: 20%;
+  display: block;
+  text-align: center;
+  border-bottom: 2px black solid;
+}
+.state-container {
+  border: 2px solid black;
+  border-radius: 5px;
+  width: 20%;
+  margin-left: 40%;
+}
+.state-container-title {
+  text-align: center;
+  border-bottom: 1px solid black;
+}
+.state-container-body {
+  height: 50px;
+  overflow: hidden;
+}
+
+.state-container-oncanvas {
+  border: 2px solid black;
+  border-radius: 5px;
+  width: 20%;
+  margin-left: 40%;
+}
+.behaviors {
+  background-color: #9acfea;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  height: 40%;
+  display: block;
+  text-align: center;
+  border-bottom: 2px black solid;
+}
+.events {
+  background-color: #9acfea;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  height: 40%;
+  display: block;
+}
+
+.canvas {
+  background-color: beige;
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
+}
