@@ -2,45 +2,26 @@ $(init);
 function init() {
   var diagram = [];
   var canvas = $(".canvas");
-  
+  var stateCanvasBody = $(".state-container-oncanvas");
+
+
   $(".state-container").draggable({
-    helper: "clone"
+    helper: "clone",
   });
   $(".behaviour").draggable({
-    helper: "clone"
+    helper: "clone",
   });
 
-  var stateCanvasBody = $(".state-container-body-oncanvas");
-  stateCanvasBody.droppable({
-    drop: function(event, ui){
-      console.log(ui);
-      alert("diufhaiusdf");
-      // if (ui.helper.hasClass("behaviour")) {
-      //   var behaviour = {
-      //     _id: behaviourID++,
-          
-      //     position: ui.helper.position(),
-      //     type: "behaviour"
-      //   };
-      // }
-    }
-  });
-  
   var stateID = 0;
   var behaviourID = 0;
   canvas.droppable({
+    accept:".state-container",
     drop: function(event, ui) {
-      if (ui.helper.hasClass("state-container")) {
+    if (ui.helper.hasClass("state-container")) {
         var state = {
           _id: stateID++,
           position: ui.helper.position(),
           type: "state"
-        };
-      }  else if (ui.helper.hasClass("tool-3")) {
-        var event = {
-          _id: eventID++,
-          position: ui.helper.position(),
-          type: "event"
         };
       } else {
         return;
@@ -49,20 +30,23 @@ function init() {
       renderDiagram(diagram, state._id);
     }
   });
+
   function renderDiagram(diagram, _id) {
     canvas.empty();
     for (var d in diagram) {
       var state = diagram[d];
       var html = "";
-      var html2 = "";
+      var htmlBehaviour = "";
       if (state.type == "state") {
-        html = `<div class="state-container-${_id} state-container-oncanvas">
-                  <div class="state-container-title">
-                    <h6 >State ${state._id}</h6>
-                  </div>
-                  <div class="state-container-body state-container-body-oncanvas">                
-                  </div>
+        html = `<div class="state-container-oncanvas">
+                    <div class="state-container-title">
+                        <h6 >State ${state._id}</h6>
+                    </div>
+                    <div class="state-container-body state-container-body-oncanvas">                
+                    </div>
                 </div>`;
+      } else if (state.type === "behaviour") {
+        htmlBehaviour = '<h6 class="behaviour"></h6>';
       } else if (state.type === "TOOL-3") {
         html = "<h3>TOOL 3</h3>";
       }
@@ -85,16 +69,39 @@ function init() {
           },
           containment: "parent"
         })
+        .droppable({  
+            drop: function(event, ui){
+                console.log(ui);
+                if (ui.helper.hasClass("behaviour")) {
+                    var behaviour = {
+                        _id: behaviourID++,
+                        position: ui.helper.position(),
+                        type: "behaviour"
+                    };
+                }
+                diagram.push(behaviour);
+            }
+        })
         .attr("id", state._id);
-      canvas.append(dom);
+
+
+        var dom2 = $(htmlBehaviour)
+        .css({
+          position: "absolute",
+          top: state.position.top,
+          left: state.position.left
+        });
+
+
+
+        
+        canvas.append(dom);
+        stateCanvasBody.append(dom2);
+
     }
-    $(function() {
-      $(".state-container-oncanvas").resizable();
-    });
+
   }
 
-
-
-
-
+  
+  
 }

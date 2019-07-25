@@ -10,7 +10,6 @@
   border-bottom: 2px black solid;
 }
 .state-container {
-  
   border: 2px solid black;
   border-radius: 5px;
   width: 20%;
@@ -26,6 +25,10 @@
   overflow: hidden;
 }
 
+.state-container-body-oncanvas {
+  height: 200px;
+  overflow: hidden;
+}
 .state-container-oncanvas {
   background: white;
   border: 2px solid black;
@@ -33,7 +36,6 @@
   width: 20%;
   position: "absolute";
 }
-
 .behaviours {
   background-color: #9acfea;
   position: absolute;
