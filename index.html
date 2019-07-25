@@ -1,55 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css"
+    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
-    
-    <title>ROBOT FSM</title>
-    
-    <link rel="stylesheet" href="styles/style.css">
 
-</head>
-<body>
-    <div class="container-fluid"
-         style="position: absolute;bottom: 0px;top: 0px;left: 0px;right: 0px;">
-        <div class="row"
-             style="height: 100%;position: relative;">
-            <div  class="col-3">
-                <div class="row tools states"
-                style="position: relative;">
-                    <h5>States</h5>
-                    <div class="tool tool-1 state-container">
-                        <div class="state-container-title">
-                            <h6 >State</h6>
-                        </div>
-                        <div class="state-container-body">
-                                
-                        </div>
-                    </div>
-                </div>
-                <div class="row tools behaviors"
-                style="position: relative;">
-                    <h5>Behaviors</h5>
-                    <h3 class="tool tool-1">State</h3>
-                </div>
-                <div class="row tools events"
-                style="position: relative;">
-                    <h5>Events</h5>
-                    <h3 class="tool tool-1">State</h3>
-                </div>
+    <title>ROBOT FSM</title>
+
+    <link rel="stylesheet" href="styles/style.css" />
+  </head>
+  <body>
+    <div
+      class="container-fluid"
+      style="position: absolute;bottom: 0px;top: 0px;left: 0px;right: 0px;"
+    >
+      <div class="row" style="height: 100%;position: relative;">
+        <div class="col-3">
+          <div class="row states" style="position: relative;">
+            <h5>States</h5>
+            <div class="state-container">
+              <div class="state-container-title">
+                <h6>State</h6>
+              </div>
+              <div class="state-container-body"></div>
             </div>
-            <div class="col-9 canvas"
-                 style="background-color: beige;position: absolute;right: 0px;bottom: 0px;top: 0px;">
-                <h2>Canvas</h2>
-            </div>
+          </div>
+          <div class="row behaviours" style="position: relative;">
+            <h5>Behaviours</h5>
+            <h6 class="behaviour">Forward</h6>
+            <h6 class="behaviour">Backward</h6>
+            <h6 class="behaviour">Turn Right</h6>
+            <h6 class="behaviour">Turn Left</h6>
+            <h6 class="behaviour">Spin</h6>
+          </div>
+          <div class="row events" style="position: relative;">
+            <h5>Events</h5>
+            <h3 class="state tool-1">State</h3>
+          </div>
         </div>
+        <div class="col-9 canvas">
+          <h2>Canvas</h2>
+        </div>
+      </div>
     </div>
 
     <script src="javascripts/script.js"></script>
-</body>
+  </body>
 </html>
