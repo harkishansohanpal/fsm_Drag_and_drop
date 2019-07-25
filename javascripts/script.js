@@ -2,6 +2,7 @@ $(init);
 function init() {
   var diagram = [];
   var canvas = $(".canvas");
+  
   $(".state-container").draggable({
     helper: "clone"
   });
@@ -9,6 +10,22 @@ function init() {
     helper: "clone"
   });
 
+  var stateCanvasBody = $(".state-container-body-oncanvas");
+  stateCanvasBody.droppable({
+    drop: function(event, ui){
+      console.log(ui);
+      alert("diufhaiusdf");
+      // if (ui.helper.hasClass("behaviour")) {
+      //   var behaviour = {
+      //     _id: behaviourID++,
+          
+      //     position: ui.helper.position(),
+      //     type: "behaviour"
+      //   };
+      // }
+    }
+  });
+  
   var stateID = 0;
   var behaviourID = 0;
   canvas.droppable({
@@ -19,13 +36,7 @@ function init() {
           position: ui.helper.position(),
           type: "state"
         };
-      } else if (ui.helper.hasClass("behaviour")) {
-        var behaviour = {
-          _id: stateID++,
-          position: ui.helper.position(),
-          type: "behaviour"
-        };
-      } else if (ui.helper.hasClass("tool-3")) {
+      }  else if (ui.helper.hasClass("tool-3")) {
         var event = {
           _id: eventID++,
           position: ui.helper.position(),
@@ -43,13 +54,15 @@ function init() {
     for (var d in diagram) {
       var state = diagram[d];
       var html = "";
+      var html2 = "";
       if (state.type == "state") {
-        html = `<div class="state-container-${_id} state-container-oncanvas"><div class="state-container-title"><h6 >State ${
-          state._id
-        }</h6></div><div class="state-container-body">                
-                            </div></div>`;
-      } else if (state.type === "behaviour") {
-        html = '<h6 class="behaviour"></h6>';
+        html = `<div class="state-container-${_id} state-container-oncanvas">
+                  <div class="state-container-title">
+                    <h6 >State ${state._id}</h6>
+                  </div>
+                  <div class="state-container-body state-container-body-oncanvas">                
+                  </div>
+                </div>`;
       } else if (state.type === "TOOL-3") {
         html = "<h3>TOOL 3</h3>";
       }
@@ -79,4 +92,9 @@ function init() {
       $(".state-container-oncanvas").resizable();
     });
   }
+
+
+
+
+
 }
