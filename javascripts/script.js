@@ -2,20 +2,20 @@ $(init);
 function init() {
   var diagram = [];
   var canvas = $(".canvas");
-  var stateCanvasBody = $(".state-container-oncanvas");
+  var stateCanvasBody = $(".state-container");
 
 
   $(".state-container").draggable({
     helper: "clone",
   });
-  $(".behaviour").draggable({
+  $(".behaviour").droppable({
     helper: "clone",
   });
 
   var stateID = 0;
   var behaviourID = 0;
   canvas.droppable({
-    accept:".state-container",
+    accept:".state-container,.behaviour",
     drop: function(event, ui) {
     if (ui.helper.hasClass("state-container")) {
         var state = {
@@ -30,6 +30,11 @@ function init() {
       renderDiagram(diagram, state._id);
     }
   });
+
+ 
+
+/*================================================render function=======================================================*/
+
 
   function renderDiagram(diagram, _id) {
     canvas.empty();
@@ -69,19 +74,7 @@ function init() {
           },
           containment: "parent"
         })
-        .droppable({  
-            drop: function(event, ui){
-                console.log(ui);
-                if (ui.helper.hasClass("behaviour")) {
-                    var behaviour = {
-                        _id: behaviourID++,
-                        position: ui.helper.position(),
-                        type: "behaviour"
-                    };
-                }
-                diagram.push(behaviour);
-            }
-        })
+        
         .attr("id", state._id);
 
 
@@ -91,12 +84,8 @@ function init() {
           top: state.position.top,
           left: state.position.left
         });
-
-
-
         
         canvas.append(dom);
-        stateCanvasBody.append(dom2);
 
     }
 
