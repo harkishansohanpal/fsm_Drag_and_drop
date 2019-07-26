@@ -54,6 +54,8 @@
   width: fit-content;
   white-space: nowrap;
   z-index: 2;
+  margin-left: 7px;
+  margin-top: 5px;
 }
 .events {
   background-color: #9acfea;
