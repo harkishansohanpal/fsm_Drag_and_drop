@@ -49,7 +49,7 @@ public class State {
 
 	@Override
 	public String toString() {
-		return "State [stateName=" + stateName + ", behaviours=" + behaviours + "]";
+		return "State [stateName=" + stateName + ", behaviours=" + behaviours + "]\n";
 	}
 
 	@Override

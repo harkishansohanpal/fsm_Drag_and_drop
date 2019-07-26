@@ -17,6 +17,13 @@ public class FSMDAO {
 	private DBConnection con;
 	
 	List<FSM> FSMs;
+	
+	
+
+	public FSMDAO() {
+		super();
+		this.con = DBConnection.getInstance();
+	}
 
 	public DBConnection getCon() {
 		return con;

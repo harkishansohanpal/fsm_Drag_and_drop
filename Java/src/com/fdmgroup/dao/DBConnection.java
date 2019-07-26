@@ -8,6 +8,7 @@ public class DBConnection {
 
 	private static final String persistenceName = "FinchFSM";
 	
+	private static DBConnection con = null;
 	private EntityManagerFactory emf = null;
 	
 	private DBConnection(){
@@ -18,6 +19,13 @@ public class DBConnection {
 		if(emf == null || !emf.isOpen()){
 			emf = Persistence.createEntityManagerFactory(persistenceName);
 		}
+	}
+	
+	public static DBConnection getInstance(){
+		if(con == null){
+			con = new DBConnection();
+		}
+		return con;
 	}
 	
 	public EntityManager getEntityManager(){

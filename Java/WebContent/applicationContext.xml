@@ -32,5 +32,10 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
+	<bean id="conDB" class="com.fdmgroup.dao.DBConnection" init-method="init" />
+	
+	<bean id="dao" class="com.fdmgroup.dao.FSMDAO">
+		<property name="con" ref="conDB"></property>
+	</bean>
 	
 </beans>

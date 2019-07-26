@@ -10,6 +10,7 @@ import com.fdmgroup.model.Input;
 import com.fdmgroup.model.State;
 
 import com.fdmgroup.controller.ExecuteStateController;
+import com.fdmgroup.dao.FSMDAO;
 
 public class AdminController {
 	
@@ -20,53 +21,77 @@ public class AdminController {
 		
 		FSM fsm = fsm2c.parseJSON(s);
 		
+		System.out.println(fsm);
+		
+		/*FSMDAO dao = new FSMDAO();
+		
+		dao.addFSM(fsm);*/
+		
 		//*************
 		
 		ExecuteStateController esc = new ExecuteStateController();
 		
 		//*************************************** USER INPUT ********************************************************
-		Scanner scanner = new Scanner(System.in);
+		//Scanner scanner = new Scanner(System.in);
 		
 		Event input0 = new Event();
 		input0.setInput(Input.NoObstacle);
 		
 		Event input1 = new Event();
-		input1.setInput(Input.ObstacleLC);
+		input1.setInput(Input.ObstacleAll);
 		
 		Event input2 = new Event();
-		input2.setInput(Input.ObstacleAll);
+		input2.setInput(Input.ObstacleL);
 		
 		Event input3 = new Event();
 		input3.setInput(Input.ObstacleR);
-		
-		Event input4 = new Event();
-		input4.setInput(Input.ObstacleRC);
-		
-		Event input5 = new Event();
-		input5.setInput(Input.ObstacleC);
 		
 		List<Event> edges = new ArrayList<>();
 		edges.add(input0);
 		edges.add(input1);
 		edges.add(input2);
 		edges.add(input3);
-		edges.add(input4);
-		edges.add(input5);
+
 		
 		//***************************
 		
-		esc.execute(fsm.getInitialState());
+		esc.execute(fsm.getCurrState());
 		
 		State fromState = fsm.getInitialState();
 		
-		/*State fromState =  fsm.start(fsm.getTruthTable().getEdge().get(0));
-		esc.execute(fromState);*/
-		
 		//***************************
 		
-		while(true){
+		Event obstacle = new Event();
+		
+		while(true){ //Change will be to continue until halt state reached
+						// Or until an error has occurred
+			System.out.println("CHECKIN INPUT - START");
 			
-			Event inputEvent = new Event();
+			if(esc.myFinch.isObstacle()){
+				obstacle.setInput(Input.ObstacleAll);
+			}
+			
+			if(!esc.myFinch.isObstacle()){
+				obstacle.setInput(Input.NoObstacle);
+			}
+			
+			if(esc.myFinch.isObstacleLeftSide()){
+				obstacle.setInput(Input.ObstacleL);
+			}
+			
+			if(esc.myFinch.isObstacleRightSide()){
+				obstacle.setInput(Input.ObstacleR);
+			}
+			
+			if(esc.myFinch.isObstacleLeftSide() || esc.myFinch.isObstacleRightSide() || esc.myFinch.isObstacle()){
+				System.out.println("INPUT");
+			}
+			
+			if(!esc.myFinch.isObstacle()) {
+				System.out.println("NO INPUT");
+			}
+			
+			/*Event inputEvent = new Event();
 			System.out.println("Please select Input");
 			for (int i = 0; i < edges.size(); i++) {
 				System.out.println(i + " " + edges.get(i).getInput());
@@ -96,17 +121,25 @@ public class AdminController {
 				
 			case 5: 
 				inputEvent = input5;
-				break;
-				
-				
-			}
+				break;	
+			}*/
 			
 			//*****************************************************
 			
-			State toState = fsm.step(inputEvent, fromState);
+			System.out.println("CHECKIN INPUT - END");
+			
+			System.out.println(obstacle);
+			
+			State toState = fsm.step(obstacle, fromState);
 
-			fromState = toState;
+			if(toState == null){
+				System.out.println("No toState found for " + obstacle + " and " + fromState);
+				break;
+			}
+			
 			esc.execute(toState);
+			fromState = toState;
+			
 		}
 	}
 	

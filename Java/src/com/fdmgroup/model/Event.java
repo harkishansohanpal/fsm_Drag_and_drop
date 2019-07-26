@@ -47,7 +47,7 @@ public class Event {
 
 	@Override
 	public String toString() {
-		return "Event [eventName=" + eventName + ", input=" + input + "]";
+		return "Event [eventName=" + eventName + ", input=" + input + "]\n";
 	}
 
 	@Override
