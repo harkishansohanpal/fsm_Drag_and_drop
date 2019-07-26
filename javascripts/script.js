@@ -1,15 +1,35 @@
 
 
 
-$(init);
 
+var context =null;
+var diagram = null;
+function drawLine(x0, y0, x1, y1){
+	console.log(x0, y0, x1, y1)
+	 context.beginPath(); 
+  // Staring point (10,45)
+   context.moveTo(x0,y0);
+  // End point (180,47)
+  context.lineTo(x1,y1);
+  // Make the line visible
+  context.stroke();
+}
+function getLocation(i){
+	return diagram[i].position;
+}
+function connect(x,y){
+	context.clearRect(0,0,3000, 3000);
+	drawLine(getLocation(x).left+300, getLocation(x).top+150, getLocation(y).left+300, getLocation(y).top+150);
+}
+
+$(init);
 function init() {
 
   //diagram is the main array, we push data into it
-  var diagram = [];
+  diagram = [];
   var canvas = $(".canvas");
   var stateCanvasBody = $(".state-container-oncanvas");
-
+  context = $("#theCanvas")[0].getContext("2d");
 //make state container draggable
   $(".state-container").draggable({
     helper: "clone",
@@ -69,8 +89,9 @@ function init() {
                     <div class="state-container-body state-container-body-oncanvas">                
                     </div>
                 </div>`;
-
-        var dom = $(html)
+		console.log(diagram[d]["_id"] + "," + d)
+		console.log( + " " + state.position.top+ " " + state.position.left + " not drag")
+	    var dom = $(html)
         .css({
           position: "absolute",
           top: state.position.top,
@@ -79,12 +100,16 @@ function init() {
         //make state-container in canvas draggable
         .draggable({
           stop: function(event, ui) {
-            console.log(ui);
-            var id = ui.helper.attr("id");
+            var id = parseInt((ui.helper[0].getAttribute("class").substr(31, 1)))
             for (var i in diagram) {
+				console.log(id)
               if (diagram[i]._id == id) {
+				 var state = diagram[d]; 
                 diagram[i].position.top = ui.position.top;
                 diagram[i].position.left = ui.position.left;
+				state.position.top =  ui.position.top;
+				state.position.left =  ui.position.left;
+				console.log(id + " " + state.position.top + " " + state.position.left+ " drag")
               }
             }
           },
@@ -107,8 +132,9 @@ function init() {
               }
               diagram.push(behaviour);
               // console.log(stateCanvasBody);
+			  console.log(ui);
               var htmlBehaviour = `<h6  class="behaviour"
-              >${ui.helper["0"].innerText}
+              >${ui.helper["0"].innerHTML}
               </h6>`;
               $(".state-container-body-oncanvas",this).append(htmlBehaviour);
               
