@@ -21,7 +21,12 @@ function connect(x,y){
 	context.clearRect(0,0,3000, 3000);
 	drawLine(getLocation(x).left+300, getLocation(x).top+150, getLocation(y).left+300, getLocation(y).top+150);
 }
-
+function getAllLocation(){
+	for(var i=0; i<diagram.length;i++){
+		console.log(i + " " + getLocation(i).top + " " + getLocation(i).left);
+	}
+	
+}
 $(init);
 function init() {
 
