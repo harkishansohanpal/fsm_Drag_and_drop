@@ -6,7 +6,9 @@ $(init);
 function init() {
 
   //diagram is the main array, we push data into it
-  var diagram = [];
+  var stateData = [];
+  var eventData = [];
+  var diagram = [stateData, eventData];
   var canvas = $(".canvas");
   var stateCanvasBody = $(".state-container-oncanvas");
 
@@ -36,7 +38,7 @@ function init() {
         var state = {
           _id: stateID++,
           position: ui.helper.position(),
-          behaviour:[],
+          behaviourArray:[],
           type: "state"
         };
       } else {
@@ -44,47 +46,56 @@ function init() {
       }
 
       //push state to diagram array
-      diagram.push(state);
+      diagram[0].push(state);
 
       //call render function and pass diagram array and state-id
       renderStateContainer(diagram, state._id);
     }
   });
 
-
   
   function renderStateContainer(diagram, _id) {
     canvas.empty();
     //loop through diagram array
-    for (var d in diagram) {
-      var state = diagram[d];
+    for (var d in diagram[0]) {
+      var state = diagram[0][d];
       var html = "";
       
-      //if state.type is state then declare html and 
+      console.log(state);      
+      //if state.type is state then declare html and render
       if (state.type == "state") {
+        //console.log(state.behaviourArray);
+        var behaviourDiv;
+        if(state.behaviourArray.length>0){
+        behaviourDiv=renderBehaviour(state.behaviourArray);
+        }else{
+          behaviourDiv="";
+        }
+        console.log(behaviourDiv);
+
         html = `<div class="state-container-oncanvas State-${state._id}">
                     <div class="state-container-title">
                         <h6 >State-${state._id}</h6>
                     </div>
-                    <div class="state-container-body state-container-body-oncanvas">                
+                    <div class="state-container-body state-container-body-oncanvas">     
+                    ${behaviourDiv}
                     </div>
                 </div>`;
-
         var dom = $(html)
         .css({
           position: "absolute",
           top: state.position.top,
-          left: state.position.left
+          left: state.position.left-200
         })
         //make state-container in canvas draggable
         .draggable({
           stop: function(event, ui) {
             console.log(ui);
             var id = ui.helper.attr("id");
-            for (var i in diagram) {
-              if (diagram[i]._id == id) {
-                diagram[i].position.top = ui.position.top;
-                diagram[i].position.left = ui.position.left;
+            for (var i in diagram[0]) {
+              if (diagram[0][i]._id == id) {
+                diagram[0][i].position.top = ui.position.top;
+                diagram[0][i].position.left = ui.position.left;
               }
             }
           },
@@ -95,26 +106,29 @@ function init() {
         .droppable({  
           accept:".behaviour",
           drop: function(event, ui){
-            // console.log($(this));
+             console.log($(this));
             // var stateContainerId = $(this).attr("id");
-              console.log(ui);
+            //console.log(diagram);
+              //console.log(ui);
               if (ui.helper.hasClass("behaviour")) {
                   var behaviour = {
                       _id: behaviourID++,
                       position: ui.helper.position(),
-                      type: "behaviour"
+                      behaviourType:ui.helper["0"].innerHTML
                   };
               }
-              diagram.push(behaviour);
+              console.log($(this)["0"].attributes[1].value)
+              ////hard coded state//////
+              diagram[0][`${$(this)["0"].attributes[1].value}`].behaviourArray.push(behaviour);
               // console.log(stateCanvasBody);
-              var htmlBehaviour = `<h6  class="behaviour"
-              >${ui.helper["0"].innerText}
+              var htmlBehaviour = `<h6  class="behaviour" data-behaviour="${ui.helper["0"].innerHTML}">${ui.helper["0"].innerHTML}
               </h6>`;
-              $(".state-container-body-oncanvas",this).append(htmlBehaviour);
-              
+              $(".state-container-body-oncanvas",this)              
+              .append(htmlBehaviour);              
                //$(this)["0"].childNodes[3].$(".state-container-body-oncanvas").append("htmlBehaviour");
           }
       })
+      .attr("state_id", state._id)
 
         canvas.append(dom);
 
@@ -128,16 +142,16 @@ function init() {
   }
 
 
-  function renderBehaviour(){
-    htmlBehaviour = '<h6 class="behaviour "></h6>';
-
-        var dom2 = $(htmlBehaviour)
-        .css({
-          position: "absolute",
-          top: state.position.top,
-          left: state.position.left
-        });
-
-      stateCanvasBody.append(dom2);
+  //Render the behaviour
+  function renderBehaviour(behaviourArray){
+    var dom2="";
+    for( var b in behaviourArray){
+      console.log(b);
+    var htmlBehaviour = `<h6 class="behaviour data-behaviour=${b.behaviourType}">${b.behaviourType}</h6>`;
+        dom2 += htmlBehaviour;
+    }
+    
+    return dom2;
+      //stateCanvasBody.append(dom2);
   }
 }
