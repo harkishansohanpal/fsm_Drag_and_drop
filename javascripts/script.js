@@ -1,12 +1,34 @@
 
 
 
-var connections = [[0,1, "red"],[0,2, "blue"],[1,2, "black"]];
+var connections = [];
 var context =document.getElementById("theCanvas").getContext("2d");
 var diagram = null;
+
+var addConnectionState = "not begin";
+function addConnection(data){
+	if(data == "start"){
+		
+		addConnectionState = [];
+		console.log(addConnectionState);
+	}
+	if(typeof(data) == "number"){
+		addConnectionState.push(data)
+		if(addConnectionState.length == 2){
+			addConnectionState.push(prompt("enter the color"));
+			connections.push(addConnectionState);
+			drawLines();
+			addConnectionState = "not begin";
+		}
+
+
+	}
+}
+
+
 function drawLine(x0, y0, x1, y1, color){
-	console.log("drawing line")
-	console.log(x0, y0, x1, y1)
+	//console.log("drawing line")
+	//console.log(x0, y0, x1, y1)
 	 context.beginPath(); 
   // Staring point (10,45)
    context.moveTo(x0,y0);
@@ -41,6 +63,53 @@ function getAllLocation(){
 	}
 	
 }
+function drawLines(ui){
+				context.clearRect(0,0,3000,3000);
+				connections.forEach(function(d){
+				var domain = d[0];
+				var target = d[1];
+				var color = d[2];
+				try{
+				var id = getIdFromString(ui.helper[0].getAttribute("class"));
+				} catch(e){
+					var id = null;
+				}
+				if(target == id){
+					try{
+					drawLine(diagram[domain].position.left+150, diagram[domain].position.top+150,ui.position.left+150, ui.position.top+150, color);
+					} catch( e){
+						;
+					}
+				}
+				else if(domain == id){
+					try{
+					drawLine(ui.position.left+150, ui.position.top+150,diagram[target].position.left+150, diagram[target].position.top+150, color);
+					} catch( e){
+						;
+					}				
+				} else{
+					try{
+					drawLine(diagram[domain].position.left+150, diagram[domain].position.top+150 , diagram[target].position.left+150, diagram[target].position.top+150, color);
+					} catch( e){
+						;
+					}						
+					
+				}
+				})
+	
+}
+//state-container-oncanvas State-2 ui-draggable ui-draggable-handle ui-droppable
+
+function getIdFromString(s){
+		//console.log("ID");
+		//console.log(s);
+		return parseInt((s.substr(31, 1)));
+}
+
+function clickState(){
+	
+	addConnection("start");
+}
 $(init);
 function init() {
 
@@ -71,6 +140,7 @@ function init() {
     //check if it is state-container else return
     // if dropped div is state-container then make object state
     drop: function(event, ui) {
+	drawLines();
     if (ui.helper.hasClass("state-container")) {
         var state = {
           _id: stateID++,
@@ -109,8 +179,8 @@ function init() {
                     <div class="state-container-body state-container-body-oncanvas">                
                     </div>
                 </div>`;
-		console.log(diagram[d]["_id"] + "," + d)
-		console.log( + " " + state.position.top+ " " + state.position.left + " not drag")
+		//console.log(diagram[d]["_id"] + "," + d)
+		//console.log( + " " + state.position.top+ " " + state.position.left + " not drag")
 	    var dom = $(html)
         .css({
           position: "absolute",
@@ -120,41 +190,18 @@ function init() {
         //make state-container in canvas draggable
         .draggable({
 			drag:function(event, ui){
-				console.log(event)
-				context.clearRect(0,0,3000,3000);
-				connections.forEach(function(d){
-				var domain = d[0];
-				var target = d[1];
-				var color = d[2];
-				var id = parseInt((ui.helper[0].getAttribute("class").substr(31, 1)));
-				if(target == id){
-					try{
-					drawLine(diagram[domain].position.left+150, diagram[domain].position.top+150,ui.position.left+150, ui.position.top+150, color);
-					} catch{
-						;
-					}
-				}
-				else if(domain == id){
-					try{
-					drawLine(ui.position.left+150, ui.position.top+150,diagram[target].position.left+150, diagram[target].position.top+150, color);
-					} catch{
-						;
-					}				
-				} else{
-					
-					drawLine(diagram[domain].position.left+150, diagram[domain].position.top+150 , diagram[target].position.left+150, diagram[target].position.top+150, color);
-				}
-				})
+				//console.log(event)
+				drawLines(ui);
 			},
 			stop: function(event, ui) {
-            var id = parseInt((ui.helper[0].getAttribute("class").substr(31, 1)))
+            var id = getIdFromString(ui.helper[0].getAttribute("class") );
             for (var i in diagram) {
-				console.log(id)
+				//console.log(id)
               if (diagram[i]._id == id) {
 				 var state = diagram[d]; 
                 diagram[i].position.top = ui.position.top;
                 diagram[i].position.left = ui.position.left;
-				console.log(id + " " + state.position.top + " " + state.position.left+ " drag")
+				//console.log(id + " " + state.position.top + " " + state.position.left+ " drag")
               }
             }
           },
@@ -168,7 +215,7 @@ function init() {
 			  
             // console.log($(this));
             // var stateContainerId = $(this).attr("id");
-              console.log(ui);
+              //console.log(ui);
               if (ui.helper.hasClass("behaviour")) {
                   var behaviour = {
                       _id: behaviourID++,
@@ -187,7 +234,12 @@ function init() {
                //$(this)["0"].childNodes[3].$(".state-container-body-oncanvas").append("htmlBehaviour");
           }
       })
-
+		.click(function(e, ui){
+			//console.log(e);
+			id = getIdFromString(e.currentTarget.getAttribute("class"));
+			console.log(id);
+			addConnection(id);
+	  })
         canvas.append(dom);
 
       } else if (state.type === "behaviour") {
