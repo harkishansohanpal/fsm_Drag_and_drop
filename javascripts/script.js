@@ -61,13 +61,15 @@ function init() {
       var state = diagram[0][d];
       var html = "";
       
-      console.log(state);      
+      console.log(state);   
+      console.log(d);   
       //if state.type is state then declare html and render
       if (state.type == "state") {
         //console.log(state.behaviourArray);
         var behaviourDiv;
         if(state.behaviourArray.length>0){
         behaviourDiv=renderBehaviour(state.behaviourArray);
+        console.log(state.behaviourArray);
         }else{
           behaviourDiv="";
         }
@@ -117,7 +119,6 @@ function init() {
                       behaviourType:ui.helper["0"].innerHTML
                   };
               }
-              console.log($(this)["0"].attributes[1].value)
               ////hard coded state//////
               diagram[0][`${$(this)["0"].attributes[1].value}`].behaviourArray.push(behaviour);
               // console.log(stateCanvasBody);
@@ -146,8 +147,9 @@ function init() {
   function renderBehaviour(behaviourArray){
     var dom2="";
     for( var b in behaviourArray){
-      console.log(b);
-    var htmlBehaviour = `<h6 class="behaviour data-behaviour=${b.behaviourType}">${b.behaviourType}</h6>`;
+      var beh = behaviourArray[b];
+      console.log(beh.behaviourType);
+    var htmlBehaviour = `<h6 class="behaviour data-behaviour=${beh.behaviourType}">${beh.behaviourType}</h6>`;
         dom2 += htmlBehaviour;
     }
     
