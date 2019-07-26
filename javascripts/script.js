@@ -11,7 +11,7 @@ function init() {
   var diagram = [stateData, eventData];
   var canvas = $(".canvas");
   var stateCanvasBody = $(".state-container-oncanvas");
-
+  
 //make state container draggable
   $(".state-container").draggable({
     helper: "clone",
@@ -61,38 +61,37 @@ function init() {
       var state = diagram[0][d];
       var html = "";
       
-      console.log(state);   
-      console.log(d);   
+      //console.log(state);      
       //if state.type is state then declare html and render
       if (state.type == "state") {
         //console.log(state.behaviourArray);
         var behaviourDiv;
         if(state.behaviourArray.length>0){
         behaviourDiv=renderBehaviour(state.behaviourArray);
-        console.log(state.behaviourArray);
         }else{
           behaviourDiv="";
         }
-        console.log(behaviourDiv);
+        //console.log(behaviourDiv);
 
         html = `<div class="state-container-oncanvas State-${state._id}">
                     <div class="state-container-title">
                         <h6 >State-${state._id}</h6>
                     </div>
-                    <div class="state-container-body state-container-body-oncanvas">     
+                    <div class="state-container-body state-container-body-oncanvas state-container-body-oncanvas-forDeletion${state._id}">     
                     ${behaviourDiv}
                     </div>
                 </div>`;
+        var clickCount = 0;
         var dom = $(html)
         .css({
           position: "absolute",
           top: state.position.top,
-          left: state.position.left-200
+          left: state.position.left
         })
         //make state-container in canvas draggable
         .draggable({
           stop: function(event, ui) {
-            console.log(ui);
+            //console.log(ui);
             var id = ui.helper.attr("id");
             for (var i in diagram[0]) {
               if (diagram[0][i]._id == id) {
@@ -108,7 +107,7 @@ function init() {
         .droppable({  
           accept:".behaviour",
           drop: function(event, ui){
-             console.log($(this));
+             //console.log($(this));
             // var stateContainerId = $(this).attr("id");
             //console.log(diagram);
               //console.log(ui);
@@ -119,18 +118,59 @@ function init() {
                       behaviourType:ui.helper["0"].innerHTML
                   };
               }
-              ////hard coded state//////
-              diagram[0][`${$(this)["0"].attributes[1].value}`].behaviourArray.push(behaviour);
-              // console.log(stateCanvasBody);
+              
+
+              //finds the index of the state that behaviour is to be addded into
+              var indexOfTheState = -1;
+              for(var i=0; i<diagram[0].length; i++){
+                if($(this)["0"].attributes[1].value == diagram[0][i]._id){
+                  indexOfTheState = i;
+                }
+              };
+              diagram[0][indexOfTheState].behaviourArray.push(behaviour);
+              //diagram[0][$(this)["0"].attributes[1].value].behaviourArray.push(behaviour);
+               console.log($(this)["0"].attributes);
               var htmlBehaviour = `<h6  class="behaviour" data-behaviour="${ui.helper["0"].innerHTML}">${ui.helper["0"].innerHTML}
               </h6>`;
-              $(".state-container-body-oncanvas",this)              
-              .append(htmlBehaviour);              
+              $(".state-container-body-oncanvas",this).append(htmlBehaviour);              
                //$(this)["0"].childNodes[3].$(".state-container-body-oncanvas").append("htmlBehaviour");
           }
       })
+      //adding the attribute state_id
       .attr("state_id", state._id)
-
+      //to remove the element when even click occurs
+      .click(function(){
+        clickCount++;
+        if(clickCount%2 != 0){
+          //change the border color to red when deleting 
+          $(this).css({
+            border: "2px solid red",
+          });
+          //create and add the delete button when clicked
+          var htmlDeleteButton = `<h6 class="deleteButton">X</h6>`;
+          var stateIDToRemove = $(this)[0].attributes[1].value;
+          console.log($(this)[0].attributes[1].value);
+          $(".state-container-body-oncanvas-forDeletion"+stateIDToRemove).append(htmlDeleteButton);
+          //after clicking on the state container, if they click on X then the state will be removed
+          $(".deleteButton").click(function(){
+            for(var i=0; i<diagram[0].length; i++){
+              if(diagram[0][i]._id == stateIDToRemove){
+                //splice function finds the element at index i and then removes 1 element at/after that index
+                diagram[0].splice(i,1);
+                //have to render the diagram to reflect the changes on the canvas, the number -1 is given randomly as it is not used 
+              }
+            };
+            renderStateContainer(diagram, -1);
+          }).attr("state", $(this));//REMOVABLE AFTER TEST 
+        }else{
+          $(this).css({
+            border : "2px solid black",
+          });
+          $(".deleteButton").css({
+            display: "none",
+          })
+        }
+      });
         canvas.append(dom);
 
       } else if (state.type === "behaviour") {
@@ -148,7 +188,6 @@ function init() {
     var dom2="";
     for( var b in behaviourArray){
       var beh = behaviourArray[b];
-      console.log(beh.behaviourType);
     var htmlBehaviour = `<h6 class="behaviour data-behaviour=${beh.behaviourType}">${beh.behaviourType}</h6>`;
         dom2 += htmlBehaviour;
     }
