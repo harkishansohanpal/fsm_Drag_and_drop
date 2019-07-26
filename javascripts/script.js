@@ -1,10 +1,10 @@
 
 
 
-var connections = [[0,1],[1,2]];
+var connections = [[0,1, "red"],[0,2, "blue"],[1,2, "black"]];
 var context =document.getElementById("theCanvas").getContext("2d");
 var diagram = null;
-function drawLine(x0, y0, x1, y1){
+function drawLine(x0, y0, x1, y1, color){
 	console.log("drawing line")
 	console.log(x0, y0, x1, y1)
 	 context.beginPath(); 
@@ -12,6 +12,7 @@ function drawLine(x0, y0, x1, y1){
    context.moveTo(x0,y0);
   // End point (180,47)
   context.lineTo(x1,y1);
+  context.strokeStyle = color;
   // Make the line visible
   context.stroke();
 }
@@ -124,23 +125,24 @@ function init() {
 				connections.forEach(function(d){
 				var domain = d[0];
 				var target = d[1];
+				var color = d[2];
 				var id = parseInt((ui.helper[0].getAttribute("class").substr(31, 1)));
 				if(target == id){
 					try{
-					drawLine(diagram[domain].position.left+150, diagram[domain].position.top+150,ui.position.left+150, ui.position.top+150);
+					drawLine(diagram[domain].position.left+150, diagram[domain].position.top+150,ui.position.left+150, ui.position.top+150, color);
 					} catch{
 						;
 					}
 				}
 				else if(domain == id){
 					try{
-					drawLine(ui.position.left+150, ui.position.top+150,diagram[target].position.left+150, diagram[target].position.top+150);
+					drawLine(ui.position.left+150, ui.position.top+150,diagram[target].position.left+150, diagram[target].position.top+150, color);
 					} catch{
 						;
 					}				
 				} else{
 					
-					drawLine(diagram[domain].position.left+150, diagram[domain].position.top+150 , diagram[target].position.left+150, diagram[target].position.top+150);
+					drawLine(diagram[domain].position.left+150, diagram[domain].position.top+150 , diagram[target].position.left+150, diagram[target].position.top+150, color);
 				}
 				})
 			},
