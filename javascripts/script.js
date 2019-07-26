@@ -1,10 +1,11 @@
 
 
 
-
-var context =null;
+var connections = [[0,1],[1,2]];
+var context =document.getElementById("theCanvas").getContext("2d");
 var diagram = null;
 function drawLine(x0, y0, x1, y1){
+	console.log("drawing line")
 	console.log(x0, y0, x1, y1)
 	 context.beginPath(); 
   // Staring point (10,45)
@@ -14,16 +15,28 @@ function drawLine(x0, y0, x1, y1){
   // Make the line visible
   context.stroke();
 }
+function drawCircle(x,y,r){
+	console.log(x,y,r)
+	context.beginPath();
+	context.arc(x,y,r,0*Math.PI,2*Math.PI);
+	context.stroke();
+	
+}
 function getLocation(i){
 	return diagram[i].position;
 }
-function connect(x,y){
+function connect(x,y){	
+	drawLine(getLocation(x).left+150, getLocation(x).top+150, getLocation(y).left+150, getLocation(y).top+150);
+}
+function connectMultiplePairs(lst1, lst2){
 	context.clearRect(0,0,3000, 3000);
-	drawLine(getLocation(x).left+300, getLocation(x).top+150, getLocation(y).left+300, getLocation(y).top+150);
+	for(var i=0;i<lst1.length;i++){
+		connect(lst1[i] , lst2[i]);
+	}
 }
 function getAllLocation(){
 	for(var i=0; i<diagram.length;i++){
-		console.log(i + " " + getLocation(i).top + " " + getLocation(i).left);
+		console.log(i + " " + getLocation(i).left + " " + getLocation(i).top);
 	}
 	
 }
@@ -64,6 +77,7 @@ function init() {
           behaviour:[],
           type: "state"
         };
+		state.position.left -= 300;
       } else {
         return;
       }
@@ -104,7 +118,33 @@ function init() {
         })
         //make state-container in canvas draggable
         .draggable({
-          stop: function(event, ui) {
+			drag:function(event, ui){
+				console.log(event)
+				context.clearRect(0,0,3000,3000);
+				connections.forEach(function(d){
+				var domain = d[0];
+				var target = d[1];
+				var id = parseInt((ui.helper[0].getAttribute("class").substr(31, 1)));
+				if(target == id){
+					try{
+					drawLine(diagram[domain].position.left+150, diagram[domain].position.top+150,ui.position.left+150, ui.position.top+150);
+					} catch{
+						;
+					}
+				}
+				else if(domain == id){
+					try{
+					drawLine(ui.position.left+150, ui.position.top+150,diagram[target].position.left+150, diagram[target].position.top+150);
+					} catch{
+						;
+					}				
+				} else{
+					
+					drawLine(diagram[domain].position.left+150, diagram[domain].position.top+150 , diagram[target].position.left+150, diagram[target].position.top+150);
+				}
+				})
+			},
+			stop: function(event, ui) {
             var id = parseInt((ui.helper[0].getAttribute("class").substr(31, 1)))
             for (var i in diagram) {
 				console.log(id)
@@ -112,8 +152,6 @@ function init() {
 				 var state = diagram[d]; 
                 diagram[i].position.top = ui.position.top;
                 diagram[i].position.left = ui.position.left;
-				state.position.top =  ui.position.top;
-				state.position.left =  ui.position.left;
 				console.log(id + " " + state.position.top + " " + state.position.left+ " drag")
               }
             }
@@ -125,6 +163,7 @@ function init() {
         .droppable({  
           accept:".behaviour",
           drop: function(event, ui){
+			  
             // console.log($(this));
             // var stateContainerId = $(this).attr("id");
               console.log(ui);
