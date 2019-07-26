@@ -1,12 +1,459 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Leslie</title>
-</head>
-<body>
-    
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Test Canvas</title>
+  </head>
+
+  <body>
+    <svg id="svg" width="801" height="481" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern
+          id="smallGrid"
+          width="8"
+          height="8"
+          patternUnits="userSpaceOnUse"
+        >
+          <path
+            id="smallGridPath"
+            d="M 8 0 H 0 V 8"
+            fill="none"
+            stroke="gray"
+            stroke-width="0.5"
+          />
+        </pattern>
+        <pattern
+          id="largeGrid"
+          width="80"
+          height="80"
+          patternUnits="userSpaceOnUse"
+        >
+          <rect
+            id="largeGridRect"
+            width="80"
+            height="80"
+            fill="url(#smallGrid)"
+          />
+          <!-- draw from upper right to upper left, then down to lower left -->
+          <!-- This creates the appearance of an 80x80 grid when stacked -->
+          <path
+            id="largeGridPath"
+            d="M 80 0 H 0 V 80"
+            fill="none"
+            stroke="gray"
+            stroke-width="2"
+          />
+        </pattern>
+      </defs>
+
+      <!-- extend the scrolling region beyond the viewport 
+        and use mod 80 to reset the position to simulate a virtual space. -->
+      <g
+        id="surface"
+        transform="translate(0, 0)"
+        x="-80"
+        y="-80"
+        width="961"
+        height="641"
+      >
+        <rect
+          id="grid"
+          x="-80"
+          y="-80"
+          width="961"
+          height="641"
+          fill="url(#largeGrid)"
+        />
+      </g>
+
+      <g id="objects" transform="translate(0, 0)">
+        <circle
+          id="circle1"
+          cx="150"
+          cy="100"
+          r="40"
+          stroke="black"
+          stroke-width="1"
+          fill="#FFC0C0"
+        />
+        <circle
+          id="circle2"
+          cx="175"
+          cy="125"
+          r="40"
+          stroke="black"
+          stroke-width="1"
+          fill="#C0FFC0"
+        />
+      </g>
+    </svg>
+  </body>
+  <script>
+    var mouseDown = false;
+    var mouseDownX = 0;
+    var mouseDownY = 0;
+    var gridX = 0;
+    var gridY = 0;
+
+    function initializeSurface() {
+      var svg = document.getElementById("svg");
+      var surface = svg.getElementById("surface");
+      surface.addEventListener("mousedown", onMouseDown, false);
+      surface.addEventListener("mouseup", onMouseUp, false);
+      surface.addEventListener("mousemove", onMouseMove, false);
+      surface.addEventListener("mouseleave", onMouseLeave, false);
+    }
+
+    initializeSurface();
+
+    const LEFT_MOUSE_BUTTON = 0;
+
+    class MouseController {
+      constructor() {
+        this.mouseDown = false;
+        this.controllers = {};
+        this.activeController = null;
+      }
+
+      // Create a map between then SVG element (by it's ID, so ID's must be unique) and its controller.
+      attach(svgElement, controller) {
+        var id = svgElement.getAttribute("id");
+        this.controllers[id] = controller;
+      }
+
+      detach(svgElement) {
+        var id = svgElement.getAttribute("id");
+        delete this.controllers[id];
+      }
+
+      // Get the controller associated with the event and remember where the user clicked.
+      onMouseDown(evt) {
+        if (evt.button == LEFT_MOUSE_BUTTON) {
+          evt.preventDefault();
+          var id = evt.currentTarget.getAttribute("id");
+          this.activeController = this.controllers[id];
+          this.mouseDown = true;
+          this.mouseDownX = evt.clientX;
+          this.mouseDownY = evt.clientY;
+        }
+      }
+
+      // If the user is dragging, call the controller's onDrag function.
+      onMouseMove(evt) {
+        evt.preventDefault();
+
+        if (this.mouseDown && this.activeController != null) {
+          this.activeController.onDrag(evt);
+        }
+      }
+
+      // Any dragging is now done.
+      onMouseUp(evt) {
+        if (evt.button == LEFT_MOUSE_BUTTON) {
+          evt.preventDefault();
+          this.clearSelectedObject();
+        }
+      }
+
+      // Any dragging is now done.
+      onMouseLeave(evt) {
+        evt.preventDefault();
+        if (this.mouseDown && this.activeController != null) {
+          this.activeController.onMouseLeave();
+        }
+      }
+
+      clearSelectedObject() {
+        this.mouseDown = false;
+        this.activeController = null;
+      }
+    }
+
+    class SvgObject {
+      constructor(mouseController, svgElement) {
+        this.mouseController = mouseController;
+        this.events = [];
+
+        // These two parameters are actually the shape TRANSLATION, not the absolute coordinates!!!
+        this.X = 0;
+        this.Y = 0;
+
+        // These two parameters are the relative change during the CURRENT translation.
+        // These is reset to 0 at the beginning of each move.
+        // We use these numbers for translating the anchors because anchors are always
+        // placed with an initial translation of (0, 0)
+        this.dragX = 0;
+        this.dragY = 0;
+
+        this.mouseController.attach(svgElement, this);
+      }
+
+      // Register the event so that when we destroy the object, we can unwire the event listeners.
+      registerEvent(element, eventName, callbackRef) {
+        this.events.push({
+          element: element,
+          eventName: eventName,
+          callbackRef: callbackRef
+        });
+      }
+
+      destroy() {
+        this.unhookEvents();
+      }
+
+      registerEventListener(element, eventName, callback, self) {
+        var ref;
+
+        if (self == null) {
+          self = this;
+        }
+
+        element.addEventListener(eventName, (ref = callback.bind(self)));
+        this.registerEvent(element, eventName, ref);
+      }
+
+      unhookEvents() {
+        for (var i = 0; i < this.events.length; i++) {
+          var event = this.events[i];
+          event.element.removeEventListener(event.eventName, event.callbackRef);
+        }
+
+        this.events = [];
+      }
+
+      startMove() {
+        this.dragX = 0;
+        this.dragY = 0;
+      }
+
+      updatePosition(evt) {
+        var mouseX = evt.clientX;
+        var mouseY = evt.clientY;
+        var mouseDX = mouseX - this.mouseController.mouseDownX;
+        var mouseDY = mouseY - this.mouseController.mouseDownY;
+        this.X += mouseDX;
+        this.Y += mouseDY;
+        this.mouseController.mouseDownX = mouseX;
+        this.mouseController.mouseDownY = mouseY;
+      }
+
+      onMouseLeave(evt) {}
+    }
+
+    class SvgElement extends SvgObject {
+      constructor(mouseController, svgElement) {
+        super(mouseController, svgElement);
+        this.element = svgElement;
+        this.registerEventListener(
+          this.element,
+          "mousedown",
+          mouseController.onMouseDown,
+          mouseController
+        );
+        this.registerEventListener(
+          this.element,
+          "mouseup",
+          mouseController.onMouseUp,
+          mouseController
+        );
+        this.registerEventListener(
+          this.element,
+          "mousemove",
+          mouseController.onMouseMove,
+          mouseController
+        );
+      }
+
+      onDrag(evt) {
+        this.updatePosition(evt);
+        this.element.setAttribute(
+          "transform",
+          "translate(" + this.X + "," + this.Y + ")"
+        );
+      }
+    }
+
+    class Circle extends SvgElement {
+      constructor(mouseController, svgElement) {
+        super(mouseController, svgElement);
+      }
+    }
+
+    class Surface extends SvgElement {
+      constructor(mouseController, svgSurface, svgObjects) {
+        super(mouseController, svgSurface);
+        this.svgObjects = svgObjects;
+        this.gridCellW = 80;
+        this.gridCellH = 80;
+
+        this.registerEventListener(
+          this.svgSurface,
+          "mouseleave",
+          mouseController.onMouseLeave,
+          mouseController
+        );
+      }
+
+      onDrag(evt) {
+        this.updatePosition();
+        var dx = this.X % this.gridCellW;
+        var dy = this.Y % this.gridCellH;
+        this.scrollSurface(dx, dy, this.X, this.Y);
+      }
+
+      onMouseLeave() {
+        this.mouseController.clearSelectedObject();
+      }
+
+      scrollSurface(dx, dy, x, y) {
+        // svgElement is the surface.
+        this.svgElement.setAttribute(
+          "transform",
+          "translate(" + dx + "," + dy + ")"
+        );
+        this.svgObjects.setAttribute(
+          "transform",
+          "translate(" + x + "," + y + ")"
+        );
+      }
+
+      resizeGrid(lw, lh, sw, sh) {
+        this.gridCellW = lw;
+        this.gridCellH = lh;
+        var elLargeGridRect = document.getElementById("largeGridRect");
+        var elLargeGridPath = document.getElementById("largeGridPath");
+        var elLargeGrid = document.getElementById("largeGrid");
+
+        var elSmallGridPath = document.getElementById("smallGridPath");
+        var elSmallGrid = document.getElementById("smallGrid");
+
+        var elSvg = document.getElementById("svg");
+        var elSurface = document.getElementById("surface");
+        var elGrid = document.getElementById("grid");
+
+        elLargeGridRect.setAttribute("width", lw);
+        elLargeGridRect.setAttribute("height", lh);
+
+        elLargeGridPath.setAttribute("d", "M " + lw + " 0 H 0 V " + lh);
+        elLargeGrid.setAttribute("width", lw);
+        elLargeGrid.setAttribute("height", lh);
+
+        elSmallGridPath.setAttribute("d", "M " + sw + " 0 H 0 V " + sh);
+        elSmallGrid.setAttribute("width", sw);
+        elSmallGrid.setAttribute("height", sh);
+
+        elGrid.setAttribute("x", -lw);
+        elGrid.setAttribute("y", -lh);
+
+        var svgW = elSvg.getAttribute("width");
+        var svgH = elSvg.getAttribute("height");
+
+        elSurface.setAttribute("width", svgW + lw * 2);
+        elSurface.setAttribute("height", svgH + lh * 2);
+
+        elSurface.setAttribute("x", -lw);
+        elSurface.setAttribute("y", -lh);
+
+        elSurface.setAttribute("width", svgW + lw * 2);
+        elSurface.setAttribute("height", svgH + lh * 2);
+      }
+    }
+
+    function onMouseDown(evt) {
+      if (evt.button == LEFT_MOUSE_BUTTON) {
+        evt.preventDefault();
+        mouseDown = true;
+        mouseDownX = evt.clientX;
+        mouseDownY = evt.clientY;
+      }
+    }
+
+    function onMouseUp(evt) {
+      if (evt.button == LEFT_MOUSE_BUTTON) {
+        evt.preventDefault();
+        mouseDown = false;
+      }
+    }
+
+    function onMouseMove(evt) {
+      if (mouseDown) {
+        evt.preventDefault();
+        var mouseX = evt.clientX;
+        var mouseY = evt.clientY;
+        var mouseDX = mouseX - mouseDownX;
+        var mouseDY = mouseY - mouseDownY;
+        var gridCellW = 80;
+        var gridCellH = 80;
+        gridX += mouseDX;
+        gridY += mouseDY;
+        mouseDownX = mouseX;
+        mouseDownY = mouseY;
+        var svg = document.getElementById("svg");
+        var surface = svg.getElementById("surface");
+        var dx = gridX % gridCellW;
+        var dy = gridY % gridCellH;
+        surface.setAttribute("transform", "translate(" + dx + "," + dy + ")");
+        var objects = document.getElementById("objects");
+        objects.setAttribute(
+          "transform",
+          "translate(" + gridX + "," + gridY + ")"
+        );
+      }
+    }
+
+    // Programmatically change the grid spacing for the larger grid cells and smaller grid cells.
+    function resizeGrid(lw, lh, sw, sh) {
+      gridCellW = lw;
+      gridCellH = lh;
+      var elLargeGridRect = document.getElementById("largeGridRect");
+      var elLargeGridPath = document.getElementById("largeGridPath");
+      var elLargeGrid = document.getElementById("largeGrid");
+
+      var elSmallGridPath = document.getElementById("smallGridPath");
+      var elSmallGrid = document.getElementById("smallGrid");
+
+      var elSvg = document.getElementById("svg");
+      var elSurface = document.getElementById("surface");
+      var elGrid = document.getElementById("grid");
+
+      elLargeGridRect.setAttribute("width", lw);
+      elLargeGridRect.setAttribute("height", lh);
+
+      elLargeGridPath.setAttribute("d", "M " + lw + " 0 H 0 V " + lh);
+      elLargeGrid.setAttribute("width", lw);
+      elLargeGrid.setAttribute("height", lh);
+
+      elSmallGridPath.setAttribute("d", "M " + sw + " 0 H 0 V " + sh);
+      elSmallGrid.setAttribute("width", sw);
+      elSmallGrid.setAttribute("height", sh);
+
+      elGrid.setAttribute("x", -lw);
+      elGrid.setAttribute("y", -lh);
+
+      var svgW = +elSvg.getAttribute("width");
+      var svgH = +elSvg.getAttribute("height");
+
+      elSurface.setAttribute("width", svgW + lw * 2);
+      elSurface.setAttribute("height", svgH + lh * 2);
+
+      elSurface.setAttribute("x", -lw);
+      elSurface.setAttribute("y", -lh);
+
+      elSurface.setAttribute("width", svgW + lw * 2);
+      elSurface.setAttribute("height", svgH + lh * 2);
+    }
+
+    surface.addEventListener("mouseleave", onMouseLeave, false);
+
+    // If the mouse moves out of the surface area, the mouse up event will not trigger,
+    // so we clear the mouseDown flag so that scrolling does not resume "by itself"
+    // when the user moves the mouse back onto the surface, which would otherwise
+    // require the user to click to clear the mouseDown flag.
+    function onMouseLeave(evt) {
+      evt.preventDefault();
+      mouseDown = false;
+    }
+  </script>
 </html>
