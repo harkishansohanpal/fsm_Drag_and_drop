@@ -28,6 +28,7 @@
 .state-container-body-oncanvas {
   height: 200px;
   overflow: hidden;
+  opacity: 1.0;
 }
 .state-container-oncanvas {
   background: white;
@@ -54,6 +55,8 @@
   width: fit-content;
   white-space: nowrap;
   z-index: 2;
+  margin-left: 7px;
+  margin-top: 5px;
 }
 .events {
   background-color: #9acfea;
@@ -66,9 +69,19 @@
 }
 
 .canvas {
-  background-color: white;
+  background-color: rgba(0,0,0,0);
   position: absolute;
   right: 0px;
   bottom: 0px;
   top: 0px;
+ 
+}
+
+
+#theCanvas {
+  position: absolute;
+  top:0px;
+  left:400px;
+  z-index:-1;
+
 }
