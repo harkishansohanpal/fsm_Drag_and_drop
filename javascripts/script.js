@@ -1,5 +1,169 @@
 
+var connections = [];
+var context =document.getElementById("theCanvas").getContext("2d");
+var diagram = null;
 
+//code for adding a new connection
+var addConnectionState = "not begin";
+function addConnection(data){
+	// when add connection is clicked
+	if(data == "start"){
+		addConnectionState = [];
+	}
+	// if a state is clicked and the current addConnectionState is an array:
+	if(typeof(data) == "number" && typeof(addConnectionState) == "object"){
+		console.log(addConnectionState);
+		addConnectionState.push(data)
+		if(addConnectionState.length == 2){
+			addConnectionState.push(prompt("enter the color"));
+			if(addConnectionState[2] != null){
+				connections.push(addConnectionState);
+				drawLines();
+			}
+				addConnectionState = "not begin";
+			
+		}
+
+
+	}
+}
+
+//gets the width of the screen
+function getWidth(){
+	return $(window).width();
+}
+
+//draws a line with the given coordinates and color
+function drawLine(x0, y0, x1, y1, color){
+//	console.log(x0, y0, x1, y1)
+	 context.beginPath(); 
+   context.moveTo(x0,y0);
+  context.lineTo(x1,y1);
+  context.strokeStyle = color;
+  context.stroke();
+}
+
+//draws a circle with the given coordinates and color
+function drawCircle(x,y,r, color){
+	console.log(x,y,r)
+	context.beginPath();
+	context.arc(x,y,r,0*Math.PI,2*Math.PI);
+	context.strokeStyle = color;
+	context.stroke();
+	
+}
+//get the coordinates of a given state object
+function getLocation(i){
+	return diagram[0][i].position;
+}
+
+
+//adds a connection to those states
+function connect(x,y, color){	
+	if(color == undefined){
+		throw "undefined color";
+	}
+	connections.push([x,y,color])
+	drawLine(getLocation(x).left+150, getLocation(x).top+150, getLocation(y).left+150, getLocation(y).top+150,color);
+}
+
+//connect every element in list1 with its corresponding element in lst2
+function connectMultiplePairs(lst1, lst2, colors){
+	context.clearRect(0,0,3000, 3000);
+	for(var i=0;i<lst1.length;i++){
+		connect(lst1[i] , lst2[i],colors[i]);
+	}
+}
+
+//get all locations
+function getAllLocation(){
+	for(var i=0; i<diagram.length;i++){
+		console.log(i + " " + getLocation(i).left + " " + getLocation(i).top);
+	}
+	
+}
+
+//clears the canvas then draws all connections
+function drawLines(ui){
+				context.clearRect(0,0,3000,3000);
+				var counter = {}; // count how many time a pair has showed up
+				//so we can draw new lines that don't overlap with old ones.
+				connections.forEach(function(d){
+				
+				var domain = d[0];
+				var target = d[1];
+				var color = d[2];
+				if(domain < target){
+						var temp = domain;
+						domain = target;
+						target = temp;
+					}
+				counter[domain + " " + target] = (counter[domain + " " + target] == undefined ? 1 : counter[domain + " " + target]+1);
+				var offset = counter[domain + " " + target];
+				console.log(domain + " " + target + " " + offset);
+				//offsets 
+				var line_offset_left = getWidth()*(0.01*offset);
+				var line_offset_top = 100+5*offset;
+				var circle_offset_left = getWidth()*0.15;
+				var circle_offset_top = 10;
+				var circle_radius = getWidth()*(0.03-0.003*offset);
+				try{
+				var id = getIdFromString(ui.helper[0].getAttribute("class"));
+				} catch(e){
+					var id = null;
+				}
+				if(domain == id && target == id){
+					try{
+						drawCircle(ui.position.left+circle_offset_left, ui.position.top+circle_offset_top,circle_radius, color);
+					} catch( e){
+						;
+					}					
+				}
+				else if(target == id){
+					try{
+					drawLine(diagram[0][domain].position.left+line_offset_left, diagram[0][domain].position.top+line_offset_top,ui.position.left+line_offset_left, ui.position.top+line_offset_top, color);
+					} catch( e){
+						;
+					}
+				}
+				else if(domain == id){
+					try{
+					drawLine(ui.position.left+line_offset_left, ui.position.top+line_offset_top,diagram[0][target].position.left+line_offset_left, diagram[0][target].position.top+line_offset_top, color);
+					} catch( e){
+						;
+					}				
+				} else{
+					try{
+						if(domain == target){
+							drawCircle(diagram[0][domain].position.left+circle_offset_left, diagram[0][domain].position.top+circle_offset_top,circle_radius, color);
+						}
+						else {
+							drawLine(diagram[0][domain].position.left+line_offset_left, diagram[0][domain].position.top+line_offset_top , diagram[0][target].position.left+line_offset_left, diagram[0][target].position.top+line_offset_top, color);
+						}
+					} catch( e){
+						;
+					}						
+					
+				}
+				})
+	
+}
+
+
+//gets the ID from the given state class
+//for example: state-container-oncanvas State-2 ui-draggable ui-draggable-handle ui-droppable -> 2
+
+function getIdFromString(s){
+		//console.log("ID");
+		//console.log(s);
+		return parseInt(s.substr(31, s.indexOf("u", 31)));
+}
+
+
+function clickState(){
+	
+	addConnection("start");
+}
 
 $(init);
 
@@ -8,16 +172,9 @@ function init() {
   //diagram is the main array, we push data into it
   var stateData = [];
   var eventData = [];
-  var diagram = [stateData, eventData];
+  diagram = [stateData, eventData];
   var canvas = $(".canvas");
   var stateCanvasBody = $(".state-container-oncanvas");
-
-  $(".eventlist").mousedown(function(){
-    $(this).css("background-color","red")
-  });
-  $(".eventlist").mouseup(function(){
-    $(this).css("background-color","")
-  });
   
 //make state container draggable
   $(".state-container").draggable({
@@ -42,9 +199,13 @@ function init() {
     // if dropped div is state-container then make object state
     drop: function(event, ui) {
     if (ui.helper.hasClass("state-container")) {
+		var position =  ui.helper.position();
+		console.log(position)
+		position.left = position.left -getWidth()*0.20; // TODO
+		console.log(position)
         var state = {
           _id: stateID++,
-          position: ui.helper.position(),
+          position: position,
           behaviourArray:[],
           type: "state"
         };
@@ -97,9 +258,15 @@ function init() {
         })
         //make state-container in canvas draggable
         .draggable({
+			drag:function(event, ui){
+				//draw all connections when dragged
+				drawLines(ui);
+			},
+			
           stop: function(event, ui) {
             //console.log(ui);
-            var id = ui.helper.attr("id");
+            var id = getIdFromString(ui.helper[0].getAttribute("class") );
+			
             for (var i in diagram[0]) {
               if (diagram[0][i]._id == id) {
                 diagram[0][i].position.top = ui.position.top;
@@ -146,9 +313,13 @@ function init() {
       //adding the attribute state_id
       .attr("state_id", state._id)
       //to remove the element when even click occurs
-      .click(function(){
-        clickCount++;
+      .click(function(e, ui){
+		 // mark it for adding connection
+		addConnection(getIdFromString(e.currentTarget.getAttribute("class")))
+        
+		clickCount++;
         if(clickCount%2 != 0){
+
           //change the border color to red when deleting 
           $(this).css({
             border: "2px solid red",
