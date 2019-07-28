@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+    />
+    <link rel="stylesheet" href="/resources/demos/style.css" />
+    <title>Document</title>
+  </head>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <style >
+    #drag1 {
+      height: 100px;
+      width: 100px;
+    }
+
+    #drag2 {
+      height: 100px;
+      width: 100px;
+    }
+  </style>
+  <script>
+    $(function() {
+      $("#drag1").draggable({
+        drag: function() {
+            var offset = $(this).offset();
+            var xPos = offset.left;
+            var yPos = offset.top;
+            $(this).text('x: ' + xPos + '  y: ' + yPos);
+        }
+      });
+      $("#drag2").draggable();
+
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+      ctx.moveTo(0, 0);
+      ctx.lineTo(xPos, yPos);
+      ctx.stroke();
+    });
+  </script>
+  <body>
+    <canvas
+      id="myCanvas"
+      width="1000px"
+      height="1000px"
+      style="border:1px solid #d3d3d3;"
+    >
+      Your browser does not support the HTML5 canvas tag.</canvas
+    >
+    <div id="drag1" class="ui-widget-content">
+      <h1>Drag1</h1>
+    </div>
+    <div id="drag2" class="ui-widget-content">
+      <h1>Drag2</h1>
+    </div>
+  </body>
+</html>
