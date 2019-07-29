@@ -65,13 +65,6 @@ public class Event {
 		if (getClass() != obj.getClass())
 			return false;
 		Event other = (Event) obj;
-		if (EventID != other.EventID)
-			return false;
-		if (eventName == null) {
-			if (other.eventName != null)
-				return false;
-		} else if (!eventName.equals(other.eventName))
-			return false;
 		if (input != other.input)
 			return false;
 		return true;

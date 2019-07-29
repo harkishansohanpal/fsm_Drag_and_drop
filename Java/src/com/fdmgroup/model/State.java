@@ -44,7 +44,7 @@ public class State {
 
 	@Override
 	public String toString() {
-		return "State [stateID=" + stateID + ", stateName=" + stateName + ", behaviours=" + behaviours + "]";
+		return "\nState [stateID=" + stateID + ", stateName=" + stateName + ", behaviours=" + behaviours + "]";
 	}
 
 	@Override
@@ -70,13 +70,6 @@ public class State {
 			if (other.behaviours != null)
 				return false;
 		} else if (!behaviours.equals(other.behaviours))
-			return false;
-		if (stateID != other.stateID)
-			return false;
-		if (stateName == null) {
-			if (other.stateName != null)
-				return false;
-		} else if (!stateName.equals(other.stateName))
 			return false;
 		return true;
 	}

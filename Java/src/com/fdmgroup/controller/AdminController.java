@@ -28,6 +28,8 @@ public class AdminController {
 		FSMtoCodeController fsm2c = new FSMtoCodeController();
 		FSM fsm = fsm2c.parseJSON(s);
 		
+		System.out.println(fsm);
+		
 		ExecuteStateController esc = new ExecuteStateController();
 		
 		esc.execute(fsm.getCurrState());
@@ -41,6 +43,8 @@ public class AdminController {
 		
 		//Continous while loop to execute fsm unless light is sensed
 		while(!obstacle.equals(light)){
+			
+			System.out.println(esc.myFinch.getLeftLightSensor());
 			
 			if(esc.myFinch.isLeftLightSensor(93) || esc.myFinch.isRightLightSensor(93)){
 				System.out.println(esc.myFinch.getLeftLightSensor());

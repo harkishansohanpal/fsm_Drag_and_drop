@@ -102,7 +102,7 @@ public class FSM {
 		
 		
 		for(int i = 0; i < truthTable.getFromState().size(); i++){
-
+			
 			if(truthTable.getFromState().get(i).equals(fromState) && truthTable.getEdge().get(i).equals(inputEvent)){
 				return truthTable.getToState().get(i);
 			}
