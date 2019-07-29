@@ -116,7 +116,7 @@ function init() {
           drop: function(event, ui){
              //console.log($(this));
             // var stateContainerId = $(this).attr("id");
-            //console.log(diagram);
+            console.log(diagram);
               //console.log(ui);
               if (ui.helper.hasClass("behaviour")) {
                   var behaviour = {
@@ -154,7 +154,7 @@ function init() {
             border: "2px solid red",
           });
           //create and add the delete button when clicked
-          var htmlDeleteButton = `<h6 class="deleteButton">X</h6>`;
+          var htmlDeleteButton = `<h6 class="deleteButton"></h6>`;
           var stateIDToRemove = $(this)[0].attributes[1].value;
           console.log($(this)[0].attributes[1].value);
           $(".state-container-title-oncanvas-forDeletion"+stateIDToRemove).append(htmlDeleteButton);
