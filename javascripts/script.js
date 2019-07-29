@@ -4,6 +4,9 @@ var context =document.getElementById("theCanvas").getContext("2d");
 var diagram = null;
 var labelinput ="";
 var colorinput = "";
+var eventID=0;
+var eventData=[];
+var connectionIndex=0;
 
 //code for adding a new connection
 var addConnectionState = "not begin";
@@ -14,14 +17,23 @@ function addConnection(data){
 	}
 	// if a state is clicked and the current addConnectionState is an array:
 	if(typeof(data) == "number" && typeof(addConnectionState) == "object"){
-		console.log(addConnectionState);
+		//console.log(addConnectionState);
 		addConnectionState.push(data)
 		if(addConnectionState.length == 2){
       addConnectionState.push(colorinput);
       addConnectionState.push(labelinput);
+      addConnectionState.push(eventID++);
       
 			if(addConnectionState[2] != null){
-				connections.push(addConnectionState);
+        connections.push(addConnectionState);
+        eventData.push({
+          id:connections[connectionIndex][4],
+          fromState:connections[connectionIndex][0],
+          toState:connections[connectionIndex][1],
+          label:connections[connectionIndex][3]}
+          );
+          connectionIndex++;
+        //console.log(eventData);
 				drawLines();
 			}
 				addConnectionState = "not begin";
@@ -41,7 +53,7 @@ function getWidth(){
 function drawLine(x0, y0, x1, y1, color,label){
 //	console.log(x0, y0, x1, y1)
 context.strokeStyle = color;
-context.font = "20px Arial";
+context.font = "14px Arial";
 context.textBaseline = "bottom";
 context.lineWidth = 3;
   context.beginPath();
@@ -83,9 +95,9 @@ function drawLabel( ctx, text, p1, p2, alignment, padding ){
 
 //draws a circle with the given coordinates and color
 function drawCircle(x,y,r, color,label){
-  console.log(x,y,r)
+  //console.log(x,y,r)
   context.strokeStyle = color;
-  context.font = "20px Arial";
+  context.font = "14px Arial";
   context.textBaseline = "bottom";
   context.lineWidth = 3;
 	context.beginPath();
@@ -123,7 +135,7 @@ function connectMultiplePairs(lst1, lst2, colors){
 //get all locations
 function getAllLocation(){
 	for(var i=0; i<diagram.length;i++){
-		console.log(i + " " + getLocation(i).left + " " + getLocation(i).top);
+		//console.log(i + " " + getLocation(i).left + " " + getLocation(i).top);
 	}
 	
 }
@@ -138,7 +150,8 @@ function drawLines(ui){
 				var domain = d[0];
 				var target = d[1];
         var color = d[2];
-        var label = d[3]
+        var labelinput = d[3];
+        var label=labelinput + "("+domain+"=>"+target+")";
 				if(domain < target){
 						var temp = domain;
 						domain = target;
@@ -146,7 +159,7 @@ function drawLines(ui){
 					}
 				counter[domain + " " + target] = (counter[domain + " " + target] == undefined ? 1 : counter[domain + " " + target]+1);
 				var offset = counter[domain + " " + target];
-				console.log(domain + " " + target + " " + offset);
+				//console.log(domain + " " + target + " " + offset);
 				//offsets 
 				var line_offset_left = getWidth()*(0.01*offset);
 				var line_offset_top = 100+5*offset;
@@ -268,7 +281,6 @@ function init() {
 
   //diagram is the main array, we push data into it
   var stateData = [];
-  var eventData = [];
   diagram = [stateData, eventData];
   var canvas = $(".canvas");
   var stateCanvasBody = $(".state-container-oncanvas");
@@ -295,6 +307,7 @@ function init() {
     //check if it is state-container else return
     // if dropped div is state-container then make object state
     drop: function(event, ui) {
+      console.log(diagram)
     if (ui.helper.hasClass("state-container")) {
 		var position =  ui.helper.position();
 		console.log(position)
