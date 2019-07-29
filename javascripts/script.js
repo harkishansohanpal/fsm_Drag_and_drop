@@ -66,7 +66,8 @@ function init() {
       if (state.type == "state") {
         //console.log(state.behaviourArray);
         var behaviourDiv;
-        if(state.behaviourArray.length>0){
+        //if there is behaviour element in state then render behaviour else render nothing
+        if(state.behaviourArray.length > 0){
         behaviourDiv=renderBehaviour(state.behaviourArray);
         }else{
           behaviourDiv="";
@@ -74,13 +75,15 @@ function init() {
         //console.log(behaviourDiv);
 
         html = `<div class="state-container-oncanvas State-${state._id}">
-                    <div class="state-container-title">
+                    <div class="state-container-title state-container-title-oncanvas-forDeletion${state._id}">
                         <h6 >State-${state._id}</h6>
                     </div>
-                    <div class="state-container-body state-container-body-oncanvas state-container-body-oncanvas-forDeletion${state._id}">     
+                    <div class="state-container-body state-container-body-oncanvas ">     
                     ${behaviourDiv}
                     </div>
                 </div>`;
+
+        
         var clickCount = 0;
         var dom = $(html)
         .css({
@@ -91,10 +94,14 @@ function init() {
         //make state-container in canvas draggable
         .draggable({
           stop: function(event, ui) {
-            //console.log(ui);
-            var id = ui.helper.attr("id");
+            console.log(ui);
+            var id = ui.helper["0"].attributes[1].value;
+            console.log(typeof ui.helper["0"].attributes[1].value);
+            
             for (var i in diagram[0]) {
+              console.log(typeof diagram[0][i]._id);
               if (diagram[0][i]._id == id) {
+                console.log("if executed");
                 diagram[0][i].position.top = ui.position.top;
                 diagram[0][i].position.left = ui.position.left;
               }
@@ -130,7 +137,7 @@ function init() {
               diagram[0][indexOfTheState].behaviourArray.push(behaviour);
               //diagram[0][$(this)["0"].attributes[1].value].behaviourArray.push(behaviour);
                console.log($(this)["0"].attributes);
-              var htmlBehaviour = `<h6  class="behaviour" data-behaviour="${ui.helper["0"].innerHTML}">${ui.helper["0"].innerHTML}
+              var htmlBehaviour = `<h6  class="behaviour-oncanvas" data-behaviour="${ui.helper["0"].innerHTML}">${ui.helper["0"].innerHTML}
               </h6>`;
               $(".state-container-body-oncanvas",this).append(htmlBehaviour);              
                //$(this)["0"].childNodes[3].$(".state-container-body-oncanvas").append("htmlBehaviour");
@@ -150,7 +157,7 @@ function init() {
           var htmlDeleteButton = `<h6 class="deleteButton">X</h6>`;
           var stateIDToRemove = $(this)[0].attributes[1].value;
           console.log($(this)[0].attributes[1].value);
-          $(".state-container-body-oncanvas-forDeletion"+stateIDToRemove).append(htmlDeleteButton);
+          $(".state-container-title-oncanvas-forDeletion"+stateIDToRemove).append(htmlDeleteButton);
           //after clicking on the state container, if they click on X then the state will be removed
           $(".deleteButton").click(function(){
             for(var i=0; i<diagram[0].length; i++){
@@ -172,6 +179,7 @@ function init() {
         }
       });
         canvas.append(dom);
+        $(".state-container-oncanvas").resizable({});
 
       } else if (state.type === "behaviour") {
         
@@ -188,7 +196,7 @@ function init() {
     var dom2="";
     for( var b in behaviourArray){
       var beh = behaviourArray[b];
-    var htmlBehaviour = `<h6 class="behaviour data-behaviour=${beh.behaviourType}">${beh.behaviourType}</h6>`;
+    var htmlBehaviour = `<h6 class="behaviour-oncanvas data-behaviour=${beh.behaviourType}">${beh.behaviourType}</h6>`;
         dom2 += htmlBehaviour;
     }
     
