@@ -179,7 +179,7 @@ function init() {
         }
       });
         canvas.append(dom);
-        $(".state-container-oncanvas").resizable({});
+        //$(".state-container-body-oncanvas").resizable({});
 
       } else if (state.type === "behaviour") {
         
