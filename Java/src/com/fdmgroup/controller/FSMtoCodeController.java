@@ -1,17 +1,25 @@
 package com.fdmgroup.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import com.fdmgroup.model.Behaviour;
 import com.fdmgroup.model.Event;
 import com.fdmgroup.model.FSM;
 import com.fdmgroup.model.Input;
 import com.fdmgroup.model.State;
 import com.fdmgroup.model.TruthTable;
+<<<<<<< HEAD
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 
 import org.json.*;
 
@@ -137,5 +145,5 @@ public class FSMtoCodeController {
 		result.put("startState", fsm.getInitialState().getStateName());
 		result.put("endState", new JSONArray(fsm.getFinalStates().stream().map((x -> inverseParseState(x) )).collect(Collectors.toList())));
 		return result.toString();
-	}
+
 }

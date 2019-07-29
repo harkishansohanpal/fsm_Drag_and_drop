@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="FinchFSM">
+    <wb-module deploy-name="FincFSM">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/resources"/>
-        <property name="java-output-path" value="/FinchFSM/build/classes"/>
-        <property name="context-root" value="FinchFSM"/>
+        <property name="java-output-path" value="/FincFSM/build/classes"/>
+        <property name="context-root" value="FincFSM"/>
     </wb-module>
 </project-modules>

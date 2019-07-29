@@ -3,20 +3,9 @@ package com.fdmgroup.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-
-@Entity
 public class TruthTable {
 
-	@Id
-	@SequenceGenerator(name = "TruthTableSeq", sequenceName = "TT_SEQ", initialValue = 1, allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TruthTableSeq")
 	private int ttID;
-	
 	private List<State> fromState;
 	private List<State> toState;
 	private List<Event> edge;
@@ -27,35 +16,30 @@ public class TruthTable {
 		toState = new ArrayList<State>();
 		edge = new ArrayList<Event>();
 	}
-
 	public int getTtID() {
 		return ttID;
 	}
-
+	public void setTtID(int ttID) {
+		this.ttID = ttID;
+	}
 	public List<State> getFromState() {
 		return fromState;
 	}
-
 	public void setFromState(List<State> fromState) {
 		this.fromState = fromState;
 	}
-
 	public List<State> getToState() {
 		return toState;
 	}
-
 	public void setToState(List<State> toState) {
 		this.toState = toState;
 	}
-
 	public List<Event> getEdge() {
 		return edge;
 	}
-
 	public void setEdge(List<Event> edge) {
 		this.edge = edge;
 	}
-	
 	
 	/**
 	 * This method adds a row to the truth table
@@ -90,7 +74,6 @@ public class TruthTable {
 	public String toString() {
 		return "TruthTable [fromState=" + fromState + ", toState=" + toState + ", edge=" + edge + "]";
 	}
-	
 	
 	
 	

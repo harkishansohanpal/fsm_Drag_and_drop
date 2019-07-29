@@ -1,32 +1,28 @@
 package com.fdmgroup.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
-@Entity
-@Table(name="FSMEvent")
 public class Event {
 	
-	@Id
-	@SequenceGenerator(name = "FSMEventSeq", sequenceName = "FSM_Event_SEQ", initialValue = 1, allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FSMEventSeq")
 	private int EventID;
 	private String eventName;
-	
 	private Input input;
 	
 	public Event() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	public Event(String eventName, Input input) {
 		super();
 		this.eventName = eventName;
 		this.input = input;
+	}
+
+	public int getEventID() {
+		return EventID;
+	}
+
+	public void setEventID(int eventID) {
+		EventID = eventID;
 	}
 
 	public String getEventName() {
@@ -47,7 +43,7 @@ public class Event {
 
 	@Override
 	public String toString() {
-		return "Event [eventName=" + eventName + ", input=" + input + "]\n";
+		return "Event [EventID=" + EventID + ", eventName=" + eventName + ", input=" + input + "]";
 	}
 
 	@Override
@@ -71,10 +67,17 @@ public class Event {
 		Event other = (Event) obj;
 		if (EventID != other.EventID)
 			return false;
+		if (eventName == null) {
+			if (other.eventName != null)
+				return false;
+		} else if (!eventName.equals(other.eventName))
+			return false;
 		if (input != other.input)
 			return false;
 		return true;
 	}
+
+	
 	
 	
 	

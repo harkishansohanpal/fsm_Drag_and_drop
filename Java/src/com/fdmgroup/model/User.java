@@ -17,6 +17,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "FSMUser")
 @NamedQueries({
+	@NamedQuery(name = "User.getByUserID", query="SELECT u FROM User u WHERE u.userID = ?1"),
 	@NamedQuery(name = "User.getAllUsers", query = "SELECT u FROM User u"),
 	@NamedQuery(name = "User.getByUsername", query = "SELECT u FROM User u WHERE u.username = ?1")
 })
@@ -36,7 +37,8 @@ public class User {
 	private String password;
 	
 	@OneToMany
-	private List<FSM> myFSM;
+	@Resource
+	private List<JSONFsm> myFSM;
 
 	public User() {
 		super();
@@ -74,11 +76,11 @@ public class User {
 		this.password = password;
 	}
 
-	public List<FSM> getMyFSM() {
+	public List<JSONFsm> getMyFSM() {
 		return myFSM;
 	}
 
-	public void setMyFSM(List<FSM> myFSM) {
+	public void setMyFSM(List<JSONFsm> myFSM) {
 		this.myFSM = myFSM;
 	}
 
@@ -91,5 +93,5 @@ public class User {
 	
 	
 	
-	
 }
+

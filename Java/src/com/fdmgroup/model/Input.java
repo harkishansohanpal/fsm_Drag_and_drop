@@ -5,6 +5,6 @@ public enum Input {
 	NoObstacle,
 	ObstacleL,
 	ObstacleR,
-	ObstacleAll
-	
+	ObstacleAll,
+	Light
 }
