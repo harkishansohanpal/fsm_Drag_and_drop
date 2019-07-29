@@ -1,15 +1,17 @@
 package com.fdmgroup.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import com.fdmgroup.model.Behaviour;
 import com.fdmgroup.model.Event;
 import com.fdmgroup.model.FSM;
 import com.fdmgroup.model.Input;
 import com.fdmgroup.model.State;
 import com.fdmgroup.model.TruthTable;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.json.*;
 
 public class FSMtoCodeController {
@@ -78,5 +80,6 @@ public class FSMtoCodeController {
 		}
 		return null;
 	}
+	
 	
 }

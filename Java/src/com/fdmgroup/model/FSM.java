@@ -2,46 +2,19 @@ package com.fdmgroup.model;
 
 import java.util.List;
 
-import javax.annotation.Resource;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
-@Entity
-@Table(name="FSMTable")
-@NamedQueries({
-	@NamedQuery(name = "FSM.getAllFSMs", query = "SELECT f FROM FSM f"),
-	@NamedQuery(name = "FSM.getFSMByID", query = "SELECT f FROM FSM f WHERE f.FSMID = ?1")
-})
 public class FSM {
 
-	@Id
-	@SequenceGenerator(name = "FSMSeq", sequenceName = "FSM_SEQ", initialValue = 1, allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FSMSeq")
 	private int FSMID;
-	
-	@Resource
-	@OneToOne
 	private TruthTable truthTable;
 	private State currState;
 	private Event recentEvent;
 	private State initialState;
 	private List<State> finalStates;
-	
-	@ManyToOne
-	private User user;
-	
+
 	public FSM() {
 		super();
 	}
-	
+
 	public FSM(TruthTable truthTable, State currState, Event recentEvent, State initialState, List<State> finalStates) {
 		super();
 		this.truthTable = truthTable;
@@ -95,14 +68,10 @@ public class FSM {
 		return FSMID;
 	}
 
-	public User getUser() {
-		return user;
+	public void setFSMID(int fSMID) {
+		FSMID = fSMID;
 	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
+	
 	/**
 	 * The initial method to start the FSM
 	 * @param inputEvent The first event given
