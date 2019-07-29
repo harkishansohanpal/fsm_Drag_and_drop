@@ -2,6 +2,8 @@
 var connections = [];
 var context =document.getElementById("theCanvas").getContext("2d");
 var diagram = null;
+var labelinput ="";
+var colorinput = "";
 
 //code for adding a new connection
 var addConnectionState = "not begin";
@@ -15,7 +17,9 @@ function addConnection(data){
 		console.log(addConnectionState);
 		addConnectionState.push(data)
 		if(addConnectionState.length == 2){
-			addConnectionState.push(prompt("enter the color"));
+      addConnectionState.push(colorinput);
+      addConnectionState.push(labelinput);
+      
 			if(addConnectionState[2] != null){
 				connections.push(addConnectionState);
 				drawLines();
@@ -34,22 +38,63 @@ function getWidth(){
 }
 
 //draws a line with the given coordinates and color
-function drawLine(x0, y0, x1, y1, color){
+function drawLine(x0, y0, x1, y1, color,label){
 //	console.log(x0, y0, x1, y1)
-	 context.beginPath(); 
-   context.moveTo(x0,y0);
+context.strokeStyle = color;
+context.font = "20px Arial";
+context.textBaseline = "bottom";
+context.lineWidth = 3;
+  context.beginPath();
+  context.stroke(); 
+  context.moveTo(x0,y0);
   context.lineTo(x1,y1);
-  context.strokeStyle = color;
   context.stroke();
+  
+  
+  var p1 = { x: x0, y: y0 };
+  var p2 = { x: x1, y: y1 };
+  drawLabel(context, label, p1, p2, "center", 0);
+}
+
+
+function drawLabel( ctx, text, p1, p2, alignment, padding ){
+  if (!alignment) alignment = 'center';
+  if (!padding) padding = 0;
+
+  var dx = p2.x - p1.x;
+  var dy = p2.y - p1.y;   
+  var p, pad;
+  if (alignment=='center'){
+    p = p1;
+    pad = 0.35;
+  } else {
+    var left = alignment=='left';
+    p = left ? p1 : p2;
+    pad = padding / Math.sqrt(dx*dx+dy*dy) * (left ? 1 : -1);
+  }
+
+  ctx.save();
+  ctx.textAlign = alignment;
+  ctx.translate(p.x+dx*pad,p.y+dy*pad);
+  //ctx.rotate(Math.atan2(dy,-dx));
+  ctx.fillText(text,0,0);
+  ctx.restore();
 }
 
 //draws a circle with the given coordinates and color
-function drawCircle(x,y,r, color){
-	console.log(x,y,r)
+function drawCircle(x,y,r, color,label){
+  console.log(x,y,r)
+  context.strokeStyle = color;
+  context.font = "20px Arial";
+  context.textBaseline = "bottom";
+  context.lineWidth = 3;
 	context.beginPath();
 	context.arc(x,y,r,0*Math.PI,2*Math.PI);
 	context.strokeStyle = color;
-	context.stroke();
+  context.stroke();
+  var p1 = { x: x, y: y };
+  var p2 = { x: x, y: y };
+  drawLabel(context, label, p1, p2, "center", 0);
 	
 }
 //get the coordinates of a given state object
@@ -92,7 +137,8 @@ function drawLines(ui){
 				
 				var domain = d[0];
 				var target = d[1];
-				var color = d[2];
+        var color = d[2];
+        var label = d[3]
 				if(domain < target){
 						var temp = domain;
 						domain = target;
@@ -105,8 +151,8 @@ function drawLines(ui){
 				var line_offset_left = getWidth()*(0.01*offset);
 				var line_offset_top = 100+5*offset;
 				var circle_offset_left = getWidth()*0.15;
-				var circle_offset_top = 10;
-				var circle_radius = getWidth()*(0.03-0.003*offset);
+				var circle_offset_top = 0;
+				var circle_radius = getWidth()*(0.06-0.003*offset);
 				try{
 				var id = getIdFromString(ui.helper[0].getAttribute("class"));
 				} catch(e){
@@ -114,31 +160,31 @@ function drawLines(ui){
 				}
 				if(domain == id && target == id){
 					try{
-						drawCircle(ui.position.left+circle_offset_left, ui.position.top+circle_offset_top,circle_radius, color);
+						drawCircle(ui.position.left+circle_offset_left, ui.position.top+circle_offset_top,circle_radius, color,label);
 					} catch( e){
 						;
 					}					
 				}
 				else if(target == id){
 					try{
-					drawLine(diagram[0][domain].position.left+line_offset_left, diagram[0][domain].position.top+line_offset_top,ui.position.left+line_offset_left, ui.position.top+line_offset_top, color);
+					drawLine(diagram[0][domain].position.left+line_offset_left, diagram[0][domain].position.top+line_offset_top,ui.position.left+line_offset_left, ui.position.top+line_offset_top, color,label);
 					} catch( e){
 						;
 					}
 				}
 				else if(domain == id){
 					try{
-					drawLine(ui.position.left+line_offset_left, ui.position.top+line_offset_top,diagram[0][target].position.left+line_offset_left, diagram[0][target].position.top+line_offset_top, color);
+					drawLine(ui.position.left+line_offset_left, ui.position.top+line_offset_top,diagram[0][target].position.left+line_offset_left, diagram[0][target].position.top+line_offset_top, color,label);
 					} catch( e){
 						;
 					}				
 				} else{
 					try{
 						if(domain == target){
-							drawCircle(diagram[0][domain].position.left+circle_offset_left, diagram[0][domain].position.top+circle_offset_top,circle_radius, color);
+							drawCircle(diagram[0][domain].position.left+circle_offset_left, diagram[0][domain].position.top+circle_offset_top,circle_radius, color,label);
 						}
 						else {
-							drawLine(diagram[0][domain].position.left+line_offset_left, diagram[0][domain].position.top+line_offset_top , diagram[0][target].position.left+line_offset_left, diagram[0][target].position.top+line_offset_top, color);
+							drawLine(diagram[0][domain].position.left+line_offset_left, diagram[0][domain].position.top+line_offset_top , diagram[0][target].position.left+line_offset_left, diagram[0][target].position.top+line_offset_top, color,label);
 						}
 					} catch( e){
 						;
@@ -164,6 +210,57 @@ function clickState(){
 	
 	addConnection("start");
 }
+
+
+/* Event visuals */
+
+
+$("#noObstacle").mousedown(function () { 
+  $(this).css("background-color","green");
+  labelinput = "No Obstacle"
+  colorinput = "green"
+});
+
+$(".eventlist").mouseup(function () { 
+  $(this).css("background-color","");
+});
+
+$("#obstacleLeft").mousedown(function () { 
+  $(this).css("background-color","black");
+  labelinput = "Obstacle Left"
+  colorinput = "black"
+});
+
+$("#obstacleRight").mousedown(function () { 
+  $(this).css("background-color","blue");
+  labelinput = "Obstacle Right"
+  colorinput = "blue"
+});
+
+$("#obstacleCenter").mousedown(function () { 
+  $(this).css("background-color","yellow");
+  labelinput = "Obstacle Center"
+  colorinput = "yellow"
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*===========================================================States=============================================================================== */
 
 $(init);
 
@@ -366,7 +463,7 @@ function init() {
     var dom2="";
     for( var b in behaviourArray){
       var beh = behaviourArray[b];
-    var htmlBehaviour = `<h6 class="behaviour data-behaviour=${beh.behaviourType}">${beh.behaviourType}</h6>`;
+      var htmlBehaviour = `<h6 class="behaviour data-behaviour=${beh.behaviourType}">${beh.behaviourType}</h6>`;
         dom2 += htmlBehaviour;
     }
     
