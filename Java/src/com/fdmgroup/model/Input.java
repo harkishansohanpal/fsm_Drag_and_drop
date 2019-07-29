@@ -7,4 +7,5 @@ public enum Input {
 	ObstacleR,
 	ObstacleAll,
 	Light
+
 }

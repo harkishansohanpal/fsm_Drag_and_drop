@@ -64,29 +64,17 @@ context.lineWidth = 3;
   
   var p1 = { x: x0, y: y0 };
   var p2 = { x: x1, y: y1 };
-  drawLabel(context, label, p1, p2, "center", 0);
 }
 
 
-function drawLabel( ctx, text, p1, p2, alignment, padding ){
+function drawLabel( ctx, text, p1, p2, alignment, offset ){
   if (!alignment) alignment = 'center';
-  if (!padding) padding = 0;
-
-  var dx = p2.x - p1.x;
-  var dy = p2.y - p1.y;   
-  var p, pad;
-  if (alignment=='center'){
-    p = p1;
-    pad = 0.35;
-  } else {
-    var left = alignment=='left';
-    p = left ? p1 : p2;
-    pad = padding / Math.sqrt(dx*dx+dy*dy) * (left ? 1 : -1);
-  }
-
+  var dx = p2.left - p1.left;
+  var dy = p2.top - p1.top;
   ctx.save();
   ctx.textAlign = alignment;
-  ctx.translate(p.x+dx*pad,p.y+dy*pad);
+  console.log(p1.left+dx*offset,p1.top+dy*offset)
+  ctx.translate(p1.left+dx*offset,p1.top+dy*offset);
   //ctx.rotate(Math.atan2(dy,-dx));
   ctx.fillText(text,0,0);
   ctx.restore();
@@ -105,7 +93,6 @@ function drawCircle(x,y,r, color,label){
   context.stroke();
   var p1 = { x: x, y: y };
   var p2 = { x: x, y: y };
-  drawLabel(context, label, p1, p2, "center", 0);
 	
 }
 //get the coordinates of a given state object
@@ -170,39 +157,23 @@ function drawLines(ui){
 				} catch(e){
 					var id = null;
 				}
+				
+				var domainPosition = domain == id ? ui.position : diagram[0][domain].position; 
+				var targetPosition = target == id ? ui.position : diagram[0][target].position;
+				
 				if(domain == id && target == id){
-					try{
-						drawCircle(ui.position.left+circle_offset_left, ui.position.top+circle_offset_top,circle_radius, color,label);
-					} catch( e){
-						;
-					}					
+						drawCircle(domainPosition.left+circle_offset_left, domainPosition.top+circle_offset_top,circle_radius, color,label);
+											
 				}
-				else if(target == id){
-					try{
-					drawLine(diagram[0][domain].position.left+line_offset_left, diagram[0][domain].position.top+line_offset_top,ui.position.left+line_offset_left, ui.position.top+line_offset_top, color,label);
-					} catch( e){
-						;
-					}
-				}
-				else if(domain == id){
-					try{
-					drawLine(ui.position.left+line_offset_left, ui.position.top+line_offset_top,diagram[0][target].position.left+line_offset_left, diagram[0][target].position.top+line_offset_top, color,label);
-					} catch( e){
-						;
-					}				
-				} else{
-					try{
-						if(domain == target){
-							drawCircle(diagram[0][domain].position.left+circle_offset_left, diagram[0][domain].position.top+circle_offset_top,circle_radius, color,label);
-						}
-						else {
-							drawLine(diagram[0][domain].position.left+line_offset_left, diagram[0][domain].position.top+line_offset_top , diagram[0][target].position.left+line_offset_left, diagram[0][target].position.top+line_offset_top, color,label);
-						}
-					} catch( e){
-						;
-					}						
+				else {
+					var position1 = {"left":domainPosition.left+line_offset_left, "top": domainPosition.top+line_offset_top};
+					var position2 = {"left":targetPosition.left+line_offset_left, "top": targetPosition.top+line_offset_top};
 					
+					drawLine(domainPosition.left+line_offset_left, domainPosition.top+line_offset_top,targetPosition.left+line_offset_left, targetPosition.top+line_offset_top, color,label);
+					drawLabel(context, label, position1, position2, "center", 0.7-0.1*offset);
 				}
+				
+				//ctx, text, p1, p2, alignment, offset 
 				})
 	
 }
@@ -254,14 +225,6 @@ $("#obstacleCenter").mousedown(function () {
   labelinput = "Obstacle Center"
   colorinput = "yellow"
 });
-
-
-
-
-
-
-
-
 
 
 
