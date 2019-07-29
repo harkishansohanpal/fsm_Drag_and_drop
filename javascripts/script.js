@@ -16,7 +16,7 @@ function addConnection(data){
 	}
 	// if a state is clicked and the current addConnectionState is an array:
 	if(typeof(data) == "number" && typeof(addConnectionState) == "object"){
-		//console.log(addConnectionState);
+		////console.log(addConnectionState);
 		addConnectionState.push(data)
 		if(addConnectionState.length == 2){
       addConnectionState.push(colorinput);
@@ -24,15 +24,17 @@ function addConnection(data){
       addConnectionState.push(eventID++);
       
 			if(addConnectionState[2] != null){
-        connections.push(addConnectionState);
-        eventData.push({
-          id:connections[connectionIndex][4],
-          fromState:connections[connectionIndex][0],
-          toState:connections[connectionIndex][1],
-          label:connections[connectionIndex][3]}
-          );
-          connectionIndex++;
-        //console.log(eventData);
+				//first remove all "identical" outs
+				removeConnection(addConnectionState[0], "*", addConnectionState[3]);
+				connections.push(addConnectionState);
+				eventData.push({
+				  id:addConnectionState[4],
+				  fromState:addConnectionState[0],
+				  toState:addConnectionState[1],
+				  label:addConnectionState[3]}
+				  );
+				  connectionIndex++;
+				////console.log(eventData);
 				drawLines();
 			}
 				addConnectionState = "not begin";
@@ -42,6 +44,16 @@ function addConnection(data){
 
 	}
 }
+// remove by source/destination/label. Use "*" for placeholder
+function removeConnection(source, destination, label){
+	for(var i=connections.length-1; i>=0;i--){
+		if((eventData[i]["fromState"] == source || source == "*") && (eventData[i]["toState"] == destination || destination == "*") && (eventData[i]["label"] == label || label == "*")){
+			eventData.splice(i,1);
+			connections.splice(i,1);
+		}
+	}
+}
+
 
 //gets the width of the screen
 function getWidth(){
@@ -50,7 +62,7 @@ function getWidth(){
 
 //draws a line with the given coordinates and color
 function drawLine(x0, y0, x1, y1, color,label){
-//	console.log(x0, y0, x1, y1)
+//	//console.log(x0, y0, x1, y1)
 context.strokeStyle = color;
 context.font = "14px Arial";
 context.textBaseline = "bottom";
@@ -73,7 +85,7 @@ function drawLabel( ctx, text, p1, p2, alignment, offset ){
   var dy = p2.top - p1.top;
   ctx.save();
   ctx.textAlign = alignment;
-  console.log(p1.left+dx*offset,p1.top+dy*offset)
+  //console.log(p1.left+dx*offset,p1.top+dy*offset)
   ctx.translate(p1.left+dx*offset,p1.top+dy*offset);
   //ctx.rotate(Math.atan2(dy,-dx));
   ctx.fillText(text,0,0);
@@ -82,7 +94,7 @@ function drawLabel( ctx, text, p1, p2, alignment, offset ){
 
 //draws a circle with the given coordinates and color
 function drawCircle(x,y,r, color,label){
-  //console.log(x,y,r)
+  ////console.log(x,y,r)
   context.strokeStyle = color;
   context.font = "14px Arial";
   context.textBaseline = "bottom";
@@ -121,7 +133,7 @@ function connectMultiplePairs(lst1, lst2, colors){
 //get all locations
 function getAllLocation(){
 	for(var i=0; i<diagram.length;i++){
-		//console.log(i + " " + getLocation(i).left + " " + getLocation(i).top);
+		////console.log(i + " " + getLocation(i).left + " " + getLocation(i).top);
 	}
 	
 }
@@ -145,7 +157,7 @@ function drawLines(ui){
 					}
 				counter[domain + " " + target] = (counter[domain + " " + target] == undefined ? 1 : counter[domain + " " + target]+1);
 				var offset = counter[domain + " " + target];
-				//console.log(domain + " " + target + " " + offset);
+				////console.log(domain + " " + target + " " + offset);
 				//offsets 
 				var line_offset_left = getWidth()*(0.01*offset);
 				var line_offset_top = 100+5*offset;
@@ -183,8 +195,8 @@ function drawLines(ui){
 //for example: state-container-oncanvas State-2 ui-draggable ui-draggable-handle ui-droppable -> 2
 
 function getIdFromString(s){
-		//console.log("ID");
-		//console.log(s);
+		////console.log("ID");
+		////console.log(s);
 		return parseInt(s.substr(31, s.indexOf("u", 31)));
 }
 
@@ -269,12 +281,12 @@ function init() {
     //check if it is state-container else return
     // if dropped div is state-container then make object state
     drop: function(event, ui) {
-      console.log(diagram)
+      //console.log(diagram)
     if (ui.helper.hasClass("state-container")) {
 		var position =  ui.helper.position();
-		console.log(position)
+		//console.log(position)
 		position.left = position.left -getWidth()*0.20; // TODO
-		console.log(position)
+		//console.log(position)
         var state = {
           _id: stateID++,
           position: position,
@@ -298,20 +310,23 @@ function init() {
     canvas.empty();
     //loop through diagram array
     for (var d in diagram[0]) {
+	  if(diagram[0][d] == null){
+		continue;
+	  }
       var state = diagram[0][d];
       var html = "";
       
-      //console.log(state);      
+      ////console.log(state);      
       //if state.type is state then declare html and render
       if (state.type == "state") {
-        //console.log(state.behaviourArray);
+        ////console.log(state.behaviourArray);
         var behaviourDiv;
         if(state.behaviourArray.length>0){
         behaviourDiv=renderBehaviour(state.behaviourArray);
         }else{
           behaviourDiv="";
         }
-        //console.log(behaviourDiv);
+        ////console.log(behaviourDiv);
 
         html = `<div class="state-container-oncanvas State-${state._id}">
                     <div class="state-container-title">
@@ -333,13 +348,17 @@ function init() {
 			drag:function(event, ui){
 				//draw all connections when dragged
 				drawLines(ui);
+				
 			},
 			
           stop: function(event, ui) {
-            //console.log(ui);
+            ////console.log(ui);
             var id = getIdFromString(ui.helper[0].getAttribute("class") );
 			
             for (var i in diagram[0]) {
+			  if(diagram[0][i] == null){
+				continue;
+			  }
               if (diagram[0][i]._id == id) {
                 diagram[0][i].position.top = ui.position.top;
                 diagram[0][i].position.left = ui.position.left;
@@ -353,10 +372,10 @@ function init() {
         .droppable({  
           accept:".behaviour",
           drop: function(event, ui){
-             //console.log($(this));
+             ////console.log($(this));
             // var stateContainerId = $(this).attr("id");
-            //console.log(diagram);
-              //console.log(ui);
+            ////console.log(diagram);
+              ////console.log(ui);
               if (ui.helper.hasClass("behaviour")) {
                   var behaviour = {
                       _id: behaviourID++,
@@ -369,13 +388,16 @@ function init() {
               //finds the index of the state that behaviour is to be addded into
               var indexOfTheState = -1;
               for(var i=0; i<diagram[0].length; i++){
+				if(diagram[0][i] == null){
+					continue;
+				}
                 if($(this)["0"].attributes[1].value == diagram[0][i]._id){
                   indexOfTheState = i;
                 }
               };
               diagram[0][indexOfTheState].behaviourArray.push(behaviour);
               //diagram[0][$(this)["0"].attributes[1].value].behaviourArray.push(behaviour);
-               console.log($(this)["0"].attributes);
+               //console.log($(this)["0"].attributes);
               var htmlBehaviour = `<h6  class="behaviour" data-behaviour="${ui.helper["0"].innerHTML}">${ui.helper["0"].innerHTML}
               </h6>`;
               $(".state-container-body-oncanvas",this).append(htmlBehaviour);              
@@ -399,14 +421,22 @@ function init() {
           //create and add the delete button when clicked
           var htmlDeleteButton = `<h6 class="deleteButton">X</h6>`;
           var stateIDToRemove = $(this)[0].attributes[1].value;
-          console.log($(this)[0].attributes[1].value);
+          //console.log($(this)[0].attributes[1].value);
           $(".state-container-body-oncanvas-forDeletion"+stateIDToRemove).append(htmlDeleteButton);
           //after clicking on the state container, if they click on X then the state will be removed
           $(".deleteButton").click(function(){
+			  removeConnection(stateIDToRemove, "*","*");
+			  removeConnection("*",stateIDToRemove, "*");
+			  
+			  //first delete all classes associated to it
             for(var i=0; i<diagram[0].length; i++){
+				if(diagram[0][i] == null){
+					continue;
+				}
               if(diagram[0][i]._id == stateIDToRemove){
                 //splice function finds the element at index i and then removes 1 element at/after that index
-                diagram[0].splice(i,1);
+				//can't actually remove as that would result in indices being messed up.
+                diagram[0][i] = null
                 //have to render the diagram to reflect the changes on the canvas, the number -1 is given randomly as it is not used 
               }
             };
