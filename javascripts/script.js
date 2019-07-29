@@ -5,6 +5,7 @@ var labelinput ="";
 var colorinput = "";
 var eventID=0;
 var eventData=[];
+var stateData = [];
 var connectionIndex=0;
 
 //code for adding a new connection
@@ -242,8 +243,10 @@ $(init);
 function init() {
 
   //diagram is the main array, we push data into it
-  var stateData = [];
+  
   diagram = [stateData, eventData];
+  
+  
   var canvas = $(".canvas");
   var stateCanvasBody = $(".state-container-oncanvas");
   
