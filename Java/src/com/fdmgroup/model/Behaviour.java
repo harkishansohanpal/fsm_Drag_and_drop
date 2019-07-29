@@ -6,7 +6,7 @@ public enum Behaviour {
 	backward,
 	turnL,
 	turnR,
-	spinL,
-	spinR
+	spin,
+	stop
 	
 }
