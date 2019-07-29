@@ -8,7 +8,10 @@ import com.fdmgroup.model.State;
 import com.fdmgroup.model.TruthTable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.json.*;
 
@@ -79,4 +82,58 @@ public class FSMtoCodeController {
 		return null;
 	}
 	
+	public JSONObject inverseParseState(State s){
+		List<String> strs= s.getBehaviours().stream().map((x -> x.toString() )).collect(Collectors.toList());
+		
+		
+		JSONArray json = new JSONArray(strs);
+		JSONObject json2 = new JSONObject();
+		json2.put("name", s.getStateName());
+		json2.put("behaviors", json);
+		return json2;
+		
+	}
+	public JSONObject inverseParseEvent(Event e){
+		Map<String, String> jsonMap = new HashMap();
+		jsonMap.put("name", e.getEventName());
+		jsonMap.put("input", e.getInput().toString());
+		return new JSONObject(jsonMap);
+		
+	}
+	// order of vertices might be different
+	public String inverseParseJSON(FSM fsm){
+		TruthTable tt = fsm.getTruthTable();
+		JSONObject result = new JSONObject();
+		
+		// first, inverse parse the truth table.
+		ArrayList<State> states = new ArrayList();
+		ArrayList<JSONObject> edges = new ArrayList<JSONObject>();
+		for(int i=0;i<tt.getFromState().size();i++){
+			State s1 = tt.getFromState().get(i);
+			Event e = tt.getEdge().get(i);
+			State s2= tt.getToState().get(i);
+			JSONObject json = new JSONObject();
+			json.put("event", inverseParseEvent(e));
+			json.put("fromState", s1.getStateName());
+			json.put("toState", s2.getStateName());
+			if(getStateFromString(states, s1.getStateName()) == null){
+				states.add(s1);
+			}
+			if(getStateFromString(states, s2.getStateName()) == null){
+				states.add(s2);
+			}
+			edges.add(json);
+		}
+		result.put("edges", edges );	
+
+		// get the vertices as well
+
+		List<JSONObject> strs= states.stream().map((x -> inverseParseState(x) )).collect(Collectors.toList());
+		result.put("vertices", strs);
+		
+		//ending
+		result.put("startState", fsm.getInitialState().getStateName());
+		result.put("endState", new JSONArray(fsm.getFinalStates().stream().map((x -> inverseParseState(x) )).collect(Collectors.toList())));
+		return result.toString();
+	}
 }
