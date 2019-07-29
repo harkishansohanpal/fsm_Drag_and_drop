@@ -113,9 +113,11 @@ public class FSMtoCodeController {
 			Event e = tt.getEdge().get(i);
 			State s2= tt.getToState().get(i);
 			JSONObject json = new JSONObject();
+			// inverse parse every event
 			json.put("event", inverseParseEvent(e));
 			json.put("fromState", s1.getStateName());
 			json.put("toState", s2.getStateName());
+			// make a list of states
 			if(getStateFromString(states, s1.getStateName()) == null){
 				states.add(s1);
 			}
@@ -131,7 +133,7 @@ public class FSMtoCodeController {
 		List<JSONObject> strs= states.stream().map((x -> inverseParseState(x) )).collect(Collectors.toList());
 		result.put("vertices", strs);
 		
-		//ending
+		//set the start and end states.
 		result.put("startState", fsm.getInitialState().getStateName());
 		result.put("endState", new JSONArray(fsm.getFinalStates().stream().map((x -> inverseParseState(x) )).collect(Collectors.toList())));
 		return result.toString();
