@@ -24,8 +24,8 @@
       class="container-fluid"
       style="position: absolute;bottom: 0px;top: 0px;left: 0px;right: 0px;"
     >
-      <div class="row" style="height: 100%;position: relative;">
-        <div class="col-2" style="border-right: 2px solid black;">
+    <div class="row" style="height: 100%;position: relative;">
+        <div class="col-3">
           <div class="row states" style="position: relative;">
             <h5>States</h5>
             <div class="state-container">
@@ -45,11 +45,16 @@
           </div>
           <div class="row events" style="position: relative;">
             <h5>Events</h5>
-            <h3 class="state tool-1">State</h3>
+            <h6 id="noObstacle" class="eventlist" onclick="clickState()">No Obstacle</h6>
+            <h6 id="obstacleLeft" class="eventlist" onclick="clickState()">Obstacle Left</h6>
+            <h6 id="obstacleRight" class="eventlist" onclick="clickState()">Obstacle Right</h6>
+            <h6 id="obstacleCenter" class="eventlist" onclick="clickState()">Obstacle Center</h6>
+            
           </div>
         </div>
-        <div class="col-10 canvas">
-           <!-- <h2>Canvas</h2>  -->
+		<canvas id="theCanvas" width=1000, height=1000> </canvas>
+        <div class="col-9 canvas">
+          <h2>Canvas</h2>
         </div>
       </div>
     </div>
