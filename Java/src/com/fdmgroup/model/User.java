@@ -35,6 +35,9 @@ public class User {
 	@Resource
 	@Column(name="FSM_Password")
 	private String password;
+	@Resource
+	@Column(name="FSM_User_Type")
+	private String userType;
 	
 	@OneToMany
 	@Resource
@@ -84,14 +87,19 @@ public class User {
 		this.myFSM = myFSM;
 	}
 
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+
 	@Override
 	public String toString() {
 		return "User [userID=" + userID + ", name=" + name + ", username=" + username + ", password=" + password
-				+ ", myFSM=" + myFSM + "]";
-	}
-	
-	
-	
+				+ ", userType=" + userType + ", myFSM=" + myFSM + "]";
+	}	
 	
 }
 

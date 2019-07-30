@@ -42,7 +42,7 @@
 				<div class="tableUser">
 					<table id="users">
 						<tr>
-							<!-- <th>Username</th> -->
+							<th>Username</th>
 							<th>FSM ID</th>
 							<th>Actions</th>
 						</tr>
@@ -55,7 +55,7 @@
 						%>
 						
 						<tr>
-							<%-- <td><%= f.getUser().getUsername() %></td> --%>
+							<td><%= f.getUser().getUsername() %></td>
 							<td><%= f.getId() %></td>
 							<td>
 								<form action="Run" style="display:inline" method="post">

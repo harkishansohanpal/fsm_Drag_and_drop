@@ -49,7 +49,7 @@ public class AdminController {
 			
 			/*if(esc.myFinch.isLeftLightSensor(93) || esc.myFinch.isRightLightSensor(93)){
 				System.out.println(esc.myFinch.getLeftLightSensor());
-				//obstacle.setInput(Input.Light);
+				//obstacle.setInput(Input.light);
 			}*/
 			
 			if(esc.myFinch.isObstacle()){
