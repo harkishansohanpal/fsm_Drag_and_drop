@@ -148,9 +148,9 @@ function drawLines(ui){
 				
 				var domain = d[0];
 				var target = d[1];
-        var color = d[2];
-        var labelinput = d[3];
-        var label=labelinput + "("+domain+"=>"+target+")";
+				var color = d[2];
+				var labelinput = d[3];
+				var label=labelinput + "("+domain+"=>"+target+")";
 				if(domain < target){
 						var temp = domain;
 						domain = target;
@@ -207,6 +207,14 @@ function clickState(){
 	addConnection("start");
 }
 
+function save(){
+	var string = JSON.stringify(transform(stateData, eventData));
+	console.log(string);
+	//var string ='{"vertices":[{"name":"A","behaviors":["Forward"]},{"name":"B","behaviors":["Backward","Backward"]},{"name":"C","behaviors":[]}],"edges":[{"event":{"name":"An","input":"NoObstacle"},"fromState":"A","toState":"B"},{"event":{"name":"Cs","input":"light"},"fromState":"C","toState":"A"},{"event":{"name":"Cr","input":"ObstacleR"},"fromState":"C","toState":"B"}],"startState":"A","endStates":[]}';
+	
+	return fetch("http://localhost:8088/FincFSM/Save", {method:"post", body:JSON.stringify({fsm:string})}).then(function(x) {console.log(x)});
+	
+}
 
 /* Event visuals */
 

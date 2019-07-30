@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fdmgroup.dao.JSONFsmDAO;
@@ -21,7 +22,7 @@ public class AdminController {
 	@Autowired
 	private JSONFsmDAO jfsmDAOObj;
 	
-	@RequestMapping(value = "/Run")
+	@RequestMapping(value = "/Run", method = RequestMethod.POST)
 	public String run(Model model, @RequestParam("fsm") String s){
 		System.out.println(s);
 		//Parse JSON string to fsm object
@@ -46,12 +47,12 @@ public class AdminController {
 			
 			System.out.println(esc.myFinch.getLeftLightSensor());
 			
-			if(esc.myFinch.isLeftLightSensor(93) || esc.myFinch.isRightLightSensor(93)){
+			/*if(esc.myFinch.isLeftLightSensor(93) || esc.myFinch.isRightLightSensor(93)){
 				System.out.println(esc.myFinch.getLeftLightSensor());
-				obstacle.setInput(Input.Light);
-			}
+				//obstacle.setInput(Input.Light);
+			}*/
 			
-			else if(esc.myFinch.isObstacle()){
+			if(esc.myFinch.isObstacle()){
 				obstacle.setInput(Input.ObstacleAll);
 			}
 			
@@ -85,7 +86,18 @@ public class AdminController {
 		List<JSONFsm> Fsms =  jfsmDAOObj.getList();
 		model.addAttribute("FSMs", Fsms);
 		
-		return "ShowFSMs";
+		return "Admin";
+	}
+	
+	@RequestMapping(value = "/Delete", method = RequestMethod.POST)
+	public String deleteFSM(Model model, @RequestParam("fsm") int id){
+		
+		jfsmDAOObj.delete(id);
+		
+		List<JSONFsm> Fsms =  jfsmDAOObj.getList();
+		model.addAttribute("FSMs", Fsms);
+		
+		return "Admin";
 	}
 	
 }

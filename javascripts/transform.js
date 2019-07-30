@@ -6,7 +6,18 @@ function transform(stateData, eventData){
 		let behArray = [];
 		
 		for (var beh in stateData[state].behaviourArray){
-			behArray.push(stateData[state].behaviourArray[beh].behaviourType);
+			var s = stateData[state].behaviourArray[beh].behaviourType;
+			var replace_table = {
+				"Forward":"Forward",
+				"Backward":"Backward",
+				"Turn Right":"TurnL",
+				"Turn Left":"TurnR",
+				"Spin":"Spin",
+			};
+			if(replace_table[s] == undefined){
+				throw "does not exist " + s;
+			}
+			behArray.push(replace_table[s]);
 		}
 		
 		verticesArray.push({name : String.fromCharCode(65 + stateData[state]._id),
@@ -31,7 +42,7 @@ function transform(stateData, eventData){
 				c = "l";
 				input = "ObstacleL";
 				break;
-			case "Obstacle Centre":
+			case "Obstacle Center":
 				c = "a";
 				input = "ObstacleAll"
 				break;
@@ -62,8 +73,7 @@ function transform(stateData, eventData){
 		vertices: verticesArray,
 		edges: edgesArray,
 		startState: String.fromCharCode(65 + stateData[0]["_id"]),
-		endState: null
-		
+		endState: []
 	}
 	
 	return jsonOutput;

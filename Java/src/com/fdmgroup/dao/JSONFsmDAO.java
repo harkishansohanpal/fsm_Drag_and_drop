@@ -3,6 +3,7 @@ package com.fdmgroup.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,4 +47,31 @@ public class JSONFsmDAO {
 		
 	}
 	
+	public JSONFsm findById(int id){
+		EntityManager em = con.getEntityManager();
+		
+		Query q = em.createNamedQuery("j.getId");
+		q.setParameter(1, id);
+		
+		JSONFsm fsm = (JSONFsm) q.getSingleResult();
+		
+		return fsm;
+		
+	}
+	
+	public void delete(int id){
+		EntityManager em = con.getEntityManager();
+		
+		JSONFsm fsm = findById(id);
+		
+		em.getTransaction().begin();
+		
+		JSONFsm managed = em.merge(fsm);
+		em.remove(managed);
+		
+		em.getTransaction().commit();
+		
+		em.close();
+		
+	}
 }

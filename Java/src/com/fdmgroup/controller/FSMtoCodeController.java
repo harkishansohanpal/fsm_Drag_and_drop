@@ -44,7 +44,7 @@ public class FSMtoCodeController {
 		}		
 		// part 3 : make the FSM
 		State start  = getStateFromString(states, json.getString("startState"));
-		JSONArray endLst = json.getJSONArray("endStates");
+		JSONArray endLst = json.getJSONArray("endState");
 		List<State> ends = new ArrayList<State>();
 		for(int i=0;i<endLst.length();i++){
 			 ends.add(getStateFromString(states, endLst.getString(i)));
@@ -69,7 +69,7 @@ public class FSMtoCodeController {
 	
 	public State parseState(JSONObject js){
 		List<Behaviour> beh = new ArrayList<Behaviour>();
-		JSONArray jsl = js.getJSONArray("behaviors");
+		JSONArray jsl = js.getJSONArray("behaviours");
 		for(int i=0;i<jsl.length();i++){
 			beh.add(parseBehaviour(jsl.getString(i)));
 		}
@@ -96,7 +96,7 @@ public class FSMtoCodeController {
 		JSONArray json = new JSONArray(strs);
 		JSONObject json2 = new JSONObject();
 		json2.put("name", s.getStateName());
-		json2.put("behaviors", json);
+		json2.put("behaviours", json);
 		return json2;
 		
 	}
