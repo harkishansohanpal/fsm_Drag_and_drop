@@ -7,7 +7,7 @@
 <title>Login</title>
 
 
-  <style><%@ include file="css/loginStyle.css" %> </style>
+  <style><%@ include file="../../resources/css/loginStyle.css" %></style>
 </head>
 <body>
 

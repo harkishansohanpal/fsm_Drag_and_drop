@@ -5,6 +5,7 @@ var labelinput ="";
 var colorinput = "";
 var eventID=0;
 var eventData=[];
+var stateData = [];
 var connectionIndex=0;
 
 //code for adding a new connection
@@ -16,7 +17,7 @@ function addConnection(data){
 	}
 	// if a state is clicked and the current addConnectionState is an array:
 	if(typeof(data) == "number" && typeof(addConnectionState) == "object"){
-		//console.log(addConnectionState);
+		////console.log(addConnectionState);
 		addConnectionState.push(data)
 		if(addConnectionState.length == 2){
       addConnectionState.push(colorinput);
@@ -24,15 +25,17 @@ function addConnection(data){
       addConnectionState.push(eventID++);
       
 			if(addConnectionState[2] != null){
-        connections.push(addConnectionState);
-        eventData.push({
-          id:connections[connectionIndex][4],
-          fromState:connections[connectionIndex][0],
-          toState:connections[connectionIndex][1],
-          label:connections[connectionIndex][3]}
-          );
-          connectionIndex++;
-        //console.log(eventData);
+				//first remove all "identical" outs
+				removeConnection(addConnectionState[0], "*", addConnectionState[3]);
+				connections.push(addConnectionState);
+				eventData.push({
+				  id:addConnectionState[4],
+				  fromState:addConnectionState[0],
+				  toState:addConnectionState[1],
+				  label:addConnectionState[3]}
+				  );
+				  connectionIndex++;
+				////console.log(eventData);
 				drawLines();
 			}
 				addConnectionState = "not begin";
@@ -42,6 +45,16 @@ function addConnection(data){
 
 	}
 }
+// remove by source/destination/label. Use "*" for placeholder
+function removeConnection(source, destination, label){
+	for(var i=connections.length-1; i>=0;i--){
+		if((eventData[i]["fromState"] == source || source == "*") && (eventData[i]["toState"] == destination || destination == "*") && (eventData[i]["label"] == label || label == "*")){
+			eventData.splice(i,1);
+			connections.splice(i,1);
+		}
+	}
+}
+
 
 //gets the width of the screen
 function getWidth(){
@@ -50,7 +63,7 @@ function getWidth(){
 
 //draws a line with the given coordinates and color
 function drawLine(x0, y0, x1, y1, color,label){
-//	console.log(x0, y0, x1, y1)
+//	//console.log(x0, y0, x1, y1)
 context.strokeStyle = color;
 context.font = "14px Arial";
 context.textBaseline = "bottom";
@@ -64,29 +77,17 @@ context.lineWidth = 3;
   
   var p1 = { x: x0, y: y0 };
   var p2 = { x: x1, y: y1 };
-  drawLabel(context, label, p1, p2, "center", 0);
 }
 
 
-function drawLabel( ctx, text, p1, p2, alignment, padding ){
+function drawLabel( ctx, text, p1, p2, alignment, offset ){
   if (!alignment) alignment = 'center';
-  if (!padding) padding = 0;
-
-  var dx = p2.x - p1.x;
-  var dy = p2.y - p1.y;   
-  var p, pad;
-  if (alignment=='center'){
-    p = p1;
-    pad = 0.35;
-  } else {
-    var left = alignment=='left';
-    p = left ? p1 : p2;
-    pad = padding / Math.sqrt(dx*dx+dy*dy) * (left ? 1 : -1);
-  }
-
+  var dx = p2.left - p1.left;
+  var dy = p2.top - p1.top;
   ctx.save();
   ctx.textAlign = alignment;
-  ctx.translate(p.x+dx*pad,p.y+dy*pad);
+  //console.log(p1.left+dx*offset,p1.top+dy*offset)
+  ctx.translate(p1.left+dx*offset,p1.top+dy*offset);
   //ctx.rotate(Math.atan2(dy,-dx));
   ctx.fillText(text,0,0);
   ctx.restore();
@@ -94,7 +95,7 @@ function drawLabel( ctx, text, p1, p2, alignment, padding ){
 
 //draws a circle with the given coordinates and color
 function drawCircle(x,y,r, color,label){
-  //console.log(x,y,r)
+  ////console.log(x,y,r)
   context.strokeStyle = color;
   context.font = "14px Arial";
   context.textBaseline = "bottom";
@@ -105,7 +106,6 @@ function drawCircle(x,y,r, color,label){
   context.stroke();
   var p1 = { x: x, y: y };
   var p2 = { x: x, y: y };
-  drawLabel(context, label, p1, p2, "center", 0);
 	
 }
 //get the coordinates of a given state object
@@ -134,7 +134,7 @@ function connectMultiplePairs(lst1, lst2, colors){
 //get all locations
 function getAllLocation(){
 	for(var i=0; i<diagram.length;i++){
-		//console.log(i + " " + getLocation(i).left + " " + getLocation(i).top);
+		////console.log(i + " " + getLocation(i).left + " " + getLocation(i).top);
 	}
 	
 }
@@ -148,9 +148,9 @@ function drawLines(ui){
 				
 				var domain = d[0];
 				var target = d[1];
-        var color = d[2];
-        var labelinput = d[3];
-        var label=labelinput + "("+domain+"=>"+target+")";
+				var color = d[2];
+				var labelinput = d[3];
+				var label=labelinput + "("+domain+"=>"+target+")";
 				if(domain < target){
 						var temp = domain;
 						domain = target;
@@ -158,7 +158,7 @@ function drawLines(ui){
 					}
 				counter[domain + " " + target] = (counter[domain + " " + target] == undefined ? 1 : counter[domain + " " + target]+1);
 				var offset = counter[domain + " " + target];
-				//console.log(domain + " " + target + " " + offset);
+				////console.log(domain + " " + target + " " + offset);
 				//offsets 
 				var line_offset_left = getWidth()*(0.01*offset);
 				var line_offset_top = 100+5*offset;
@@ -170,39 +170,23 @@ function drawLines(ui){
 				} catch(e){
 					var id = null;
 				}
+				
+				var domainPosition = domain == id ? ui.position : diagram[0][domain].position; 
+				var targetPosition = target == id ? ui.position : diagram[0][target].position;
+				
 				if(domain == id && target == id){
-					try{
-						drawCircle(ui.position.left+circle_offset_left, ui.position.top+circle_offset_top,circle_radius, color,label);
-					} catch( e){
-						;
-					}					
+						drawCircle(domainPosition.left+circle_offset_left, domainPosition.top+circle_offset_top,circle_radius, color,label);
+											
 				}
-				else if(target == id){
-					try{
-					drawLine(diagram[0][domain].position.left+line_offset_left, diagram[0][domain].position.top+line_offset_top,ui.position.left+line_offset_left, ui.position.top+line_offset_top, color,label);
-					} catch( e){
-						;
-					}
-				}
-				else if(domain == id){
-					try{
-					drawLine(ui.position.left+line_offset_left, ui.position.top+line_offset_top,diagram[0][target].position.left+line_offset_left, diagram[0][target].position.top+line_offset_top, color,label);
-					} catch( e){
-						;
-					}				
-				} else{
-					try{
-						if(domain == target){
-							drawCircle(diagram[0][domain].position.left+circle_offset_left, diagram[0][domain].position.top+circle_offset_top,circle_radius, color,label);
-						}
-						else {
-							drawLine(diagram[0][domain].position.left+line_offset_left, diagram[0][domain].position.top+line_offset_top , diagram[0][target].position.left+line_offset_left, diagram[0][target].position.top+line_offset_top, color,label);
-						}
-					} catch( e){
-						;
-					}						
+				else {
+					var position1 = {"left":domainPosition.left+line_offset_left, "top": domainPosition.top+line_offset_top};
+					var position2 = {"left":targetPosition.left+line_offset_left, "top": targetPosition.top+line_offset_top};
 					
+					drawLine(domainPosition.left+line_offset_left, domainPosition.top+line_offset_top,targetPosition.left+line_offset_left, targetPosition.top+line_offset_top, color,label);
+					drawLabel(context, label, position1, position2, "center", 0.7-0.1*offset);
 				}
+				
+				//ctx, text, p1, p2, alignment, offset 
 				})
 	
 }
@@ -212,8 +196,8 @@ function drawLines(ui){
 //for example: state-container-oncanvas State-2 ui-draggable ui-draggable-handle ui-droppable -> 2
 
 function getIdFromString(s){
-		//console.log("ID");
-		//console.log(s);
+		////console.log("ID");
+		////console.log(s);
 		return parseInt(s.substr(31, s.indexOf("u", 31)));
 }
 
@@ -223,6 +207,14 @@ function clickState(){
 	addConnection("start");
 }
 
+function save(){
+	var string = JSON.stringify(transform(stateData, eventData));
+	console.log(string);
+	//var string ='{"vertices":[{"name":"A","behaviors":["Forward"]},{"name":"B","behaviors":["Backward","Backward"]},{"name":"C","behaviors":[]}],"edges":[{"event":{"name":"An","input":"NoObstacle"},"fromState":"A","toState":"B"},{"event":{"name":"Cs","input":"light"},"fromState":"C","toState":"A"},{"event":{"name":"Cr","input":"ObstacleR"},"fromState":"C","toState":"B"}],"startState":"A","endStates":[]}';
+	
+	return fetch("http://localhost:8088/FincFSM/Save", {method:"post", body:JSON.stringify({fsm:string})}).then(function(x) {console.log(x)});
+	
+}
 
 /* Event visuals */
 
@@ -264,14 +256,6 @@ $("#obstacleCenter").mousedown(function () {
 
 
 
-
-
-
-
-
-
-
-
 /*===========================================================States=============================================================================== */
 
 $(init);
@@ -279,8 +263,10 @@ $(init);
 function init() {
 
   //diagram is the main array, we push data into it
-  var stateData = [];
+  
   diagram = [stateData, eventData];
+  
+  
   var canvas = $(".canvas");
   var stateCanvasBody = $(".state-container-oncanvas");
   
@@ -306,12 +292,12 @@ function init() {
     //check if it is state-container else return
     // if dropped div is state-container then make object state
     drop: function(event, ui) {
-      console.log(diagram)
+      //console.log(diagram)
     if (ui.helper.hasClass("state-container")) {
 		var position =  ui.helper.position();
-		console.log(position)
+		//console.log(position)
 		position.left = position.left -getWidth()*0.20; // TODO
-		console.log(position)
+		//console.log(position)
         var state = {
           _id: stateID++,
           position: position,
@@ -335,20 +321,23 @@ function init() {
     canvas.empty();
     //loop through diagram array
     for (var d in diagram[0]) {
+	  if(diagram[0][d] == null){
+		continue;
+	  }
       var state = diagram[0][d];
       var html = "";
       
-      //console.log(state);      
+      ////console.log(state);      
       //if state.type is state then declare html and render
       if (state.type == "state") {
-        //console.log(state.behaviourArray);
+        ////console.log(state.behaviourArray);
         var behaviourDiv;
         if(state.behaviourArray.length>0){
         behaviourDiv=renderBehaviour(state.behaviourArray);
         }else{
           behaviourDiv="";
         }
-        //console.log(behaviourDiv);
+        ////console.log(behaviourDiv);
 
         html = `<div class="state-container-oncanvas State-${state._id}">
                     <div class="state-container-title">
@@ -370,13 +359,17 @@ function init() {
 			drag:function(event, ui){
 				//draw all connections when dragged
 				drawLines(ui);
+				
 			},
 			
           stop: function(event, ui) {
-            //console.log(ui);
+            ////console.log(ui);
             var id = getIdFromString(ui.helper[0].getAttribute("class") );
 			
             for (var i in diagram[0]) {
+			  if(diagram[0][i] == null){
+				continue;
+			  }
               if (diagram[0][i]._id == id) {
                 diagram[0][i].position.top = ui.position.top;
                 diagram[0][i].position.left = ui.position.left;
@@ -390,10 +383,10 @@ function init() {
         .droppable({  
           accept:".behaviour",
           drop: function(event, ui){
-             //console.log($(this));
+             ////console.log($(this));
             // var stateContainerId = $(this).attr("id");
-            //console.log(diagram);
-              //console.log(ui);
+            ////console.log(diagram);
+              ////console.log(ui);
               if (ui.helper.hasClass("behaviour")) {
                   var behaviour = {
                       _id: behaviourID++,
@@ -406,13 +399,16 @@ function init() {
               //finds the index of the state that behaviour is to be addded into
               var indexOfTheState = -1;
               for(var i=0; i<diagram[0].length; i++){
+				if(diagram[0][i] == null){
+					continue;
+				}
                 if($(this)["0"].attributes[1].value == diagram[0][i]._id){
                   indexOfTheState = i;
                 }
               };
               diagram[0][indexOfTheState].behaviourArray.push(behaviour);
               //diagram[0][$(this)["0"].attributes[1].value].behaviourArray.push(behaviour);
-               console.log($(this)["0"].attributes);
+               //console.log($(this)["0"].attributes);
               var htmlBehaviour = `<h6  class="behaviour" data-behaviour="${ui.helper["0"].innerHTML}">${ui.helper["0"].innerHTML}
               </h6>`;
               $(".state-container-body-oncanvas",this).append(htmlBehaviour);              
@@ -436,14 +432,22 @@ function init() {
           //create and add the delete button when clicked
           var htmlDeleteButton = `<h6 class="deleteButton">X</h6>`;
           var stateIDToRemove = $(this)[0].attributes[1].value;
-          console.log($(this)[0].attributes[1].value);
+          //console.log($(this)[0].attributes[1].value);
           $(".state-container-body-oncanvas-forDeletion"+stateIDToRemove).append(htmlDeleteButton);
           //after clicking on the state container, if they click on X then the state will be removed
           $(".deleteButton").click(function(){
+			  removeConnection(stateIDToRemove, "*","*");
+			  removeConnection("*",stateIDToRemove, "*");
+			  
+			  //first delete all classes associated to it
             for(var i=0; i<diagram[0].length; i++){
+				if(diagram[0][i] == null){
+					continue;
+				}
               if(diagram[0][i]._id == stateIDToRemove){
                 //splice function finds the element at index i and then removes 1 element at/after that index
-                diagram[0].splice(i,1);
+				//can't actually remove as that would result in indices being messed up.
+                diagram[0][i] = null
                 //have to render the diagram to reflect the changes on the canvas, the number -1 is given randomly as it is not used 
               }
             };

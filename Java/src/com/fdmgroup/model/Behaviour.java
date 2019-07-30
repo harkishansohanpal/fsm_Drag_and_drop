@@ -2,10 +2,10 @@ package com.fdmgroup.model;
 
 public enum Behaviour {
 
-	forward,
-	backward,
-	turnL,
-	turnR,
-	spin,
-	stop
+	Forward,
+	Backward,
+	TurnL,
+	TurnR,
+	Spin,
+	Stop
 }

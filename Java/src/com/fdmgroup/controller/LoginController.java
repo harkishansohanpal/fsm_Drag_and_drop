@@ -65,14 +65,21 @@ public class LoginController {
 			
 			/*JSONFsm jsonFsmObj = new JSONFsm();
 			
-			jsonFsmObj.setJsonFsm("{'vertices':[{'name':'A','behaviors':['forward']},{'name':'B','behaviors':['backward','turnL']},{'name':'C','behaviors':['backward','turnR']},{'name':'D','behaviors':['stop']},{'name':'E','behaviors':['backward','spin']}],'edges':[{'event':{'name':'An','input':'NoObstacle'},'fromState':'A','toState':'A'},{'event':{'name':'Ar','input':'ObstacleR'},'fromState':'A','toState':'B'},{'event':{'name':'Bn','input':'NoObstacle'},'fromState':'B','toState':'A'},{'event':{'name':'Al','input':'ObstacleL'},'fromState':'A','toState':'C'},{'event':{'name':'Cn','input':'NoObstacle'},'fromState':'C','toState':'A'},{'event':{'name':'Br','input':'ObstacleR'},'fromState':'B','toState':'B'},{'event':{'name':'Cl','input':'ObstacleL'},'fromState':'C','toState':'C'},{'event':{'name':'As','input':'Light'},'fromState':'A','toState':'D'},{'event':{'name':'Bs','input':'Light'},'fromState':'B','toState':'D'},{'event':{'name':'Cs','input':'Light'},'fromState':'C','toState':'D'},{'event':{'name':'Aa','input':'ObstacleAll'},'fromState':'A','toState':'E'},{'event':{'name':'Ba','input':'ObstacleAll'},'fromState':'B','toState':'E'},{'event':{'name':'Ca','input':'ObstacleAll'},'fromState':'C','toState':'E'},],'startState':'A','endStates':['D']}");
+			//jsonFsmObj.setJsonFsm("");
+			jsonFsmObj.setJsonFsm("{'vertices':[{'name':'A','behaviours':['forward']},{'name':'B','behaviours':['backward','turnL']},{'name':'C','behaviours':['backward','turnR']},{'name':'D','behaviours':['stop']},{'name':'E','behaviours':['backward','spin']}],'edges':[{'event':{'name':'An','input':'NoObstacle'},'fromState':'A','toState':'A'},{'event':{'name':'Ar','input':'ObstacleR'},'fromState':'A','toState':'B'},{'event':{'name':'Bn','input':'NoObstacle'},'fromState':'B','toState':'A'},{'event':{'name':'Al','input':'ObstacleL'},'fromState':'A','toState':'C'},{'event':{'name':'Cn','input':'NoObstacle'},'fromState':'C','toState':'A'},{'event':{'name':'Br','input':'ObstacleR'},'fromState':'B','toState':'B'},{'event':{'name':'Cl','input':'ObstacleL'},'fromState':'C','toState':'C'},{'event':{'name':'As','input':'Light'},'fromState':'A','toState':'D'},{'event':{'name':'Bs','input':'Light'},'fromState':'B','toState':'D'},{'event':{'name':'Cs','input':'Light'},'fromState':'C','toState':'D'},{'event':{'name':'Aa','input':'ObstacleAll'},'fromState':'A','toState':'E'},{'event':{'name':'Ba','input':'ObstacleAll'},'fromState':'B','toState':'E'},{'event':{'name':'Ca','input':'ObstacleAll'},'fromState':'C','toState':'E'},{'event':{'name':'En','input':'NoObstacle'},'fromState':'E','toState':'A'}],'startState':'A','endStates':['D']}");
 			jsonFsmObj.setUser(foundUser);
-			jfsmDAOObj.addFSM(jsonFsmObj);*/
+			jfsmDAOObj.addFSM(jsonFsmObj);
+			
+			JSONFsm jsonFsmObj2 = new JSONFsm();
+			
+			jsonFsmObj2.setJsonFsm("{'vertices':[{'name':'A','behaviours':['forward']},{'name':'B','behaviours':['backward','turnL']},{'name':'C','behaviours':['backward','turnR']}],'edges':[{'event':{'name':'An','input':'NoObstacle'},'fromState':'A','toState':'A'},{'event':{'name':'Ar','input':'ObstacleR'},'fromState':'A','toState':'B'},{'event':{'name':'Bn','input':'NoObstacle'},'fromState':'B','toState':'A'},{'event':{'name':'Al','input':'ObstacleL'},'fromState':'A','toState':'C'},{'event':{'name':'Cn','input':'NoObstacle'},'fromState':'C','toState':'A'},{'event':{'name':'Br','input':'ObstacleR'},'fromState':'B','toState':'B'},{'event':{'name':'Cl','input':'ObstacleL'},'fromState':'C','toState':'C'}],'startState':'A','endStates':[]}");
+			jsonFsmObj2.setUser(foundUser);
+			jfsmDAOObj.addFSM(jsonFsmObj2);*/
 			
 			List<JSONFsm> Fsms =  jfsmDAOObj.getList();
 			model.addAttribute("FSMs", Fsms);
 			
-			return "ShowFSMs";
+			return "Admin";
 		}
 		
 		return "login";

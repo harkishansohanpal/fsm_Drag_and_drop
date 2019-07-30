@@ -15,7 +15,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name="FSMJson")
 @NamedQueries({
-	@NamedQuery(name = "j.getList", query = "SELECT j FROM JSONFsm j")
+	@NamedQuery(name = "j.getList", query = "SELECT j FROM JSONFsm j"),
+	@NamedQuery(name = "j.getId", query = "SELECT j FROM JSONFsm j WHERE j.id = ?1")
 })
 public class JSONFsm {
 
