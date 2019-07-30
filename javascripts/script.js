@@ -58,6 +58,8 @@ function init() {
     canvas.empty();
     //loop through diagram array
     for (var d in diagram[0]) {
+      console.log(diagram[0]);
+      console.log(d);
       var state = diagram[0][d];
       var html = "";
       
@@ -74,13 +76,15 @@ function init() {
         }
         //console.log(behaviourDiv);
 
-        html = `<div class="state-container-oncanvas State-${state._id}">
-                    <div class="state-container-title state-container-title-oncanvas-forDeletion${state._id}">
+        html = `<div class="stateOuterDiv state-container-title-oncanvas-forDeletion${state._id}">
+                  <div class="state-container-oncanvas State-${state._id}">
+                    <div class="state-container-title-oncanvas ">
                         <h6 >State-${state._id}</h6>
                     </div>
                     <div class="state-container-body state-container-body-oncanvas ">     
                     ${behaviourDiv}
                     </div>
+                  </div>
                 </div>`;
 
         
@@ -136,9 +140,8 @@ function init() {
               };
               diagram[0][indexOfTheState].behaviourArray.push(behaviour);
               //diagram[0][$(this)["0"].attributes[1].value].behaviourArray.push(behaviour);
-               console.log($(this)["0"].attributes);
-              var htmlBehaviour = `<h6  class="behaviour-oncanvas" data-behaviour="${ui.helper["0"].innerHTML}">${ui.helper["0"].innerHTML}
-              </h6>`;
+              console.log($(this)["0"].attributes);
+              var htmlBehaviour = `<h6  style="color:white;" class="behaviour-oncanvas" data-behaviour="${ui.helper["0"].innerHTML}">${ui.helper["0"].innerHTML} </h6>`;
               $(".state-container-body-oncanvas",this).append(htmlBehaviour);              
                //$(this)["0"].childNodes[3].$(".state-container-body-oncanvas").append("htmlBehaviour");
           }
@@ -171,7 +174,7 @@ function init() {
           }).attr("state", $(this));//REMOVABLE AFTER TEST 
         }else{
           $(this).css({
-            border : "2px solid black",
+            border : "none",
           });
           $(".deleteButton").css({
             display: "none",
@@ -179,7 +182,7 @@ function init() {
         }
       });
         canvas.append(dom);
-        //$(".state-container-body-oncanvas").resizable({});
+        //$(".stateOuterDiv").resizable({});
 
       } else if (state.type === "behaviour") {
         
@@ -189,14 +192,14 @@ function init() {
       }
     }
   }
-
+  
 
   //Render the behaviour
   function renderBehaviour(behaviourArray){
     var dom2="";
     for( var b in behaviourArray){
       var beh = behaviourArray[b];
-    var htmlBehaviour = `<h6 class="behaviour-oncanvas data-behaviour=${beh.behaviourType}">${beh.behaviourType}</h6>`;
+    var htmlBehaviour = `<h6 style="color:white;" class="behaviour-oncanvas data-behaviour=${beh.behaviourType}">${beh.behaviourType}</h6>`;
         dom2 += htmlBehaviour;
     }
     

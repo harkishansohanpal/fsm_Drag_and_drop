@@ -16,9 +16,21 @@
   margin-left: 40%;
   z-index: 2;
 }
+.stateOuterDiv{
+  background-image: url("../State1.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  height:250px;
+  width: 150px;
+}
 .state-container-title {
   text-align: center;
   border-bottom: 1px solid black;
+}
+.state-container-title-oncanvas {
+  text-align: center;
+  border-bottom: 1px solid black;
+  height:60px;
 }
 .state-container-body {
   height: 50px;
@@ -26,31 +38,23 @@
 }
 
 .state-container-body-oncanvas {
-  height: 120px;
+  height: 150px;
   overflow: auto;
   }
 .state-container-oncanvas {
-  background: white;
-  border: 2px solid black;
+  /* background: white; */
+  /* border: 2px solid black;  */
   border-radius: 5px;
-  width: 10%;
-  height: 150px;
+  width: 50%;
+  height: 190px;
   position: "relative";
   overflow: hidden;
-  -webkit-box-shadow: 3px 3px 10px 60px #ccc;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-  -moz-box-shadow:    3px 3px 5px 6px #ccc;  /* Firefox 3.5 - 3.6 */
-  box-shadow: 5px 5px 10px 1px #b0b0b0;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
-}
-
-.state-container-oncanvas::before{
-  content: '';
-  width: 2px;
-  height: 50px;
-  background: #000;
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  margin-left: -2px;
+  margin: auto;
+  margin-top: 0%;
+  
+  /* -webkit-box-shadow: 3px 3px 10px 60px #ccc;  
+  -moz-box-shadow:    3px 3px 5px 6px #ccc;  
+  box-shadow: 5px 5px 10px 1px #b0b0b0;   */
 }
 
 .deleteButton{
