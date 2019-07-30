@@ -265,10 +265,6 @@ function init() {
 
   
   diagram = [stateData, eventData];
-  
-  var stateData = [];
-  diagram = [stateData, eventData];
->>>>>>> 97697152844fdbd2b9906ccf4add01224b32abe8
   var canvas = $(".canvas");
   var stateCanvasBody = $(".state-container-oncanvas");
   
