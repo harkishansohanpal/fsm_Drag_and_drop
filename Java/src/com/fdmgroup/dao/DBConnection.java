@@ -6,7 +6,7 @@ import javax.persistence.Persistence;
 
 public class DBConnection {
 
-	private static final String persistenceName = "FincFSM";
+	private static final String persistenceName = "FinchFSM";
 	
 	private EntityManagerFactory emf = null;
 	

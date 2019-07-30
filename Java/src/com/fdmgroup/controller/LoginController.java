@@ -35,11 +35,11 @@ public class LoginController {
 	@RequestMapping(value="/processLogin" , method=RequestMethod.POST)
 	public String processLogin(@RequestParam("username") String userName, @RequestParam("password") String userPassword, Model model){
 		
-		/*User u1 = new User();
+		User u1 = new User();
 		u1.setUsername("1234");
 		u1.setPassword("1234");
 		
-		userDaoObj.addUser(u1);*/
+		userDaoObj.addUser(u1);
 		
 		List<User> userList = new ArrayList<>();
 		userList = userDaoObj.findAllUsers();
@@ -63,18 +63,18 @@ public class LoginController {
 			
 			model.addAttribute("UserFSM", foundUser);
 			
-			/*JSONFsm jsonFsmObj = new JSONFsm();
+			JSONFsm jsonFsmObj = new JSONFsm();
 			
 			//jsonFsmObj.setJsonFsm("");
-			jsonFsmObj.setJsonFsm("{'vertices':[{'name':'A','behaviours':['forward']},{'name':'B','behaviours':['backward','turnL']},{'name':'C','behaviours':['backward','turnR']},{'name':'D','behaviours':['stop']},{'name':'E','behaviours':['backward','spin']}],'edges':[{'event':{'name':'An','input':'NoObstacle'},'fromState':'A','toState':'A'},{'event':{'name':'Ar','input':'ObstacleR'},'fromState':'A','toState':'B'},{'event':{'name':'Bn','input':'NoObstacle'},'fromState':'B','toState':'A'},{'event':{'name':'Al','input':'ObstacleL'},'fromState':'A','toState':'C'},{'event':{'name':'Cn','input':'NoObstacle'},'fromState':'C','toState':'A'},{'event':{'name':'Br','input':'ObstacleR'},'fromState':'B','toState':'B'},{'event':{'name':'Cl','input':'ObstacleL'},'fromState':'C','toState':'C'},{'event':{'name':'As','input':'Light'},'fromState':'A','toState':'D'},{'event':{'name':'Bs','input':'Light'},'fromState':'B','toState':'D'},{'event':{'name':'Cs','input':'Light'},'fromState':'C','toState':'D'},{'event':{'name':'Aa','input':'ObstacleAll'},'fromState':'A','toState':'E'},{'event':{'name':'Ba','input':'ObstacleAll'},'fromState':'B','toState':'E'},{'event':{'name':'Ca','input':'ObstacleAll'},'fromState':'C','toState':'E'},{'event':{'name':'En','input':'NoObstacle'},'fromState':'E','toState':'A'}],'startState':'A','endStates':['D']}");
+			jsonFsmObj.setJsonFsm("{'vertices':[{'name':'A','behaviours':['Forward']},{'name':'B','behaviours':['Backward']},{'name':'C','behaviours':['Spin']}],'edges':[{'event':{'name':'An','input':'NoObstacle'},'fromState':'A','toState':'B'},{'event':{'name':'Al','input':'ObstacleL'},'fromState':'A','toState':'C'},{'event':{'name':'Br','input':'ObstacleR'},'fromState':'B','toState':'C'}],'startState':'A','endState':[]}");
+					
 			jsonFsmObj.setUser(foundUser);
 			jfsmDAOObj.addFSM(jsonFsmObj);
 			
-			JSONFsm jsonFsmObj2 = new JSONFsm();
-			
-			jsonFsmObj2.setJsonFsm("{'vertices':[{'name':'A','behaviours':['forward']},{'name':'B','behaviours':['backward','turnL']},{'name':'C','behaviours':['backward','turnR']}],'edges':[{'event':{'name':'An','input':'NoObstacle'},'fromState':'A','toState':'A'},{'event':{'name':'Ar','input':'ObstacleR'},'fromState':'A','toState':'B'},{'event':{'name':'Bn','input':'NoObstacle'},'fromState':'B','toState':'A'},{'event':{'name':'Al','input':'ObstacleL'},'fromState':'A','toState':'C'},{'event':{'name':'Cn','input':'NoObstacle'},'fromState':'C','toState':'A'},{'event':{'name':'Br','input':'ObstacleR'},'fromState':'B','toState':'B'},{'event':{'name':'Cl','input':'ObstacleL'},'fromState':'C','toState':'C'}],'startState':'A','endStates':[]}");
+			JSONFsm jsonFsmObj2 = new JSONFsm();		
+			jsonFsmObj2.setJsonFsm("{'vertices':[{'name':'A','behaviours':['Forward','Backward']},{'name':'B','behaviours':['Backward','TurnL']},{'name':'C','behaviours':['Spin','Forward']},{'name':'D','behaviours':['Backward','Forward']}],'edges':[{'event':{'name':'Al','input':'ObstacleL'},'fromState':'A','toState':'C'},{'event':{'name':'Br','input':'ObstacleR'},'fromState':'B','toState':'C'},{'event':{'name':'Aa','input':'ObstacleAll'},'fromState':'A','toState':'B'},{'event':{'name':'An','input':'NoObstacle'},'fromState':'A','toState':'C'},{'event':{'name':'Cl','input':'ObstacleL'},'fromState':'C','toState':'B'},{'event':{'name':'Cn','input':'NoObstacle'},'fromState':'C','toState':'D'}],'startState':'A','endState':[]}");
 			jsonFsmObj2.setUser(foundUser);
-			jfsmDAOObj.addFSM(jsonFsmObj2);*/
+			jfsmDAOObj.addFSM(jsonFsmObj2);
 			
 			List<JSONFsm> Fsms =  jfsmDAOObj.getList();
 			model.addAttribute("FSMs", Fsms);

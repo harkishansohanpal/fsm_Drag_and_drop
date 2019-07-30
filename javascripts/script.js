@@ -160,11 +160,11 @@ function drawLines(ui){
 				var offset = counter[domain + " " + target];
 				////console.log(domain + " " + target + " " + offset);
 				//offsets 
-				var line_offset_left = getWidth()*(0.01*offset);
-				var line_offset_top = 100+5*offset;
-				var circle_offset_left = getWidth()*0.15;
+				var line_offset_left = getWidth()*(0.015*offset);
+				var line_offset_top = 25+30*offset;
+				var circle_offset_left = getWidth()*0.07;
 				var circle_offset_top = 0;
-				var circle_radius = getWidth()*(0.06-0.003*offset);
+				var circle_radius = getWidth()*(0.02-0.003*offset);
 				try{
 				var id = getIdFromString(ui.helper[0].getAttribute("class"));
 				} catch(e){
@@ -174,7 +174,7 @@ function drawLines(ui){
 				var domainPosition = domain == id ? ui.position : diagram[0][domain].position; 
 				var targetPosition = target == id ? ui.position : diagram[0][target].position;
 				
-				if(domain == id && target == id){
+				if(domain ==  target){
 						drawCircle(domainPosition.left+circle_offset_left, domainPosition.top+circle_offset_top,circle_radius, color,label);
 											
 				}
@@ -183,9 +183,8 @@ function drawLines(ui){
 					var position2 = {"left":targetPosition.left+line_offset_left, "top": targetPosition.top+line_offset_top};
 					
 					drawLine(domainPosition.left+line_offset_left, domainPosition.top+line_offset_top,targetPosition.left+line_offset_left, targetPosition.top+line_offset_top, color,label);
-					drawLabel(context, label, position1, position2, "center", 0.7-0.1*offset);
 				}
-				
+				drawLabel(context, label, position1, position2, "center", 0.7-0.1*offset);
 				//ctx, text, p1, p2, alignment, offset 
 				})
 	
