@@ -37,6 +37,7 @@ label {
 .state-container-body-oncanvas {
   height: 200px;
   overflow: hidden;
+  opacity: 1.0;
 }
 .state-container-oncanvas {
   background: white;
@@ -55,6 +56,10 @@ label {
   cursor: pointer;
   background-color: gray;
   color: white;
+}
+.deleteButton{
+  float:right;
+  border: 2px solid red;
 }
 .deleteButton{
   float:right;
@@ -131,5 +136,18 @@ label {
   right: 0px;
   bottom: 0px;
   top: 0px;
+<<<<<<< HEAD
   left:25%;
+=======
+ 
+}
+
+
+#theCanvas {
+  position: absolute;
+  top:0px;
+  left:400px;
+  z-index:-1;
+
+>>>>>>> 97697152844fdbd2b9906ccf4add01224b32abe8
 }
