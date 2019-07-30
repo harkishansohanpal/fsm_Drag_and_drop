@@ -58,8 +58,12 @@ function transform(stateData, eventData){
 	}
 	
 	var jsonOutput = {
+		
 		vertices: verticesArray,
-		edges: edgesArray
+		edges: edgesArray,
+		startState: String.fromCharCode(65 + stateData[0]["_id"]),
+		endState: null
+		
 	}
 	
 	return jsonOutput;
