@@ -161,11 +161,11 @@ function drawLines(ui){
         //offsets 
         //console.log(document.getElementsByClassName("canvas")[0].scrollTop);
 				// top left corner of box DOM element, vs top left corner of actual box.
-				var boxoffsetL = 42;
+				var boxoffsetL = 40;
 				var boxoffsetT = 38;
 				//width and height of the box
 				var boxWidth=125;
-				var boxHeight=125;
+				var boxHeight=128;
 				//width and height of the entire thing
 				var totalBoxWidth = 2*boxoffsetL+boxWidth;
 				var totalBoxHeight = 2*boxoffsetT+boxHeight; 
@@ -204,10 +204,23 @@ function drawLines(ui){
 					//get the first intersection point
 					var tlx = domainPosition.left+ boxoffsetL;
 					var tly = domainPosition.top+ boxoffsetT;
-					var int1 =getLineEnd(p1x, p1y, p2x ,p2y,tlx, tly ,boxWidth, boxHeight);
+					try{
+						var int1 =getLineEnd(p1x, p1y, p2x ,p2y,tlx, tly ,boxWidth, boxHeight);
+					} catch (e){
+						if(e == "p2 inside rectangle"){
+							int1 = [p1x, p1y]
+						}
+					}
 					var tlx = targetPosition.left+ boxoffsetL;
 					var tly = targetPosition.top+ boxoffsetT;
-					var int2 =getLineEnd( p2x ,p2y,p1x, p1y,tlx, tly, boxWidth, boxHeight);
+					
+					try{
+						var int2 =getLineEnd(p2x ,p2y,p1x, p1y, tlx, tly ,boxWidth, boxHeight);
+					} catch (e){
+						if(e == "p2 inside rectangle"){
+							int2 = [p2x, p2y]
+						}
+					}
 					//draw the small circles
 					drawLine(int1[0], int1[1], int2[0], int2[1], color);
 					//draw the circles
