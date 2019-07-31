@@ -48,6 +48,7 @@
             <h6 class="behaviour">Turn Right</h6>
             <h6 class="behaviour">Turn Left</h6>
             <h6 class="behaviour">Spin</h6>
+            <h6 class="behaviour">Stop</h6>
           </div>
           <div class="row events" style="position: relative;">
             <h5>Events</h5>

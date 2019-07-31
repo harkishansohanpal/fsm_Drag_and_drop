@@ -10,17 +10,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fdmgroup.dao.JSONFsmDAO;
+import com.fdmgroup.dao.UserDAO;
 import com.fdmgroup.model.Event;
 import com.fdmgroup.model.FSM;
 import com.fdmgroup.model.Input;
 import com.fdmgroup.model.JSONFsm;
 import com.fdmgroup.model.State;
+import com.fdmgroup.model.User;
 
 @Controller
 public class AdminController {
 
 	@Autowired
 	private JSONFsmDAO jfsmDAOObj;
+	
+	@Autowired
+	private UserDAO userDao;
 	
 	@RequestMapping(value = "/Run", method = RequestMethod.POST)
 	public String run(Model model, @RequestParam("fsm") String s){
@@ -98,6 +103,40 @@ public class AdminController {
 		model.addAttribute("FSMs", Fsms);
 		
 		return "Admin";
+	}
+	
+	@RequestMapping(value = "/NewUser")
+	public String newUser(Model model){
+		return "addUser";
+	}
+	
+	@RequestMapping(value = "/Cancel")
+	public String cancel(Model model){
+		
+		List<JSONFsm> Fsms =  jfsmDAOObj.getList();
+		model.addAttribute("FSMs", Fsms);
+		
+		return "Admin";
+	}
+	
+	@RequestMapping(value = "/AddUser")
+	public String addUser(Model model, @RequestParam("user") String user, @RequestParam("name") String name,
+			@RequestParam("pass") String pass, @RequestParam("type") String type){
+		
+		User u = new User();
+		
+		u.setUsername(user);
+		u.setName(name);
+		u.setPassword(pass);
+		u.setUserType(type);
+		
+		userDao.addUser(u);
+		
+		List<JSONFsm> Fsms =  jfsmDAOObj.getList();
+		model.addAttribute("FSMs", Fsms);
+		
+		return "Admin";
+		
 	}
 	
 }

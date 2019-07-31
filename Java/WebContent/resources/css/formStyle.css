@@ -1,0 +1,70 @@
+.input-form{
+	width: 500px;
+	padding: 30px;
+	background: #FFFFFF;
+	margin: 50px auto;
+	box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+	-moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+	-webkit-box-shadow:  0px 0px 15px rgba(0, 0, 0, 0.22);
+
+}
+.input-form h2{
+	background: #7d7d7d;
+	color: white;
+	font-size: 18px;
+	font-weight: 100;
+	padding: 20px;
+	margin: -30px -30px 30px -30px;
+}
+.input-form input[type="text"],
+.input-form input[type="password"],
+.input-form select 
+{
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	outline: none;
+	display: block;
+	width: 100%;
+	padding: 7px;
+	border: none;
+	border-bottom: 1px solid #ddd;
+	background: transparent;
+	margin-bottom: 10px;
+	font: 16px Arial, Helvetica, sans-serif;
+	height: 45px;
+}
+.input-form textarea{
+	resize:none;
+	overflow: hidden;
+}
+.input-form input[type="button"], 
+.input-form input[type="submit"],
+.input-form button{
+	
+/*	background-color: #5CD7ED;
+	border: 1px solid #5CD7ED;*/
+    border-radius: 8px;
+	display: inline-block;
+	cursor: pointer;
+	color: #FFFFFF;
+	font-size: 14px;
+	padding: 8px 18px;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+.add{
+   background-color: #5CD7ED; 
+}
+.cncl{
+    background-color: #e84949;
+}
+.input-form input[type="button"]:hover, 
+.input-form input[type="submit"]:hover {
+	transform: scale(1.1);
+}
+
+@media screen and (max-width: 650px) {
+	.input-form{ width: 80%;}
+	
+	}

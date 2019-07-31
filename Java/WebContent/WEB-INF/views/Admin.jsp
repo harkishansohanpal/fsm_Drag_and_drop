@@ -33,7 +33,7 @@
 		<div class="sidenav col-2">
 			<h3>Admin Name</h3>
 			</br>
-			<button class="sideButton">Add User</button>
+			<button class="sideButton" onclick="window.location.href='NewUser'">Add User</button>
 		</div>
 		
 		<div class="main col-10">

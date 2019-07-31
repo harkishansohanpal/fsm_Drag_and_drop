@@ -1,12 +1,19 @@
 function transform(stateData, eventData){
 	var verticesArray = [];
 	var edgesArray = [];
-	
+	var finalState = [];
+
 	for (var state in stateData){
 		let behArray = [];
 		
 		for (var beh in stateData[state].behaviourArray){
-			behArray.push(stateData[state].behaviourArray[beh].behaviourType);
+			let singleBehaviour = stateData[state].behaviourArray[beh].behaviourType;
+			
+			behArray.push(singleBehaviour);
+			
+			if (singleBehaviour == "Stop"){
+				finalState.push(String.fromCharCode(65 + stateData[state]._id));
+			}
 		}
 		
 		verticesArray.push({name : String.fromCharCode(65 + stateData[state]._id),
@@ -63,7 +70,7 @@ function transform(stateData, eventData){
 		vertices: verticesArray,
 		edges: edgesArray,
 		startState: String.fromCharCode(65 + stateData[0]["_id"]),
-		endState: []
+		endState: finalState
 		
 	}
 	
