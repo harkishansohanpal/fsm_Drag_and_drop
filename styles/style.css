@@ -19,27 +19,34 @@ label {
   border-bottom: 2px black solid;
 }
 .state-container {
-  border: 2px solid black;
+  /* border: 2px solid black; */
   border-radius: 5px;
   width: 20%;
-  margin-left: 40%;
+  margin: auto;
   z-index: 2;
 }
 .stateOuterDiv{
-  background-image: url("../State1.png");
+  background-image: url("../State2.png");
   background-repeat: no-repeat;
   background-size: contain;
-  height:250px;
-  width: 150px;
+  height:200px;
+  width: 200px;
+}
+.stateOuterDiv-menu{
+  background-image: url("../State2.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  height:130px;
+  width: 90px;
 }
 .state-container-title {
   text-align: center;
-  border-bottom: 1px solid black;
+  /* border-bottom: 1px solid black; */
 }
 .state-container-title-oncanvas {
   text-align: center;
-  border-bottom: 1px solid black;
-  height:60px;
+  /* border-bottom: 1px solid black; */
+  height:50px;
 }
 .state-container-body {
   height: 50px;
@@ -47,7 +54,7 @@ label {
 }
 
 .state-container-body-oncanvas {
-  height: 150px;
+  height: 100px;
   overflow: auto;
 }
 .state-container-oncanvas {
@@ -60,7 +67,7 @@ label {
   overflow: hidden; */
   border-radius: 5px;
   width: 50%;
-  height: 190px;
+  height: 150px;
   position: "relative";
   overflow: hidden;
   margin: auto;
@@ -109,6 +116,8 @@ label {
   margin-top: 5px;
   font-size: 12px;
   position: relative;
+  background-color: rgb(231, 49, 17);
+  color: black;
 }
 .behaviour-oncanvas::before{
   content: '';
