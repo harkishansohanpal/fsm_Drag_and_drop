@@ -158,8 +158,8 @@ function drawLines(ui){
 				////console.log(domain + " " + target + " " + offset);
         //offsets 
         //console.log(document.getElementsByClassName("canvas")[0].scrollTop);
-				var line_offset_left = getWidth()*(0.06*offset)-document.getElementsByClassName("canvas")[0].scrollLeft; //was0.01
-				var line_offset_top = 100+5*offset-document.getElementsByClassName("canvas")[0].scrollTop;
+				var line_offset_left = getWidth()*(0.03+0.01*offset)-document.getElementsByClassName("canvas")[0].scrollLeft; //was0.01
+				var line_offset_top = 70+15*offset-document.getElementsByClassName("canvas")[0].scrollTop;
 				var circle_offset_left = 140-document.getElementsByClassName("canvas")[0].scrollLeft;
 				var circle_offset_top = 40-document.getElementsByClassName("canvas")[0].scrollTop;
 				var circle_radius = 1000*(0.04-0.005*offset);
