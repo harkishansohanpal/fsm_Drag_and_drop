@@ -154,12 +154,13 @@ function drawLines(ui){
 						target = temp;
 					}
 				counter[domain + " " + target] = (counter[domain + " " + target] == undefined ? 1 : counter[domain + " " + target]+1);
-				var offset = counter[domain + " " + target];
+				var offsetNumber = counter[domain + " " + target];
+				var offset = ["",0,9,3,7,2,8,4,1,6,5][offsetNumber]; 
 				////console.log(domain + " " + target + " " + offset);
         //offsets 
         //console.log(document.getElementsByClassName("canvas")[0].scrollTop);
-				var line_offset_left = getWidth()*(0.03+0.01*offset)-document.getElementsByClassName("canvas")[0].scrollLeft; //was0.01
-				var line_offset_top = 20+35*offset-document.getElementsByClassName("canvas")[0].scrollTop;
+				var line_offset_left = 45+7*offset-document.getElementsByClassName("canvas")[0].scrollLeft; //was0.01
+				var line_offset_top = 50+15*offset-document.getElementsByClassName("canvas")[0].scrollTop;
 				var circle_offset_left = 140-document.getElementsByClassName("canvas")[0].scrollLeft;
 				var circle_offset_top = 40-document.getElementsByClassName("canvas")[0].scrollTop;
 				var circle_radius = 1000*(0.04-0.005*offset);
@@ -181,7 +182,7 @@ function drawLines(ui){
 					var position2 = {"left":targetPosition.left+line_offset_left, "top": targetPosition.top+line_offset_top};
 					
 					drawLine(domainPosition.left+line_offset_left, domainPosition.top+line_offset_top,targetPosition.left+line_offset_left, targetPosition.top+line_offset_top, color,label);
-					drawLabel(context, label, position1, position2, "center", 0.7-0.1*offset);
+					drawLabel(context, label, position1, position2, "center", 0.75-0.05*offset);
 				}
 				
 				//ctx, text, p1, p2, alignment, offset 
