@@ -181,7 +181,7 @@ function drawLines(ui){
 				} catch(e){
 					var id = null;
 				}
-				
+				//these positions are on the screen, not on the canvas.
 				var domainPosition = domain == id ? ui.position : diagram[0][domain].position; 
 				var targetPosition = target == id ? ui.position : diagram[0][target].position;
 				
@@ -202,8 +202,8 @@ function drawLines(ui){
 					var p2y = targetPosition.top+line_offset_top;
 					
 					//get the first intersection point
-					var tlx = domainPosition.left+ boxoffsetL;
-					var tly = domainPosition.top+ boxoffsetT;
+					var tlx = domainPosition.left-document.getElementsByClassName("canvas")[0].scrollLeft+ boxoffsetL;
+					var tly = domainPosition.top-document.getElementsByClassName("canvas")[0].scrollTop+ boxoffsetT;
 					try{
 						var int1 =getLineEnd(p1x, p1y, p2x ,p2y,tlx, tly ,boxWidth, boxHeight);
 					} catch (e){
@@ -211,8 +211,8 @@ function drawLines(ui){
 							int1 = [p1x, p1y]
 						}
 					}
-					var tlx = targetPosition.left+ boxoffsetL;
-					var tly = targetPosition.top+ boxoffsetT;
+					var tlx = targetPosition.left-document.getElementsByClassName("canvas")[0].scrollLeft+ boxoffsetL;
+					var tly = targetPosition.top-document.getElementsByClassName("canvas")[0].scrollTop+ boxoffsetT;
 					
 					try{
 						var int2 =getLineEnd(p2x ,p2y,p1x, p1y, tlx, tly ,boxWidth, boxHeight);
