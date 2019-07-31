@@ -42,7 +42,7 @@ function getLineEnd(p1x, p1y, p2x, p2y, tlx, tly, width,height){
 		// so if y = 0 then we have [0,1,0]. Else, we have [0,?,1]
 		a = 0;
 		if(p2y == 0){
-			b = 0;
+			b = 1;
 			c = 0;
 		} else{
 			c = 1;
