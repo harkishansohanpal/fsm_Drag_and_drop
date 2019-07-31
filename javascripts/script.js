@@ -91,7 +91,7 @@ function drawLabel( ctx, text, p1, p2, alignment, offset ){
 }
 
 //draws a circle with the given coordinates and color
-function drawCircle(x,y,r, color,label){
+function drawCircle(x,y,r, color){
   ////console.log(x,y,r)
   context.strokeStyle = color;
   context.font = "14px Arial";
@@ -140,7 +140,7 @@ function getAllLocation(){
 function drawLines(ui){
 				context.clearRect(0,0,3000,3000);
 				var counter = {}; // count how many time a pair has showed up
-				//so we can draw new lines that don't overlap with old ones.
+				//so we can draw new lines that don't overlap with old ones1
 				connections.forEach(function(d){
 				
 				var domain = d[0];
@@ -148,6 +148,7 @@ function drawLines(ui){
 				var color = d[2];
 				var labelinput = d[3];
 				var label=labelinput + "("+domain+"=>"+target+")";
+				
 				if(domain < target){
 						var temp = domain;
 						domain = target;
@@ -159,12 +160,22 @@ function drawLines(ui){
 				////console.log(domain + " " + target + " " + offset);
         //offsets 
         //console.log(document.getElementsByClassName("canvas")[0].scrollTop);
-
-				var line_offset_left = 45+4*offset-document.getElementsByClassName("canvas")[0].scrollLeft; //was0.01
+				// top left corner of box DOM element, vs top left corner of actual box.
+				var boxoffsetL = 42;
+				var boxoffsetT = 38;
+				//width and height of the box
+				var boxWidth=125;
+				var boxHeight=125;
+				//width and height of the entire thing
+				var totalBoxWidth = 2*boxoffsetL+boxWidth;
+				var totalBoxHeight = 2*boxoffsetT+boxHeight; 
+				
+				//line offsets must be between boxoffset and boxoffset +boxwidth/height
+				var line_offset_left = 50+9*offset-document.getElementsByClassName("canvas")[0].scrollLeft; //was0.01
 				var line_offset_top = 50+9*offset-document.getElementsByClassName("canvas")[0].scrollTop;
-				var circle_offset_left = 140-document.getElementsByClassName("canvas")[0].scrollLeft;
-				var circle_offset_top = 40-document.getElementsByClassName("canvas")[0].scrollTop;
-				var circle_radius = 1000*(0.04-0.005*offset);
+				var circle_offset_left = [boxoffsetL+boxWidth, boxoffsetL, boxoffsetL, boxoffsetL+boxWidth][offsetNumber%4]-document.getElementsByClassName("canvas")[0].scrollLeft;
+				var circle_offset_top = [boxoffsetT, boxoffsetT, boxoffsetT+boxHeight, boxoffsetT+boxHeight][offsetNumber%4]-document.getElementsByClassName("canvas")[0].scrollTop;
+				var circle_radius = 1000*(0.03 - (offsetNumber > 4? 0.01 : 0));
 				try{
 				var id = getIdFromString(ui.helper[0].children[0].getAttribute("class"));
 				} catch(e){
@@ -175,14 +186,33 @@ function drawLines(ui){
 				var targetPosition = target == id ? ui.position : diagram[0][target].position;
 				
 				if(domain== target){
-						drawCircle(domainPosition.left+circle_offset_left, domainPosition.top+circle_offset_top,circle_radius, color,label);
+						drawCircle(domainPosition.left+circle_offset_left, domainPosition.top+circle_offset_top,circle_radius, color);
+						var offsettedLocation = {left:domainPosition.left+circle_offset_left+(circle_offset_left - totalBoxWidth/2), top:domainPosition.top+circle_offset_top+(circle_offset_top - totalBoxHeight/2)*(offsetNumber > 4 ? 0.5 :1)}
+						drawLabel(context, label, offsettedLocation, offsettedLocation, "center", 0);
 											
 				}
 				else {
 					var position1 = {"left":domainPosition.left+line_offset_left, "top": domainPosition.top+line_offset_top};
 					var position2 = {"left":targetPosition.left+line_offset_left, "top": targetPosition.top+line_offset_top};
+					// draw the line
 					
-					drawLine(domainPosition.left+line_offset_left, domainPosition.top+line_offset_top,targetPosition.left+line_offset_left, targetPosition.top+line_offset_top, color,label);
+					var p1x = domainPosition.left+line_offset_left;
+					var p1y = domainPosition.top+line_offset_top;
+					var p2x = targetPosition.left+line_offset_left;
+					var p2y = targetPosition.top+line_offset_top;
+					
+					//get the first intersection point
+					var tlx = domainPosition.left+ boxoffsetL;
+					var tly = domainPosition.top+ boxoffsetT;
+					var int1 =getLineEnd(p1x, p1y, p2x ,p2y,tlx, tly ,boxWidth, boxHeight);
+					var tlx = targetPosition.left+ boxoffsetL;
+					var tly = targetPosition.top+ boxoffsetT;
+					var int2 =getLineEnd( p2x ,p2y,p1x, p1y,tlx, tly, boxWidth, boxHeight);
+					//draw the small circles
+					drawLine(int1[0], int1[1], int2[0], int2[1], color);
+					//draw the circles
+					drawCircle(int1[0], int1[1], 10, color)
+					drawCircle(int2[0], int2[1], 10, color)
 					drawLabel(context, label, position1, position2, "center", 0.75-0.05*offset);
 				}
 				
