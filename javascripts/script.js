@@ -27,13 +27,13 @@ function addConnection(data){
 			if(addConnectionState[2] != null){
 				//first remove all "identical" outs
 				removeConnection(addConnectionState[0], "*", addConnectionState[3]);
-				connections.push(addConnectionState);
+        connections.push(addConnectionState);
 				eventData.push({
 				  id:addConnectionState[4],
 				  fromState:addConnectionState[0],
 				  toState:addConnectionState[1],
 				  label:addConnectionState[3]}
-				  );
+          );
 				  connectionIndex++;
 				////console.log(eventData);
 				drawLines();
@@ -62,7 +62,7 @@ function getWidth(){
 }
 
 //draws a line with the given coordinates and color
-function drawLine(x0, y0, x1, y1, color,label){
+function drawLine(x0, y0, x1, y1, color){
 //	//console.log(x0, y0, x1, y1)
 context.strokeStyle = color;
 context.font = "14px Arial";
@@ -73,10 +73,6 @@ context.lineWidth = 3;
   context.moveTo(x0,y0);
   context.lineTo(x1,y1);
   context.stroke();
-  
-  
-  var p1 = { x: x0, y: y0 };
-  var p2 = { x: x1, y: y1 };
 }
 
 
@@ -159,14 +155,15 @@ function drawLines(ui){
 				counter[domain + " " + target] = (counter[domain + " " + target] == undefined ? 1 : counter[domain + " " + target]+1);
 				var offset = counter[domain + " " + target];
 				////console.log(domain + " " + target + " " + offset);
-				//offsets 
-				var line_offset_left = getWidth()*(0.01*offset);
-				var line_offset_top = 100+5*offset;
-				var circle_offset_left = getWidth()*0.15;
-				var circle_offset_top = 0;
-				var circle_radius = getWidth()*(0.06-0.003*offset);
+        //offsets 
+        //console.log(document.getElementsByClassName("canvas")[0].scrollTop);
+				var line_offset_left = getWidth()*(0.06*offset)-document.getElementsByClassName("canvas")[0].scrollLeft; //was0.01
+				var line_offset_top = 100+5*offset-document.getElementsByClassName("canvas")[0].scrollTop;
+				var circle_offset_left = 140-document.getElementsByClassName("canvas")[0].scrollLeft;
+				var circle_offset_top = 40-document.getElementsByClassName("canvas")[0].scrollTop;
+				var circle_radius = 1000*(0.04-0.005*offset);
 				try{
-				var id = getIdFromString(ui.helper[0].getAttribute("class"));
+				var id = getIdFromString(ui.helper[0].children[0].getAttribute("class"));
 				} catch(e){
 					var id = null;
 				}
@@ -174,7 +171,7 @@ function drawLines(ui){
 				var domainPosition = domain == id ? ui.position : diagram[0][domain].position; 
 				var targetPosition = target == id ? ui.position : diagram[0][target].position;
 				
-				if(domain == id && target == id){
+				if(domain== target){
 						drawCircle(domainPosition.left+circle_offset_left, domainPosition.top+circle_offset_top,circle_radius, color,label);
 											
 				}
@@ -191,14 +188,13 @@ function drawLines(ui){
 	
 }
 
-
 //gets the ID from the given state class
 //for example: state-container-oncanvas State-2 ui-draggable ui-draggable-handle ui-droppable -> 2
-
+               //state-container-oncanvas State-
 function getIdFromString(s){
 		////console.log("ID");
 		////console.log(s);
-		return parseInt(s.substr(31, s.indexOf("u", 31)));
+		return parseInt(s.substr(31));
 }
 
 
@@ -247,12 +243,11 @@ $("#obstacleCenter").mousedown(function () {
   colorinput = "yellow"
 });
 
-
-
-
-
-
-
+$("#light").mousedown(function () { 
+  $(this).css("background-color","orange");
+  labelinput = "Light"
+  colorinput = "orange"
+});
 
 
 
@@ -263,10 +258,7 @@ $(init);
 function init() {
 
   //diagram is the main array, we push data into it
-  
   diagram = [stateData, eventData];
-  
-  
   var canvas = $(".canvas");
   var stateCanvasBody = $(".state-container-oncanvas");
   
@@ -321,9 +313,9 @@ function init() {
     canvas.empty();
     //loop through diagram array
     for (var d in diagram[0]) {
-	  if(diagram[0][d] == null){
-		continue;
-	  }
+      if(diagram[0][d] == null){
+      continue;
+      }
       var state = diagram[0][d];
       var html = "";
       
@@ -339,13 +331,15 @@ function init() {
         }
         ////console.log(behaviourDiv);
 
-        html = `<div class="state-container-oncanvas State-${state._id}">
-                    <div class="state-container-title">
+        html = `<div class="stateOuterDiv state-container-title-oncanvas-forDeletion${state._id}">
+                  <div class="state-container-oncanvas State-${state._id}">
+                    <div class="state-container-title-oncanvas ">
                         <h6 >State-${state._id}</h6>
                     </div>
-                    <div class="state-container-body state-container-body-oncanvas state-container-body-oncanvas-forDeletion${state._id}">     
+                    <div class="state-container-body state-container-body-oncanvas ">     
                     ${behaviourDiv}
                     </div>
+                  </div>
                 </div>`;
         var clickCount = 0;
         var dom = $(html)
@@ -356,20 +350,20 @@ function init() {
         })
         //make state-container in canvas draggable
         .draggable({
-			drag:function(event, ui){
-				//draw all connections when dragged
-				drawLines(ui);
-				
-			},
+          drag:function(event, ui){
+            //draw all connections when dragged
+            drawLines(ui);
+            
+          },
 			
           stop: function(event, ui) {
             ////console.log(ui);
-            var id = getIdFromString(ui.helper[0].getAttribute("class") );
+            var id = getIdFromString(ui.helper[0].children[0].getAttribute("class") );
 			
             for (var i in diagram[0]) {
-			  if(diagram[0][i] == null){
-				continue;
-			  }
+              if(diagram[0][i] == null){
+              continue;
+              }
               if (diagram[0][i]._id == id) {
                 diagram[0][i].position.top = ui.position.top;
                 diagram[0][i].position.left = ui.position.left;
@@ -399,9 +393,9 @@ function init() {
               //finds the index of the state that behaviour is to be addded into
               var indexOfTheState = -1;
               for(var i=0; i<diagram[0].length; i++){
-				if(diagram[0][i] == null){
-					continue;
-				}
+                if(diagram[0][i] == null){
+                  continue;
+                }
                 if($(this)["0"].attributes[1].value == diagram[0][i]._id){
                   indexOfTheState = i;
                 }
@@ -409,9 +403,8 @@ function init() {
               diagram[0][indexOfTheState].behaviourArray.push(behaviour);
               //diagram[0][$(this)["0"].attributes[1].value].behaviourArray.push(behaviour);
                //console.log($(this)["0"].attributes);
-              var htmlBehaviour = `<h6  class="behaviour" data-behaviour="${ui.helper["0"].innerHTML}">${ui.helper["0"].innerHTML}
-              </h6>`;
-              $(".state-container-body-oncanvas",this).append(htmlBehaviour);              
+               var htmlBehaviour = `<h6  style="color:white;" class="behaviour-oncanvas" data-behaviour="${ui.helper["0"].innerHTML}">${ui.helper["0"].innerHTML} </h6>`;
+               $(".state-container-body-oncanvas",this).append(htmlBehaviour);              
                //$(this)["0"].childNodes[3].$(".state-container-body-oncanvas").append("htmlBehaviour");
           }
       })
@@ -420,9 +413,9 @@ function init() {
       //to remove the element when even click occurs
       .click(function(e, ui){
 		 // mark it for adding connection
-		addConnection(getIdFromString(e.currentTarget.getAttribute("class")))
+		    addConnection(getIdFromString(e.currentTarget.children[0].getAttribute("class")))
         
-		clickCount++;
+		    clickCount++;
         if(clickCount%2 != 0){
 
           //change the border color to red when deleting 
@@ -430,20 +423,20 @@ function init() {
             border: "2px solid red",
           });
           //create and add the delete button when clicked
-          var htmlDeleteButton = `<h6 class="deleteButton">X</h6>`;
+          var htmlDeleteButton = `<h6 class="deleteButton"></h6>`;
           var stateIDToRemove = $(this)[0].attributes[1].value;
           //console.log($(this)[0].attributes[1].value);
-          $(".state-container-body-oncanvas-forDeletion"+stateIDToRemove).append(htmlDeleteButton);
+          $(".state-container-title-oncanvas-forDeletion"+stateIDToRemove).append(htmlDeleteButton);
           //after clicking on the state container, if they click on X then the state will be removed
           $(".deleteButton").click(function(){
-			  removeConnection(stateIDToRemove, "*","*");
-			  removeConnection("*",stateIDToRemove, "*");
+            removeConnection(stateIDToRemove, "*","*");
+            removeConnection("*",stateIDToRemove, "*");
 			  
 			  //first delete all classes associated to it
             for(var i=0; i<diagram[0].length; i++){
-				if(diagram[0][i] == null){
-					continue;
-				}
+              if(diagram[0][i] == null){
+                continue;
+              }
               if(diagram[0][i]._id == stateIDToRemove){
                 //splice function finds the element at index i and then removes 1 element at/after that index
 				//can't actually remove as that would result in indices being messed up.
@@ -455,7 +448,7 @@ function init() {
           }).attr("state", $(this));//REMOVABLE AFTER TEST 
         }else{
           $(this).css({
-            border : "2px solid black",
+            border : "none",
           });
           $(".deleteButton").css({
             display: "none",
@@ -479,11 +472,17 @@ function init() {
     var dom2="";
     for( var b in behaviourArray){
       var beh = behaviourArray[b];
-      var htmlBehaviour = `<h6 class="behaviour data-behaviour=${beh.behaviourType}">${beh.behaviourType}</h6>`;
+      var htmlBehaviour = `<h6 style="color:white;" class="behaviour-oncanvas data-behaviour=${beh.behaviourType}">${beh.behaviourType}</h6>`;
         dom2 += htmlBehaviour;
     }
     
     return dom2;
       //stateCanvasBody.append(dom2);
   }
+
+  document.getElementsByClassName("canvas")[0].addEventListener("scroll", function(e){
+
+    drawLines();
+  
+  })
 }

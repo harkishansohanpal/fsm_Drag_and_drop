@@ -15,7 +15,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
 
-    <title>ROBOT FSM</title>
+    <title>DRAGON DROBOTICS</title>
 
     <link rel="stylesheet" href="styles/style.css" />
   </head>
@@ -24,8 +24,14 @@
       class="container-fluid"
       style="position: absolute;bottom: 0px;top: 0px;left: 0px;right: 0px;"
     >
-    <div class="row" style="height: 100%;position: relative;">
-        <div class="col-3">
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand" href="#">
+        <img src="dragon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        Dragon Drobotics
+      </a>
+    </nav>
+    <div class="row" style="height: 100%;position: relative; overflow:hidden;">
+        <div class="col-2" style="border-right: 2px solid black; min-width: 160px;">
           <div class="row states" style="position: relative;">
             <h5>States</h5>
             <div class="state-container">
@@ -42,6 +48,7 @@
             <h6 class="behaviour">Turn Right</h6>
             <h6 class="behaviour">Turn Left</h6>
             <h6 class="behaviour">Spin</h6>
+            <h6 class="behaviour">Stop</h6>
           </div>
           <div class="row events" style="position: relative;">
             <h5>Events</h5>
@@ -49,12 +56,11 @@
             <h6 id="obstacleLeft" class="eventlist" onclick="clickState()">Obstacle Left</h6>
             <h6 id="obstacleRight" class="eventlist" onclick="clickState()">Obstacle Right</h6>
             <h6 id="obstacleCenter" class="eventlist" onclick="clickState()">Obstacle Center</h6>
-            
+            <h6 id="light" class="eventlist" onclick="clickState()">Light</h6>
           </div>
         </div>
-		<canvas id="theCanvas" width=1000, height=1000> </canvas>
-        <div class="col-9 canvas">
-          <h2>Canvas</h2>
+	    	<canvas id="theCanvas" width=3000, height=3000> </canvas>
+        <div class="col-10 canvas"></div>
         </div>
       </div>
     </div>
