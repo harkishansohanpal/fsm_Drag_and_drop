@@ -154,12 +154,13 @@ function drawLines(ui){
 						target = temp;
 					}
 				counter[domain + " " + target] = (counter[domain + " " + target] == undefined ? 1 : counter[domain + " " + target]+1);
-				var offset = counter[domain + " " + target];
+				var offsetNumber = counter[domain + " " + target];
+				var offset = ["",0,9,3,7,2,8,4,1,6,5][offsetNumber]; 
 				////console.log(domain + " " + target + " " + offset);
         //offsets 
         //console.log(document.getElementsByClassName("canvas")[0].scrollTop);
-				var line_offset_left = getWidth()*(0.06*offset)-document.getElementsByClassName("canvas")[0].scrollLeft; //was0.01
-				var line_offset_top = 100+5*offset-document.getElementsByClassName("canvas")[0].scrollTop;
+				var line_offset_left = 45+4*offset-document.getElementsByClassName("canvas")[0].scrollLeft; //was0.01
+				var line_offset_top = 50+9*offset-document.getElementsByClassName("canvas")[0].scrollTop;
 				var circle_offset_left = 140-document.getElementsByClassName("canvas")[0].scrollLeft;
 				var circle_offset_top = 40-document.getElementsByClassName("canvas")[0].scrollTop;
 				var circle_radius = 1000*(0.04-0.005*offset);
@@ -181,7 +182,7 @@ function drawLines(ui){
 					var position2 = {"left":targetPosition.left+line_offset_left, "top": targetPosition.top+line_offset_top};
 					
 					drawLine(domainPosition.left+line_offset_left, domainPosition.top+line_offset_top,targetPosition.left+line_offset_left, targetPosition.top+line_offset_top, color,label);
-					drawLabel(context, label, position1, position2, "center", 0.7-0.1*offset);
+					drawLabel(context, label, position1, position2, "center", 0.75-0.05*offset);
 				}
 				
 				//ctx, text, p1, p2, alignment, offset 
@@ -406,7 +407,7 @@ function init() {
               diagram[0][indexOfTheState].behaviourArray.push(behaviour);
               //diagram[0][$(this)["0"].attributes[1].value].behaviourArray.push(behaviour);
                //console.log($(this)["0"].attributes);
-               var htmlBehaviour = `<h6  style="color:white;" class="behaviour-oncanvas" data-behaviour="${ui.helper["0"].innerHTML}">${ui.helper["0"].innerHTML} </h6>`;
+               var htmlBehaviour = `<h6  style="color:black;" class="behaviour-oncanvas" data-behaviour="${ui.helper["0"].innerHTML}">${ui.helper["0"].innerHTML} </h6>`;
                $(".state-container-body-oncanvas",this).append(htmlBehaviour);              
                //$(this)["0"].childNodes[3].$(".state-container-body-oncanvas").append("htmlBehaviour");
           }
@@ -475,7 +476,7 @@ function init() {
     var dom2="";
     for( var b in behaviourArray){
       var beh = behaviourArray[b];
-      var htmlBehaviour = `<h6 style="color:white;" class="behaviour-oncanvas data-behaviour=${beh.behaviourType}">${beh.behaviourType}</h6>`;
+      var htmlBehaviour = `<h6 style="color:black;" class="behaviour-oncanvas data-behaviour=${beh.behaviourType}">${beh.behaviourType}</h6>`;
         dom2 += htmlBehaviour;
     }
     
