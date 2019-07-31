@@ -25,21 +25,9 @@ label {
   margin-left: 40%;
   z-index: 2;
 }
-.stateOuterDiv{
-  background-image: url("../State1.png");
-  background-repeat: no-repeat;
-  background-size: contain;
-  height:250px;
-  width: 150px;
-}
 .state-container-title {
   text-align: center;
   border-bottom: 1px solid black;
-}
-.state-container-title-oncanvas {
-  text-align: center;
-  border-bottom: 1px solid black;
-  height:60px;
 }
 .state-container-body {
   height: 50px;
@@ -47,35 +35,30 @@ label {
 }
 
 .state-container-body-oncanvas {
-  height: 150px;
-  overflow: auto;
+  height: 200px;
+  overflow: hidden;
 }
 .state-container-oncanvas {
-  /* background: white;
+  background: white;
   border: 2px solid black;
   border-radius: 5px;
   width: 10%;
   height: 150px;
   position: "absolute";
-  overflow: hidden; */
-  border-radius: 5px;
-  width: 50%;
-  height: 190px;
-  position: "relative";
   overflow: hidden;
-  margin: auto;
-  margin-top: 0%;
 }
 .deleteButton{
   float:right;
-  background-image: url("../deleteButton2.png");
-  height:25px;
-  width :25px
+  border: 2px solid red;
 }
 .deleteButton:hover{
   cursor: pointer;
   background-color: gray;
   color: white;
+}
+.deleteButton{
+  float:right;
+  border: 2px solid red;
 }
 .behaviours {
   background-color: #9acfea;
@@ -97,29 +80,19 @@ label {
   z-index: 2;
   margin-left: 7px;
   margin-top: 5px;
+
 }
+
 .behaviour-oncanvas{
   border: 2px solid gray;
   border-radius: 5px;
   padding: 5px;
   width: fit-content;
   white-space: nowrap;
-  z-index: 0;
+  z-index: 2;
   margin-left: 7px;
   margin-top: 5px;
   font-size: 12px;
-  position: relative;
-}
-.behaviour-oncanvas::before{
-  content: '';
-  width: 2px;
-  height: 12px;
-  background: gray;
-  position: absolute;
-  bottom: 100%;
-  left: 20px;
-  margin-left: -2px;
-  z-index: -1;
 }
 
 .eventlist {
@@ -145,8 +118,11 @@ label {
 #theCanvas {
   position: absolute;
   top:0px;
-  left:16.66%;
+  left:25%;
   z-index:-1;
+  
+ 
+
 }
 
 .canvas {
@@ -155,10 +131,5 @@ label {
   right: 0px;
   bottom: 0px;
   top: 0px;
-  overflow: scroll;
-}
-
-.navbar{
-  margin-left: -15px !important;
-  margin-right: -15px !important;
+  left:25%;
 }

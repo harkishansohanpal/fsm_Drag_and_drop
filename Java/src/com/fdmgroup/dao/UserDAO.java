@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fdmgroup.model.User;
 
-
-
 public class UserDAO {
 
 	@Autowired

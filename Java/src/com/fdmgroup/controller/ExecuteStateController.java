@@ -15,27 +15,27 @@ public class ExecuteStateController {
 			Behaviour action = state.getBehaviours().get(i);
 			
 			switch(action){
-			case forward:
+			case Forward:
 				System.out.println("FORWARD");
 				myFinch.setWheelVelocities(255, 255, 200);
 				break;
-			case backward:
+			case Backward:
 				System.out.println("BACKWARD");
 				myFinch.setWheelVelocities(-255, -255, 200);
 				break;
-			case turnL:
+			case TurnL:
 				System.out.println("TURN LEFT");
 				myFinch.setWheelVelocities(0, 255, 975);
 				break;
-			case turnR:
+			case TurnR:
 				System.out.println("TURN RIGHT");
 				myFinch.setWheelVelocities(255, 0, 975);
 				break;
-			case spin:
+			case Spin:
 				System.out.println("SPIN");
-				myFinch.setWheelVelocities(180, -180, 500);
+				myFinch.setWheelVelocities(180, -180, 1000);
 				break;
-			case stop:
+			case Stop:
 				System.out.println("STOP");
 				myFinch.setLED(0, 0, 255);
 				break;
