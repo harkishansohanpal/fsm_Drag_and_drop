@@ -54,22 +54,4 @@ public class SaveController {
 		
 	}
 	
-	@RequestMapping(value = "/Save2", method = RequestMethod.POST)
-	@CrossOrigin
-	public String FSMtoDB2(Model model, @RequestBody String s){
-		//System.out.println(s);
-		JSONObject json = new JSONObject(s);
-		JSONObject fsm = new JSONObject(json.getString("fsm"));
-		System.out.println(fsm.toString());
-		return "Admin";
-	}
-	
-	@RequestMapping(value = "Save2", method = RequestMethod.GET)
-	@CrossOrigin
-	public String FSMtoDB3(Model model, @RequestBody String s){
-		System.out.println(s);
-		
-		return "Admin";
-	}
-	
 }

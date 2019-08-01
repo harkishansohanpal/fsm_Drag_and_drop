@@ -1,30 +1,31 @@
 function transform(stateData, eventData){
 	var verticesArray = [];
 	var edgesArray = [];
-	var finalState = [];
-
+	
 	for (var state in stateData){
 		let behArray = [];
 		
 		for (var beh in stateData[state].behaviourArray){
-			let singleBehaviour = stateData[state].behaviourArray[beh].behaviourType;
-			
-			behArray.push(singleBehaviour);
-			
-			if (singleBehaviour == "Stop"){
-				finalState.push(String.fromCharCode(65 + stateData[state]._id));
+			var s = stateData[state].behaviourArray[beh].behaviourType;
+			console.log(s);
+			var replace_table = {"Forward":"forward",
+			"Backward":"backward",
+			"Turn Left":"turnL",
+			"Turn Right":"turnR",
+			"Spin":"spin",
 			}
+			behArray.push(replace_table[s]);
+			
 		}
 		
 		verticesArray.push({name : String.fromCharCode(65 + stateData[state]._id),
-				behaviours : behArray});
+				behaviors : behArray});
 	}
 	
 	
 	for (var event in eventData){
 		let c;
 		let input;
-		
 		
 		switch (eventData[event].label){
 			case "No Obstacle":
@@ -39,14 +40,16 @@ function transform(stateData, eventData){
 				c = "l";
 				input = "ObstacleL";
 				break;
-			case "Obstacle Center":
+			case "Obstacle Centre":
 				c = "a";
 				input = "ObstacleAll"
 				break;
-			default:
-				c = "s";
+			case "Light":
+				c = "l";
 				input = "Light";
 				break;
+			default :
+				throw eventData[event].label;
 		}
 		
 		let from = String.fromCharCode(65 + eventData[event].fromState);
@@ -70,7 +73,7 @@ function transform(stateData, eventData){
 		vertices: verticesArray,
 		edges: edgesArray,
 		startState: String.fromCharCode(65 + stateData[0]["_id"]),
-		endState: finalState
+		endStates: []
 		
 	}
 	
