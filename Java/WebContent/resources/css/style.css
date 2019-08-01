@@ -1,0 +1,174 @@
+label {
+  margin-left: 2em;
+}
+.byline {
+  font-style: italic;
+  font-size: smaller;
+}
+
+
+.states {
+  background-color: #9acfea;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  height: 20%;
+  display: block;
+  text-align: center;
+  border-bottom: 2px black solid;
+}
+.state-container {
+  /* border: 2px solid black; */
+  border-radius: 5px;
+  width: 20%;
+  margin: auto;
+  z-index: 2;
+}
+.stateOuterDiv{
+  background-image: url("State2.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  height:200px;
+  width: 200px;
+}
+.stateOuterDiv-menu{
+  background-image: url("State2.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  height:130px;
+  width: 90px;
+}
+.state-container-title {
+  text-align: center;
+  /* border-bottom: 1px solid black; */
+}
+.state-container-title-oncanvas {
+  text-align: center;
+  /* border-bottom: 1px solid black; */
+  height:40px;
+}
+.state-container-body {
+  height: 50px;
+  overflow: hidden;
+}
+
+.state-container-body-oncanvas {
+  height: 100px;
+  overflow: auto;
+}
+.state-container-oncanvas {
+  /* background: white;
+  border: 2px solid black;
+  border-radius: 5px;
+  width: 10%;
+  height: 150px;
+  position: "absolute";
+  overflow: hidden; */
+  border-radius: 5px;
+  width: 50%;
+  height: 150px;
+  position: "relative";
+  overflow: hidden;
+  margin: auto;
+  margin-top: 0%;
+}
+.deleteButton{
+  float:right;
+  background-image: url("../images/deleteButton2.png");
+  height:25px;
+  width :25px
+}
+.deleteButton:hover{
+  cursor: pointer;
+  background-color: gray;
+  color: white;
+}
+.behaviours {
+  background-color: #9acfea;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  height: 40%;
+  display: block;
+  text-align: center;
+  border-bottom: 2px black solid;
+}
+.behaviour {
+  border: 2px solid gray;
+  border-radius: 5px;
+  padding: 5px;
+  width: fit-content;
+  white-space: nowrap;
+  z-index: 2;
+  margin-left: 7px;
+  margin-top: 5px;
+}
+.behaviour-oncanvas{
+  border: 2px solid gray;
+  border-radius: 5px;
+  padding: 5px;
+  width: fit-content;
+  white-space: nowrap;
+  z-index: 0;
+  margin-left: 7px;
+  margin-top: 5px;
+  font-size: 12px;
+  position: relative;
+  background-color: rgb(231, 49, 17);
+  color: black;
+}
+.behaviour-oncanvas::before{
+  content: '';
+  width: 2px;
+  height: 12px;
+  background: gray;
+  position: absolute;
+  bottom: 100%;
+  left: 20px;
+  margin-left: -2px;
+  z-index: -1;
+}
+
+.eventlist {
+  border: 2px solid gray;
+  border-radius: 5px;
+  padding: 5px;
+  width: fit-content;
+  white-space: nowrap;
+  z-index: 2;
+  margin-left: 7px;
+  margin-top: 5px;
+}
+
+.events {
+  background-color: #9acfea;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  height: 40%;
+  display: block;
+  text-align: center;
+}
+#theCanvas {
+  position: absolute;
+  top:0px;
+  left:16.66%;
+  z-index:-1;
+}
+
+.canvas {
+  background-color: rgba(0,0,0,0);
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
+  overflow: scroll;
+}
+
+.navbar{
+  margin-left: -15px !important;
+  margin-right: -15px !important;
+}
