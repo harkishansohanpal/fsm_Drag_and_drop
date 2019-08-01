@@ -1,25 +1,30 @@
 function transform(stateData, eventData){
 	var verticesArray = [];
 	var edgesArray = [];
+	var endStates = [];
 	
 	for (var state in stateData){
 		let behArray = [];
 		
+		let stopChecked = false;
+		
 		for (var beh in stateData[state].behaviourArray){
-			var s = stateData[state].behaviourArray[beh].behaviourType;
-			console.log(s);
-			var replace_table = {"Forward":"forward",
-			"Backward":"backward",
-			"Turn Left":"turnL",
-			"Turn Right":"turnR",
-			"Spin":"spin",
-			}
-			behArray.push(replace_table[s]);
 			
+			let specificBehaviour = stateData[state].behaviourArray[beh].behaviourType;
+			behArray.push({
+				behaviour: specificBehaviour,
+				time: stateData[state].behaviourArray[beh].time
+			}});
+			
+			if (specificBehaviour == "Stop" && !stopChecked){
+				stopChecked = true;
+				endStates.push(String.fromCharCode(65 + stateData[state]._id));
+			}
+							
 		}
 		
 		verticesArray.push({name : String.fromCharCode(65 + stateData[state]._id),
-				behaviors : behArray});
+										robotActions : behArray});
 	}
 	
 	
@@ -40,43 +45,41 @@ function transform(stateData, eventData){
 				c = "l";
 				input = "ObstacleL";
 				break;
-			case "Obstacle Centre":
+			case "Obstacle Center":
 				c = "a";
 				input = "ObstacleAll"
 				break;
-			case "Light":
-				c = "l";
-				input = "Light";
-				break;
-			default :
-				throw eventData[event].label;
+			default:
+				c = "s";
+				input = "light";
+				break;`
 		}
 		
 		let from = String.fromCharCode(65 + eventData[event].fromState);
 		let to = String.fromCharCode(65 + eventData[event].toState);
 		
 		edgesArray.push({
-			event: {
-				name: from + c,
-				input: input
-			},
-			fromState: from,
-			toState: to
-			
+						event: {
+										name: from + c,
+										input: input
+						},
+						fromState: from,
+						toState: to
+						
 		})
-	
-		
+
+					
 	}
 	
 	var jsonOutput = {
-		
-		vertices: verticesArray,
-		edges: edgesArray,
-		startState: String.fromCharCode(65 + stateData[0]["_id"]),
-		endStates: []
-		
+					
+					vertices: verticesArray,
+					edges: edgesArray,
+					startState: String.fromCharCode(65 + stateData[0]["_id"]),
+					endState: endStates
+					
 	}
 	
 	return jsonOutput;
-	
+                
 }
