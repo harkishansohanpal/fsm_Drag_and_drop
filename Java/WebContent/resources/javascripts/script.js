@@ -256,7 +256,7 @@ function save(){
 	   
 	 // var string ='{"vertices":[{"name":"A","behaviors":["Forward"]},{"name":"B","behaviors":["Backward","Backward"]},{"name":"C","behaviors":[]}],"edges":[{"event":{"name":"An","input":"NoObstacle"},"fromState":"A","toState":"B"},{"event":{"name":"Cs","input":"light"},"fromState":"C","toState":"A"},{"event":{"name":"Cr","input":"ObstacleR"},"fromState":"C","toState":"B"}],"startState":"A","endStates":[]}';
 	  
-	   return fetch("http://localhost:8088/FincFSM/Save", {method:"post", body:JSON.stringify({
+	   return fetch("http://localhost:8080/FinchFSM/Save", {method:"post", body:JSON.stringify({
 		   filename:filename,
 		   fsm:string,
 		   diagram: dummyString
@@ -285,7 +285,7 @@ function loadModel(e){
 //	console.log(string);
 //	//var string ='{"vertices":[{"name":"A","behaviors":["Forward"]},{"name":"B","behaviors":["Backward","Backward"]},{"name":"C","behaviors":[]}],"edges":[{"event":{"name":"An","input":"NoObstacle"},"fromState":"A","toState":"B"},{"event":{"name":"Cs","input":"light"},"fromState":"C","toState":"A"},{"event":{"name":"Cr","input":"ObstacleR"},"fromState":"C","toState":"B"}],"startState":"A","endStates":[]}';
 //	
-//	return fetch("http://localhost:8088/FincFSM/Save", {method:"post", body:JSON.stringify({fsm:string})}).then(function(x) {console.log(x)});
+//	return fetch("http://localhost:8080/FinchFSM/Save", {method:"post", body:JSON.stringify({fsm:string})}).then(function(x) {console.log(x)});
 //	
 //}
 
