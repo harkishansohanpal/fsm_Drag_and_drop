@@ -36,7 +36,7 @@ public class LoginController {
 	@RequestMapping(value="/processLogin" , method=RequestMethod.POST)
 	public String processLogin(@RequestParam("username") String userName, @RequestParam("password") String userPassword, Model model){
 		
-		//jfsmDAOObj.addSamples();
+		jfsmDAOObj.addSamples();
 		
 		List<User> userList = new ArrayList<>();
 		userList = userDaoObj.findAllUsers();

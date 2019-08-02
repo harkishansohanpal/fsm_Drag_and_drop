@@ -15,9 +15,32 @@ function transform(stateData, eventData){
 		for (var beh in stateData[state].behaviourArray){
 			
 			let specificBehaviour = stateData[state].behaviourArray[beh].behaviourType;
+			let setTime;
+			let time = stateData[state].behaviourArray[beh].time;
+			
+			
+			switch (specificBehaviour){
+				case "Forward":
+				case "Backward":
+					setTime = time * 40;
+					break;
+				
+				case "Turn Right":
+				case "Turn Left":
+				case "Spin":
+					setTime = time * 7;
+					break;
+				
+				default:
+					setTime = time;
+					
+				
+			}
+			
+			
 			behArray.push({
 				behaviour: specificBehaviour,
-				time: stateData[state].behaviourArray[beh].time
+				time: setTime
 			});
 			
 			if (specificBehaviour == "Stop" && !stopChecked){

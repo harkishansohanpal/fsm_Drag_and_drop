@@ -12,8 +12,8 @@
             <!-- Scan for annotated classes and Hibernate mapping XML files -->
             <property name="hibernate.archive.autodetection" value="class" />
             
- 			<!-- <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
-			<property name="hibernate.hbm2ddl.auto" value="create" /> -->
+ 			<property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+			<property name="hibernate.hbm2ddl.auto" value="create" />
            
             <!-- SQL stdout logging -->
             <property name="hibernate.show_sql" value="false" />
