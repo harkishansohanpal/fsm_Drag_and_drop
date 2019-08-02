@@ -10,6 +10,7 @@ import com.fdmgroup.model.Behaviour;
 import com.fdmgroup.model.Event;
 import com.fdmgroup.model.FSM;
 import com.fdmgroup.model.Input;
+import com.fdmgroup.model.RobotAction;
 import com.fdmgroup.model.State;
 import com.fdmgroup.model.TruthTable;
 
@@ -44,7 +45,7 @@ public class FSMtoCodeController {
 		}		
 		// part 3 : make the FSM
 		State start  = getStateFromString(states, json.getString("startState"));
-		JSONArray endLst = json.getJSONArray("endState");
+		JSONArray endLst = json.getJSONArray("endStates");
 		List<State> ends = new ArrayList<State>();
 		for(int i=0;i<endLst.length();i++){
 			 ends.add(getStateFromString(states, endLst.getString(i)));
@@ -59,8 +60,8 @@ public class FSMtoCodeController {
 		return output;
 	}
 	
-	public Behaviour parseBehaviour(String s){
-		return Behaviour.valueOf(s);
+	public RobotAction parseAction(JSONObject s){
+		return new RobotAction(Behaviour.valueOf(s.getString("behaviour")), s.getInt("time"));
 	}
 	
 	public Input parseInput(String s){
@@ -68,10 +69,10 @@ public class FSMtoCodeController {
 	}
 	
 	public State parseState(JSONObject js){
-		List<Behaviour> beh = new ArrayList<Behaviour>();
-		JSONArray jsl = js.getJSONArray("behaviours");
+		List<RobotAction> beh = new ArrayList<RobotAction>();
+		JSONArray jsl = js.getJSONArray("robotActions");
 		for(int i=0;i<jsl.length();i++){
-			beh.add(parseBehaviour(jsl.getString(i)));
+			beh.add(parseAction(jsl.getJSONObject(i)));
 		}
 		return new State(js.getString("name"), beh);
 	}
@@ -90,16 +91,16 @@ public class FSMtoCodeController {
 	}
 	
 	public JSONObject inverseParseState(State s){
-		List<String> strs= s.getBehaviours().stream().map((x -> x.toString() )).collect(Collectors.toList());
+		List<JSONObject> objs= s.getBehaviours().stream().map((x -> new JSONObject("{behaviour:"+ x.getBehaviour().toString() + ",time:" + Integer.toString(x.getTime()) +"}" ))).collect(Collectors.toList());
 		
-		
-		JSONArray json = new JSONArray(strs);
+		JSONArray json = new JSONArray(objs);
 		JSONObject json2 = new JSONObject();
 		json2.put("name", s.getStateName());
-		json2.put("behaviours", json);
+		json2.put("robotActions", json);
 		return json2;
 		
 	}
+	
 	public JSONObject inverseParseEvent(Event e){
 		Map<String, String> jsonMap = new HashMap();
 		jsonMap.put("name", e.getEventName());
@@ -142,7 +143,7 @@ public class FSMtoCodeController {
 		
 		//set the start and end states.
 		result.put("startState", fsm.getInitialState().getStateName());
-		result.put("endState", new JSONArray(fsm.getFinalStates().stream().map((x -> inverseParseState(x) )).collect(Collectors.toList())));
+		result.put("endStates", new JSONArray(fsm.getFinalStates().stream().map((x -> inverseParseState(x) )).collect(Collectors.toList())));
 		return result.toString();
 	}
 

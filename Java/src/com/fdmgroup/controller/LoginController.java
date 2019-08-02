@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.fdmgroup.dao.JSONFsmDAO;
 import com.fdmgroup.dao.UserDAO;
@@ -71,8 +72,18 @@ public class LoginController {
 			}
 		}
 		
+		model.addAttribute("ErrorInfo", "username/password is wrong");
+		
 		return "login";
 		
+	}
+	
+	@RequestMapping(value = "/Logout")
+	public String logout(Model model, SessionStatus sessionStatus){
+		sessionStatus.setComplete();
+		model.addAttribute("UserFSM", null);
+		
+		return "login";
 	}
 
 }

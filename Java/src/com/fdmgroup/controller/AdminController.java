@@ -27,8 +27,21 @@ public class AdminController {
 	@Autowired
 	private UserDAO userDao;
 	
+	private int kill = 1;
+	
+	@RequestMapping(value = "/Kill")
+	public String kill(Model model){
+		kill = 0;
+		
+		List<JSONFsm> Fsms =  jfsmDAOObj.getList();
+		model.addAttribute("FSMs", Fsms);
+		
+		return "Admin";
+	}
+	
 	@RequestMapping(value = "/Run", method = RequestMethod.POST)
 	public String run(Model model, @RequestParam("fsm") String s){
+		kill = 1;
 		System.out.println(s);
 		//Parse JSON string to fsm object
 		FSMtoCodeController fsm2c = new FSMtoCodeController();
@@ -48,7 +61,7 @@ public class AdminController {
 		
 		
 		//Continous while loop to execute fsm unless light is sensed
-		while(!obstacle.equals(light)){
+		while(!obstacle.equals(light) && kill == 1){
 			
 			System.out.println(esc.myFinch.getLeftLightSensor());
 			
@@ -79,6 +92,12 @@ public class AdminController {
 			
 			if(toState == null){
 				System.out.println("No toState found for " + obstacle + " and " + fromState);
+				esc.myFinch.setLED(255, 0, 0);
+				break;
+			}
+			
+			if(toState.getBehaviours() == null){
+				System.out.println("Final state reached");
 				esc.myFinch.setLED(255, 0, 0);
 				break;
 			}

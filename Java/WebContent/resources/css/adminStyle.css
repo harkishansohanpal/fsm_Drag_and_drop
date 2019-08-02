@@ -1,3 +1,8 @@
+
+
+
+
+
 #users {
     border-collapse: collapse;
     width:70%;
@@ -58,7 +63,7 @@
   transform: scale(1.1);
 }
 .buttonclass {
-       display: inline;
+       /* display: inline; */
        padding: auto;
        color: #fff;
        /*background-color: #7d7d7d;*/
@@ -67,6 +72,7 @@
        /*font-style: normal;*/
        border-radius: 5px;
        height: 35px;
+       width:100%;
       /* border: 1px solid #5a5a5a;
        border-width: 1px 1px 3px;
        box-shadow:0 -1px 0 rgba(255,255,255,0.1) inset;*/
@@ -94,7 +100,7 @@
 	   font-size: 18px;
        text-align: center;
 	   border-radius: 5px;
-       width:70%
+       width:70%;
 }
 
 .run{
@@ -136,3 +142,50 @@
 .row1{
 	margin:0 !important;
 }
+
+
+.buttonsDiv{
+  float: right;
+  width: 65%;
+  margin-top: 20px;
+  padding-left: 10px;
+}
+
+.inputDivTopBar{
+  float:right;
+  width: 70%;
+  margin-top: 7px;
+}
+
+#fsmName{
+  /* opacity: 0; */
+  background-color: transparent;
+  border: none;
+  width:94.6%;
+  padding-left: 10px;
+  padding-top: 2px;
+  padding-bottom: 4px;
+  margin-left: 7px;
+  /* margin-top: 2px; */
+  color:white;
+}
+input:focus{
+  outline: none;
+}
+input[type="text"]{
+  font-size: 20px;
+  color: #39ff14 !important;
+  font-family: 'heavy_data';
+}
+@font-face{
+  font-family:'heavy_data';
+  src: url('heavy_data.ttf');
+ }
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #39ff14;
+  opacity: 1;
+  font-family: 'heavy_data';
+  font-size: 20px;
+}
+
+

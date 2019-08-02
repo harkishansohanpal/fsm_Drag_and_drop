@@ -20,6 +20,7 @@
 	       	<input class="txt" type="text" name="username" placeholder="Username"></br>
 	    
 		    <input class="txt" type="password" name="password" placeholder="Password"></br>
+		    <h4 style="color:red;"> ${ErrorInfo} </h4>
 	     
 			<div> <input class="buttonclass" type="submit" name="Submit" value="submit"></div>
 			

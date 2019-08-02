@@ -6,13 +6,13 @@ public class State {
 
 	private int stateID;
 	private String stateName;
-	private List<Behaviour> behaviours;
+	private List<RobotAction> behaviours;
 
 	public State() {
 		super();
 	}
-
-	public State( String stateName, List<Behaviour> behaviours) {
+	
+	public State(String stateName, List<RobotAction> behaviours) {
 		super();
 		this.stateName = stateName;
 		this.behaviours = behaviours;
@@ -34,27 +34,17 @@ public class State {
 		this.stateName = stateName;
 	}
 
-	public List<Behaviour> getBehaviours() {
+	public List<RobotAction> getBehaviours() {
 		return behaviours;
 	}
 
-	public void setBehaviours(List<Behaviour> behaviours) {
+	public void setBehaviours(List<RobotAction> behaviours) {
 		this.behaviours = behaviours;
 	}
-
+	
 	@Override
 	public String toString() {
-		return "\nState [stateID=" + stateID + ", stateName=" + stateName + ", behaviours=" + behaviours + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((behaviours == null) ? 0 : behaviours.hashCode());
-		result = prime * result + stateID;
-		result = prime * result + ((stateName == null) ? 0 : stateName.hashCode());
-		return result;
+		return "State [stateID=" + stateID + ", stateName=" + stateName + ", behaviours=" + behaviours + "]";
 	}
 
 	@Override
