@@ -5,18 +5,19 @@ label {
   font-style: italic;
   font-size: smaller;
 }
-
-
 .states {
-  background-color: #9acfea;
+  background-image: url("../images/left-top.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   position: absolute;
   top: 0px;
   bottom: 0px;
   left: 0px;
-  height: 20%;
+  height: 25%;
   display: block;
   text-align: center;
   border-bottom: 2px black solid;
+  padding-top: 20px;
 }
 .state-container {
   /* border: 2px solid black; */
@@ -47,6 +48,7 @@ label {
   text-align: center;
   /* border-bottom: 1px solid black; */
   height:40px;
+  color: white;
 }
 .state-container-body {
   height: 50px;
@@ -85,15 +87,22 @@ label {
   color: white;
 }
 .behaviours {
-  background-color: #9acfea;
+  background-image: url("../images/left-mid.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   position: absolute;
   top: 0px;
   bottom: 0px;
   left: 0px;
-  height: 40%;
+  height: 41%;
   display: block;
-  text-align: center;
-  border-bottom: 2px black solid;
+  text-align: center !important;
+  /* border-bottom: 2px black solid; */
+
+  padding-top: 20px;
+  padding-left: 90px;
+  padding-right: 90px;
+  
 }
 .behaviour {
   border: 2px solid gray;
@@ -102,9 +111,11 @@ label {
   width: fit-content;
   white-space: nowrap;
   z-index: 2;
-  margin-left: 7px;
+  margin: auto;
   margin-top: 5px;
+  color: white;
 }
+
 .behaviour-oncanvas{
   border: 2px solid gray;
   border-radius: 5px;
@@ -116,7 +127,7 @@ label {
   margin-top: 5px;
   font-size: 12px;
   position: relative;
-  background-color: rgb(231, 49, 17);
+  background-color: rgb(116, 168, 218);
   color: black;
 }
 .behaviour-oncanvas::before{
@@ -138,21 +149,30 @@ label {
   width: fit-content;
   white-space: nowrap;
   z-index: 2;
-  margin-left: 7px;
+  margin: auto;
   margin-top: 5px;
+  color: white;
 }
 
 .events {
-  background-color: #9acfea;
+  /* background-color: #9acfea; */
+  background-image: url("../images/left-bottom.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   position: absolute;
   top: 0px;
   bottom: 0px;
   left: 0px;
-  height: 40%;
+  height: 35%;
   display: block;
   text-align: center;
+  padding-top: 20px;
+
 }
 #theCanvas {
+  background-image: url("../images/canvasBG.svg");
+  background-repeat: no-repeat;
+
   position: absolute;
   top:0px;
   left:16.66%;
@@ -168,7 +188,24 @@ label {
   overflow: scroll;
 }
 
-.navbar{
+.navbarC{
   margin-left: -15px !important;
   margin-right: -15px !important;
+  padding-left: -15px !important;
+  padding-right: -15px !important;
+  margin: 0 !important;
+  background-image: url("../images/top2.png");
+  height: 150px;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }
+@font-face{
+  font-family:'heavy_data';
+  src: url('heavy_data.ttf');
+ }
+body h5{
+  font-family: 'heavy_data';
+  color: #00ffff;
+}
+

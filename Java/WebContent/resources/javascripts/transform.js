@@ -2,19 +2,22 @@ function transform(stateData, eventData){
 	var verticesArray = [];
 	var edgesArray = [];
 	var endStates = [];
+	var startState;
 	
 	for (var state in stateData){
 		let behArray = [];
 		
 		let stopChecked = false;
 		
+		if(stateData[state] == null)
+			continue;
+		
 		for (var beh in stateData[state].behaviourArray){
 			
 			let specificBehaviour = stateData[state].behaviourArray[beh].behaviourType;
 			behArray.push({
 				behaviour: specificBehaviour,
-				//time: stateData[state].behaviourArray[beh].time
-				time: 100
+				time: stateData[state].behaviourArray[beh].time
 			});
 			
 			if (specificBehaviour == "Stop" && !stopChecked){
@@ -26,6 +29,13 @@ function transform(stateData, eventData){
 		
 		verticesArray.push({name : String.fromCharCode(65 + stateData[state]._id),
 										robotActions : behArray});
+	}
+	
+	for (var state in stateData){
+		if(stateData[state] != null){
+			startState = stateData[state];
+			break;
+		}
 	}
 	
 	
@@ -75,7 +85,7 @@ function transform(stateData, eventData){
 					
 					vertices: verticesArray,
 					edges: edgesArray,
-					startState: String.fromCharCode(65 + stateData[0]["_id"]),
+					startState: String.fromCharCode(65 + startState["_id"]),
 					endStates: endStates
 					
 	}
