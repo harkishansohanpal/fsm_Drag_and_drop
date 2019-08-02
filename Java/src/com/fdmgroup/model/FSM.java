@@ -97,7 +97,7 @@ public class FSM {
 		//Check for halt state
 		for (State state : finalStates) {
 			if(fromState.equals(state))
-				return state;
+				return new State("End" , null);
 		}
 		
 		

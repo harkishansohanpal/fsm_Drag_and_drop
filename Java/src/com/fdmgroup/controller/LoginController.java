@@ -72,6 +72,8 @@ public class LoginController {
 			}
 		}
 		
+		model.addAttribute("ErrorInfo", "username/password is wrong");
+		
 		return "login";
 		
 	}

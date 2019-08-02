@@ -69,7 +69,7 @@ function renderCurrentState(){
 	//curState["0"].style.border = "2px solid blue";
 	//curState["0"].style.backgroundImage =  "url(../State2Focus.png)";
 	var stateBack = document.getElementsByClassName("state-container-title-oncanvas-forDeletion" + currentState._id)["0"];
-	stateBack.style.backgroundImage =  "url(./resources/images/State2Focus.png)";
+	stateBack.style.backgroundImage =  "url(./resources/images/State2StepFocus.png)";
 }
 
 function unRenderCurrentState(){

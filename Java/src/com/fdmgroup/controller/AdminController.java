@@ -96,6 +96,12 @@ public class AdminController {
 				break;
 			}
 			
+			if(toState.getBehaviours() == null){
+				System.out.println("Final state reached");
+				esc.myFinch.setLED(255, 0, 0);
+				break;
+			}
+			
 			esc.execute(toState);
 			fromState = toState;
 			

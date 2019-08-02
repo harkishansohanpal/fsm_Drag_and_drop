@@ -86,6 +86,7 @@ function drawLabel( ctx, text, p1, p2, alignment, offset ){
   //console.log(p1.left+dx*offset,p1.top+dy*offset)
   ctx.translate(p1.left+dx*offset,p1.top+dy*offset);
   //ctx.rotate(Math.atan2(dy,-dx));
+  ctx.fillStyle = "white";
   ctx.fillText(text,0,0);
   ctx.restore();
 }
@@ -276,6 +277,8 @@ function loadModel(e){
 	connections = data[2];
 	init();
 	
+	document.getElementById("executejsonfsm").value = document.getElementById(e + "fsmRunButton").value;
+	
 }
 
 //function save(){
@@ -293,7 +296,7 @@ function loadModel(e){
 $("#noObstacle").mousedown(function () { 
   $(this).css("background-color","green");
   labelinput = "No Obstacle"
-  colorinput = "green"
+  colorinput = "red"
 });
 
 $(".eventlist").mouseup(function () { 
@@ -468,7 +471,8 @@ function init() {
                   var behaviour = {
                       _id: behaviourID++,
                       position: ui.helper.position(),
-                      behaviourType:ui.helper["0"].innerHTML
+                      behaviourType:ui.helper["0"].innerHTML,
+					  time: 100, //default
                   };
               }
               
@@ -486,8 +490,13 @@ function init() {
               diagram[0][indexOfTheState].behaviourArray.push(behaviour);
               //diagram[0][$(this)["0"].attributes[1].value].behaviourArray.push(behaviour);
                //console.log($(this)["0"].attributes);
-               var htmlBehaviour = `<h6  style="color:black;" class="behaviour-oncanvas" data-behaviour="${ui.helper["0"].innerHTML}">${ui.helper["0"].innerHTML} </h6>`;
-               $(".state-container-body-oncanvas",this).append(htmlBehaviour);              
+               var htmlBehaviour = `<div  style="color:black;" class="behaviour-oncanvas" data-behaviour="${ui.helper["0"].innerHTML}">${ui.helper["0"].innerHTML} 
+                                      <input style="width: 30px;" id="behaviourInput${behaviour._id}" type="number"/>
+                                    </div>`;
+               $(".state-container-body-oncanvas",this).append(htmlBehaviour);    
+                $(`#behaviourInput${behaviour._id}`).on("change", function(){
+                  behaviour.time = this.value;
+                })              
                //$(this)["0"].childNodes[3].$(".state-container-body-oncanvas").append("htmlBehaviour");
           }
       })
@@ -526,6 +535,7 @@ function init() {
               }
             };
             renderStateContainer(diagram, -1);
+			drawLines();
           }).attr("state", $(this));//REMOVABLE AFTER TEST 
         }else{
           $(this).css("background-image", "url(./resources/css/State2.png)");
@@ -546,8 +556,13 @@ function init() {
     var dom2="";
     for( var b in behaviourArray){
       var beh = behaviourArray[b];
-      var htmlBehaviour = `<h6 style="color:black;" class="behaviour-oncanvas data-behaviour=${beh.behaviourType}">${beh.behaviourType}</h6>`;
+      var htmlBehaviour = `<div style="color:black;" class="behaviour-oncanvas data-behaviour=${beh.behaviourType}">${beh.behaviourType}
+                              <input style="width: 30px;" id="behaviourInput${beh._id}" type="number"/>                     
+                            </div>`;
         dom2 += htmlBehaviour;
+        $(`#behaviourInput${beh._id}`).on("change", function(){
+          behaviour.time = this.value;
+        })
     }
     
     return dom2;

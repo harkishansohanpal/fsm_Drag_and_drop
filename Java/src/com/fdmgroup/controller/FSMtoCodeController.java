@@ -61,7 +61,7 @@ public class FSMtoCodeController {
 	}
 	
 	public RobotAction parseAction(JSONObject s){
-		return new RobotAction(Behaviour.valueOf(s.getString("behavior")), s.getInt("time"));
+		return new RobotAction(Behaviour.valueOf(s.getString("behaviour")), s.getInt("time"));
 	}
 	
 	public Input parseInput(String s){
@@ -91,7 +91,7 @@ public class FSMtoCodeController {
 	}
 	
 	public JSONObject inverseParseState(State s){
-		List<JSONObject> objs= s.getRobotActions().stream().map((x -> new JSONObject("{behavior:"+ x.getBehaviour().toString() + ",time:" + Integer.toString(x.getTime()) +"}" ))).collect(Collectors.toList());
+		List<JSONObject> objs= s.getBehaviours().stream().map((x -> new JSONObject("{behaviour:"+ x.getBehaviour().toString() + ",time:" + Integer.toString(x.getTime()) +"}" ))).collect(Collectors.toList());
 		
 		JSONArray json = new JSONArray(objs);
 		JSONObject json2 = new JSONObject();
@@ -100,6 +100,7 @@ public class FSMtoCodeController {
 		return json2;
 		
 	}
+	
 	public JSONObject inverseParseEvent(Event e){
 		Map<String, String> jsonMap = new HashMap();
 		jsonMap.put("name", e.getEventName());

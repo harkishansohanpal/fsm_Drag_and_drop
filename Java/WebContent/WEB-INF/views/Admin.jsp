@@ -104,7 +104,7 @@
 							List<JSONFsm> FSMs = (List<JSONFsm>) request.getAttribute("FSMs");
 						
 							for(JSONFsm f : FSMs){
-						
+						System.out.println(f.getJsonFsm());
 						%>
 						
 						<tr>
@@ -114,6 +114,7 @@
 								<form action="Load" style="display:inline" method="post">
 									<input type="hidden" id="<%= f.getId() + "fsmLoadButton" %>" name="fsm" value='<%= f.getLoadModel().getModel() %>'>
 									<input type="button" value="Load Model" onclick="loadModel(<%= (f.getId())%>)" class="buttonclass run">
+									<input type="hidden" id="<%= f.getId() + "fsmRunButton" %>" name="fsm" value=<%= f.getJsonFsm() %>>
 								</form>
 								
 								<form action="Delete" style="display:inline" method="post">
@@ -148,7 +149,10 @@
           </div>
           <div class="row behaviours" style="position: relative;">
             <h5>Behaviours</h5>
-            
+            <form action="Run" style="display:inline" method="post">
+				<input id="executejsonfsm" type="hidden" id="fsm" name="fsm">
+				<input type="submit" value="Run" class="buttonclass run">
+			</form>
           </div>
           <div class="row events" style="position: relative;">
             <h5>Events</h5>

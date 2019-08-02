@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -26,11 +27,17 @@ public class JSONFsm {
 	private int id;
 	
 	@Resource
+	private String FsmName;
+	
+	@Resource
 	@Column(columnDefinition = "LONG")
 	private String jsonFsm;
 	
 	@ManyToOne
 	private User user;
+	
+	@OneToOne
+	private LoadModel loadModel;
 	
 	public JSONFsm() {
 		super();
@@ -66,11 +73,27 @@ public class JSONFsm {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
 	
+	public String getFsmName() {
+		return FsmName;
+	}
+
+	public void setFsmName(String fsmName) {
+		FsmName = fsmName;
+	}
+
+	public LoadModel getLoadModel() {
+		return loadModel;
+	}
+
+	public void setLoadModel(LoadModel loadModel) {
+		this.loadModel = loadModel;
+	}
+
 	@Override
 	public String toString() {
-		return "JSONFsm [id=" + id + ", jsonFsm=" + jsonFsm + ", user=" + user + "]";
+		return "JSONFsm [id=" + id + ", FsmName=" + FsmName + ", jsonFsm=" + jsonFsm + ", user="
+				+ user + "]";
 	}
 
 	@Override

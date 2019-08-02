@@ -6,16 +6,16 @@ public class State {
 
 	private int stateID;
 	private String stateName;
-	private List<RobotAction> robotActions;
+	private List<RobotAction> behaviours;
 
 	public State() {
 		super();
 	}
-
-	public State( String stateName, List<RobotAction> robotActions) {
+	
+	public State(String stateName, List<RobotAction> behaviours) {
 		super();
 		this.stateName = stateName;
-		this.robotActions = robotActions;
+		this.behaviours = behaviours;
 	}
 
 	public int getStateID() {
@@ -34,27 +34,17 @@ public class State {
 		this.stateName = stateName;
 	}
 
-	public List<RobotAction> getRobotActions() {
-		return robotActions;
+	public List<RobotAction> getBehaviours() {
+		return behaviours;
 	}
 
-	public void setRobotActions(List<RobotAction> robotActions) {
-		this.robotActions = robotActions;
+	public void setBehaviours(List<RobotAction> behaviours) {
+		this.behaviours = behaviours;
 	}
-
+	
 	@Override
 	public String toString() {
-		return "\nState [stateID=" + stateID + ", stateName=" + stateName + ", robotActions=" + robotActions + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((robotActions == null) ? 0 : robotActions.hashCode());
-		result = prime * result + stateID;
-		result = prime * result + ((stateName == null) ? 0 : stateName.hashCode());
-		return result;
+		return "State [stateID=" + stateID + ", stateName=" + stateName + ", behaviours=" + behaviours + "]";
 	}
 
 	@Override
@@ -66,10 +56,10 @@ public class State {
 		if (getClass() != obj.getClass())
 			return false;
 		State other = (State) obj;
-		if (robotActions == null) {
-			if (other.robotActions != null)
+		if (behaviours == null) {
+			if (other.behaviours != null)
 				return false;
-		} else if (!robotActions.equals(other.robotActions))
+		} else if (!behaviours.equals(other.behaviours))
 			return false;
 		return true;
 	}
