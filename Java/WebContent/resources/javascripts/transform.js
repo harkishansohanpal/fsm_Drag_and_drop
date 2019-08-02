@@ -20,11 +20,9 @@ function transform(stateData, eventData){
 				time: stateData[state].behaviourArray[beh].time
 			});
 			
-			if (specificBehaviour == "Stop" && !stopChecked){
-				stopChecked = true;
+			if(stateData[state].halt == true){ // halt state checked
 				endStates.push(String.fromCharCode(65 + stateData[state]._id));
 			}
-							
 		}
 		
 		verticesArray.push({name : String.fromCharCode(65 + stateData[state]._id),

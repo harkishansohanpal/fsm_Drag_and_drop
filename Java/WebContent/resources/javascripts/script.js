@@ -380,7 +380,8 @@ function init() {
           _id: stateID++,
           position: position,
           behaviourArray:[],
-          type: "state"
+          type: "state",
+          halt:false
         };
       } else {
         return;
@@ -403,6 +404,8 @@ function init() {
       continue;
       }
       var state = diagram[0][d];
+      var stateHalt = state.halt ? "halt" : "";
+      console.log(state + stateHalt)
       var html = "";
       
       ////console.log(state);      
@@ -420,7 +423,7 @@ function init() {
         html = `<div class="stateOuterDiv state-container-title-oncanvas-forDeletion${state._id}">
                   <div class="state-container-oncanvas State-${state._id}">
                     <div class="state-container-title-oncanvas ">
-                        <h6 >State-${state._id}</h6>
+                        <h6 >State-${state._id} ${stateHalt}</h6>
                     </div>
                     <div class="state-container-body state-container-body-oncanvas ">     
                     ${behaviourDiv}
@@ -519,6 +522,7 @@ function init() {
           $(".state-container-title-oncanvas-forDeletion"+stateIDToRemove).append(htmlDeleteButton);
           //after clicking on the state container, if they click on X then the state will be removed
           $(".deleteButton").click(function(){
+        	console.log("delete called");
             removeConnection(stateIDToRemove, "*","*");
             removeConnection("*",stateIDToRemove, "*");
 			  
@@ -537,9 +541,24 @@ function init() {
             renderStateContainer(diagram, -1);
 			drawLines();
           }).attr("state", $(this));//REMOVABLE AFTER TEST 
+         
+          var htmlHaltButton = `<h6 class="haltButton"></h6>`;
+          var stateIDToHalt = $(this)[0].attributes[1].value;
+          var children = $(".state-container-title-oncanvas-forDeletion"+stateIDToHalt).children();
+          $(".state-container-title-oncanvas-forDeletion"+stateIDToHalt).append(htmlHaltButton);
+	      $(".haltButton").click(function(){
+	         stateData[stateIDToHalt].halt = !stateData[stateIDToHalt].halt;
+	         console.log("halt called");
+	         renderStateContainer(diagram, 0);
+	      })
+            
+	    
         }else{
           $(this).css("background-image", "url(./resources/css/State2.png)");
           $(".deleteButton").css({
+            display: "none",
+          })
+          $(".haltButton").css({
             display: "none",
           })
         }
