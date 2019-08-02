@@ -39,6 +39,7 @@
       style="position: absolute;bottom: 0px;top: 0px;left: 0px;right: 0px;padding: 0;"
     >
     <div class="navbarC">
+    	<div class="logoDivTopBar"></div>
         <div class="inputDivTopBar">
           <input type="text" id="fsmName" placeholder="FSM Name"/>
         </div>

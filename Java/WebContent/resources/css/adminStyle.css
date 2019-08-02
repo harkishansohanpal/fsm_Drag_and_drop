@@ -105,8 +105,11 @@
 
 .run{
 	border: 1px solid #42cad4;
-    border-width: 1px 1px 3px;
-	background-color:#42cad4;
+  border-width: 1px 1px 3px;
+  background-color:#42cad4;
+  margin-top: 315px;
+  height: 90px;
+  opacity: 0;
 }
 .delete{
 	border: 1px solid #d44242;
