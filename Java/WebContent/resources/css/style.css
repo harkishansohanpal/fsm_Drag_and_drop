@@ -87,6 +87,7 @@ label {
   height:25px;
   width :25px
 }
+
 .deleteButton:hover{
   cursor: pointer;
   background-color: gray;

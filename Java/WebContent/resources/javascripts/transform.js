@@ -20,6 +20,7 @@ function transform(stateData, eventData){
 				time: stateData[state].behaviourArray[beh].time
 			});
 			
+
 			if(stateData[state].halt == true){ // halt state checked
 				endStates.push(String.fromCharCode(65 + stateData[state]._id));
 			}
