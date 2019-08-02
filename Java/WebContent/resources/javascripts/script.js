@@ -248,13 +248,44 @@ function clickState(){
 }
 
 function save(){
-	var string = JSON.stringify(transform(stateData, eventData));
-	console.log(string);
-	//var string ='{"vertices":[{"name":"A","behaviors":["Forward"]},{"name":"B","behaviors":["Backward","Backward"]},{"name":"C","behaviors":[]}],"edges":[{"event":{"name":"An","input":"NoObstacle"},"fromState":"A","toState":"B"},{"event":{"name":"Cs","input":"light"},"fromState":"C","toState":"A"},{"event":{"name":"Cr","input":"ObstacleR"},"fromState":"C","toState":"B"}],"startState":"A","endStates":[]}';
-	
-	return fetch("http://localhost:8088/FincFSM/Save", {method:"post", body:JSON.stringify({fsm:string})}).then(function(x) {console.log(x)});
+	  dummyDiagram = [[...stateData], [...eventData] , [...connections]];
+	  dummyConnections=[...connections];
+	  var string = JSON.stringify(transform(stateData, eventData));  
+	  var dummyString = "{diagram:" + JSON.stringify(dummyDiagram) + "}";
+	  var filename = document.getElementById("fsmName").value;
+	   
+	 // var string ='{"vertices":[{"name":"A","behaviors":["Forward"]},{"name":"B","behaviors":["Backward","Backward"]},{"name":"C","behaviors":[]}],"edges":[{"event":{"name":"An","input":"NoObstacle"},"fromState":"A","toState":"B"},{"event":{"name":"Cs","input":"light"},"fromState":"C","toState":"A"},{"event":{"name":"Cr","input":"ObstacleR"},"fromState":"C","toState":"B"}],"startState":"A","endStates":[]}';
+	  
+	   return fetch("http://localhost:8088/FincFSM/Save", {method:"post", body:JSON.stringify({
+		   filename:filename,
+		   fsm:string,
+		   diagram: dummyString
+		   }
+	     )}).then(function(msg) {
+	    	 alert("Saved succesfully");
+	    	 console.log(msg)
+	    	 });
+	  
+	}
+
+function loadModel(e){
+	console.log(e + "fsmLoadButton");
+	var data = JSON.parse(document.getElementById(e + "fsmLoadButton").getAttribute("value")).diagram;
+	stateData = data[0];
+	eventData = data[1];
+	connections = data[2];
+	init();
 	
 }
+
+//function save(){
+//	var string = JSON.stringify(transform(stateData, eventData));
+//	console.log(string);
+//	//var string ='{"vertices":[{"name":"A","behaviors":["Forward"]},{"name":"B","behaviors":["Backward","Backward"]},{"name":"C","behaviors":[]}],"edges":[{"event":{"name":"An","input":"NoObstacle"},"fromState":"A","toState":"B"},{"event":{"name":"Cs","input":"light"},"fromState":"C","toState":"A"},{"event":{"name":"Cr","input":"ObstacleR"},"fromState":"C","toState":"B"}],"startState":"A","endStates":[]}';
+//	
+//	return fetch("http://localhost:8088/FincFSM/Save", {method:"post", body:JSON.stringify({fsm:string})}).then(function(x) {console.log(x)});
+//	
+//}
 
 /* Event visuals */
 
@@ -307,6 +338,12 @@ function init() {
   
   var canvas = $(".canvas");
   var stateCanvasBody = $(".state-container-oncanvas");
+  
+  if(stateData.length!=0 && eventData.length !=0){
+	  renderStateContainer(diagram, 1);
+	  drawLines();
+	  
+  }
   
 //make state container draggable
   $(".state-container").draggable({
@@ -522,4 +559,5 @@ function init() {
     drawLines();
   
   })
+  
 }

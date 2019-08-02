@@ -42,14 +42,17 @@
         <img src="dragon.png" width="30" height="30" class="d-inline-block align-top" alt="">
         Dragon Drobotics
       </a>
-      <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="onTest()">Test</button>
+      <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModaltest" onclick="onTest()">Test</button>
       <button id="stepButton" type="button" class="btn btn-info btn-lg" onclick="onStep()" >Step</button>
       <button id="runButton" type="button" class="btn btn-info btn-lg" onclick="onRun()">Run</button>
       <button id="killButton" type="button" class="btn btn-info btn-lg" onclick="onKill()">Stop</button>
+    
+      	<input type="text" id="fsmName" name="fsmName" placeholder="FSM Name" required /> 
+      
       <button type="button" class="btn btn-info btn-lg" onclick="save()">Save</button>
       <button type="button" class="btn btn-info btn-lg" onclick="window.location.href='Logout'">Logout</button>
     </nav>
-    <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal fade" id="myModaltest" role="dialog">
       <div class="modal-dialog">
       
         <!-- Modal content-->
