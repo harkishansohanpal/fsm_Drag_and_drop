@@ -13,28 +13,29 @@ form {
 	align-items: center;
 	align-content: center;
 	position: absolute;
-	top: 50%;
+	top: 60.5%;
 	left: 50%;
 	margin-right: -50%;
 	transform: translate(-50%, -50%);
 	width: 350px;
+	height: 400px;
 	/*margin:auto;*/
 	padding: 10px 20px;
-	background: #dedede;
+	background-color: transparent;
 	border-radius: 8px;
 }
 
 .txt {
-	/*background:rgba(255,255,255,0.1);*/
+	/* background: rgba(255,255,255,0.1); */
 	border: none;
 	font-size: small;
-	height: auto;
-	margine: 0;
-	padding: 15px;
-	width: 100%;
-	background-color: #F7FFF7;
+	height: 30px;
+	margin-left: 30px;
+	padding: 2px;
+	width: 80%;
+	background-color: transparent;
 	color: #8a97a0;
-	/*bax-shadow:0 1px 0 rgb(0,0,0,0.3) inset;*/
+	/* bax-shadow: 0 1px 0 rgb(0,0,0,0.3) inset; */
 	margin-bottom: 20px;
 }
 
@@ -42,24 +43,24 @@ form {
 	display: block;
 	padding: auto;
 	color: #fff;
-	background-color: #7d7d7d;
+	background-color: transparent;
 	font-size: 18px;
-	text-align: center:;
+	text-align: center;
 	font-style: normal;
-	border-radius: 5px;
 	width: 50%;
-	height: 50px;
-	border: 1px solid #5a5a5a;
-	border-width: 1px 1px 3px;
-	/*box-shadow:0 -1px 0 rgba(255,255,255,0.1) inset;*/
-	margin: 10px auto;
+	height: 85px;
+	margin: auto;
+	margin-top: 30px;
+}
+.buttonclass:hover{
+	cursor: pointer;
 }
 
 .back {
 	/* padding-top:200px;*/
-	height: 789.4px;
+	height: 100vh;
 	background: 100% 100%;
-	background-image: url(./resources/images/dark.jpg);
+	background-image: url("../images/login-page.png");
 	width: 100%;
 	margin: 0px 0px;
 	background-repeat: no-repeat;
@@ -82,3 +83,30 @@ h2 {
 		min-width: 200px;
 	}
 }
+
+@font-face{
+	font-family:'heavy_data';
+	src: url('heavy_data.ttf');
+   }
+
+
+   input[type="text"]{
+	font-size: 20px;
+	color: #39ff14 !important;
+	font-family: 'heavy_data';
+  }
+  input[type="password"]{
+	font-size: 20px;
+	color: #39ff14 !important;
+	font-family: 'heavy_data';
+  }
+  input:focus{
+	outline: none;
+  }
+
+  ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+	color: #39ff14;
+	opacity: 1;
+	font-family: 'heavy_data';
+	font-size: 20px;
+  }

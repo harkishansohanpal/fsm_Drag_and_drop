@@ -519,7 +519,7 @@ function init() {
         if(clickCount%2 != 0){
 
           //change the border color to red when deleting 
-          $(this).css("background-image", "url(./resources/images/State2Focus.png)");
+          $(this).css("background-image", "url(./Java/WebContent/resources/images/State2Focus.png)");
           //create and add the delete button when clicked
           var htmlDeleteButton = `<h6 class="deleteButton"></h6>`;
           var stateIDToRemove = $(this)[0].attributes[1].value;
@@ -558,7 +558,7 @@ function init() {
 	      })
 
         }else{
-          $(this).css("background-image", "url(./resources/css/State2.png)");
+          $(this).css("background-image", "url(./Java/WebContent/resources/css/State2.png)");
           $(".deleteButton").css({
             display: "none",
           })
