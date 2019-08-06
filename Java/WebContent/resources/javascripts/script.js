@@ -161,11 +161,11 @@ function drawLines(ui){
       //offsets 
       //console.log(document.getElementsByClassName("canvas")[0].scrollTop);
       // top left corner of box DOM element, vs top left corner of actual box.
-      var boxoffsetL = 40;
-      var boxoffsetT = 38;
+      var boxoffsetL = 46;
+      var boxoffsetT = 30;
       //width and height of the box
-      var boxWidth=125;
-      var boxHeight=128;
+      var boxWidth=184;
+      var boxHeight=144;
       //width and height of the entire thing
       var totalBoxWidth = 2*boxoffsetL+boxWidth;
       var totalBoxHeight = 2*boxoffsetT+boxHeight; 
@@ -186,21 +186,20 @@ function drawLines(ui){
 				var targetPosition = target == id ? ui.position : diagram[0][target].position;
 				
 				if(domain== target){
-          drawCircle(domainPosition.left+circle_offset_left, domainPosition.top+circle_offset_top,circle_radius, color);
-          var offsettedLocation = {left:domainPosition.left+circle_offset_left+(circle_offset_left - totalBoxWidth/2), top:domainPosition.top+circle_offset_top+(circle_offset_top - totalBoxHeight/2)*(offsetNumber > 4 ? 0.5 :1)}
-          drawLabel(context, label, offsettedLocation, offsettedLocation, "center", 0);					
+					//draw a circle
+					  drawCircle(domainPosition.left+circle_offset_left, domainPosition.top+circle_offset_top,circle_radius, color);
+					  var offsettedLocation = {left:domainPosition.left+circle_offset_left+(circle_offset_left - totalBoxWidth/2), top:domainPosition.top+circle_offset_top+(circle_offset_top - totalBoxHeight/2)*(offsetNumber > 4 ? 0.5 :1)}
+					  drawLabel(context, label, offsettedLocation, offsettedLocation, "center", 0);					
 				}
 				else {
-          var position1 = {"left":domainPosition.left+line_offset_left, "top": domainPosition.top+line_offset_top};
-					var position2 = {"left":targetPosition.left+line_offset_left, "top": targetPosition.top+line_offset_top};
-					// draw the line
+					//draw a line
 					
 					var p1x = domainPosition.left+line_offset_left;
 					var p1y = domainPosition.top+line_offset_top;
 					var p2x = targetPosition.left+line_offset_left;
 					var p2y = targetPosition.top+line_offset_top;
 					
-					//get the first intersection point
+					//get the intersection points
 					var tlx = domainPosition.left-document.getElementsByClassName("canvas")[0].scrollLeft+ boxoffsetL;
 					var tly = domainPosition.top-document.getElementsByClassName("canvas")[0].scrollTop+ boxoffsetT;
 					try{
@@ -220,11 +219,15 @@ function drawLines(ui){
 							int2 = [p2x, p2y]
 						}
 					}
-					//draw the small circles
 					drawLine(int1[0], int1[1], int2[0], int2[1], color);
-					//draw the cir  cles
+					//draw the small circles
 					drawCircle(int1[0], int1[1], 10, color)
 					drawCircle(int2[0], int2[1], 10, color)
+					//draw the labels
+					var position1 = {"left":int1[0], "top": int1[1]};
+					var position2 = {"left":int2[0], "top": int2[1]};
+					console.log(position1)
+					console.log(position2)
 					drawLabel(context, label, position1, position2, "center", 0.75-0.05*offset);
 				}
 				
@@ -255,7 +258,7 @@ function save(){
 	  var dummyString = "{diagram:" + JSON.stringify(dummyDiagram) + "}";
 	  var filename = document.getElementById("fsmName").value;
 	   
-	 // var string ='{"vertices":[{"name":"A","behaviors":["Forward"]},{"name":"B","behaviors":["Backward","Backward"]},{"name":"C","behaviors":[]}],"edges":[{"event":{"name":"An","input":"NoObstacle"},"fromState":"A","toState":"B"},{"event":{"name":"Cs","input":"light"},"fromState":"C","toState":"A"},{"event":{"name":"Cr","input":"ObstacleR"},"fromState":"C","toState":"B"}],"startState":"A","endStates":[]}';
+	 // var strinag ='{"vertices":[{"name":"A","behaviors":["Forward"]},{"name":"B","behaviors":["Backward","Backward"]},{"name":"C","behaviors":[]}],"edges":[{"event":{"name":"An","input":"NoObstacle"},"fromState":"A","toState":"B"},{"event":{"name":"Cs","input":"light"},"fromState":"C","toState":"A"},{"event":{"name":"Cr","input":"ObstacleR"},"fromState":"C","toState":"B"}],"startState":"A","endStates":[]}';
 	  
 
 	   return fetch("http://localhost:8088/FincFSM/Save", {method:"post", body:JSON.stringify({
