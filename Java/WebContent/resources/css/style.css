@@ -13,10 +13,10 @@ label {
   top: 0px;
   bottom: 0px;
   left: 0px;
-  height: 45%;
+  height: 35%;
   display: block;
   text-align: center;
-  padding-top: 120px;
+  padding-top: 110px;
   padding-left: 69px;
   padding-right: 69px;
 }
@@ -101,8 +101,8 @@ label {
   /* border-bottom: 2px black solid; */
 
   padding-top: 15px;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding-left: 25px;
+  padding-right: 25px;
   
 }
 .behaviour {
@@ -187,6 +187,7 @@ label {
   bottom: 0px;
   top: 0px;
   overflow: scroll;
+  height: 100%;
 }
 
 .navbarC{
@@ -241,7 +242,7 @@ body h4{
   top: 0px;
   bottom: 0px;
   left: 0px;
-  height: 80%;
+  height: 100%;
   display: block;
   text-align: center !important;
   /* border-bottom: 2px black solid; */

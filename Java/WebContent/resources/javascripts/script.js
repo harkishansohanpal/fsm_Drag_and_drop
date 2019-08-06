@@ -161,11 +161,11 @@ function drawLines(ui){
       //offsets 
       //console.log(document.getElementsByClassName("canvas")[0].scrollTop);
       // top left corner of box DOM element, vs top left corner of actual box.
-      var boxoffsetL = 40;
-      var boxoffsetT = 38;
+      var boxoffsetL = 46;
+      var boxoffsetT = 30;
       //width and height of the box
-      var boxWidth=125;
-      var boxHeight=128;
+      var boxWidth=184;
+      var boxHeight=144;
       //width and height of the entire thing
       var totalBoxWidth = 2*boxoffsetL+boxWidth;
       var totalBoxHeight = 2*boxoffsetT+boxHeight; 
@@ -511,7 +511,7 @@ function init() {
         if(clickCount%2 != 0){
 
           //change the border color to red when deleting 
-          $(this).css("background-image", "url(./resources/images/State2Focus.png)");
+          $(this).css("background-image", "url(./Java/WebContent/resources/images/State2Focus.png)");
           //create and add the delete button when clicked
           var htmlDeleteButton = `<h6 class="deleteButton"></h6>`;
           var stateIDToRemove = $(this)[0].attributes[1].value;
@@ -538,7 +538,7 @@ function init() {
 			drawLines();
           }).attr("state", $(this));//REMOVABLE AFTER TEST 
         }else{
-          $(this).css("background-image", "url(./resources/css/State2.png)");
+          $(this).css("background-image", "url(./Java/WebContent/resources/css/State2.png)");
           $(".deleteButton").css({
             display: "none",
           })
