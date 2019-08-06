@@ -82,56 +82,65 @@
       <div class="modal-dialog">
       
         <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
+        <div class="modal-content" style="width: 100vh">
+          <!-- <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>
-          <div class="modal-body">
-          <div class="main-div">
-          <div class="tableUser">
-   				<table id="users">
-						<tr>
-							<th>Username</th>
-							<th>FSM ID</th>
-							<th>Actions</th>
-						</tr>
+          </div> -->
+          <div class="modal-body" id="modalLoadBackground">
+            <!-- <div class="main-div"> -->
+            <div class="tableUser">
+            <table id="users">
+              <!-- <tr>
+                <th>Username</th>
+                <th>FSM ID</th>
+                <th>Actions</th>
+              </tr> -->
 
-						<!-- <% 
-							List<JSONFsm> FSMs = (List<JSONFsm>) request.getAttribute("FSMs");
-						
-							for(JSONFsm f : FSMs){
-						System.out.println(f.getJsonFsm());
-						%> -->
-						
-						<tr>
-							<!-- <td><%= f.getUser().getUsername() %></td>
-							<td><%= f.getId() %></td> -->
-							<td>
-								<form action="Load" style="display:inline" method="post">
-									<!-- <input type="hidden" id="<%= f.getId() + "fsmLoadButton" %>" name="fsm" value='<%= f.getLoadModel().getModel() %>'>
-									<input type="button" value="Load Model" onclick="loadModel(<%= (f.getId())%>)" class="buttonclass run">
-									<input type="hidden" id="<%= f.getId() + "fsmRunButton" %>" name="fsm" value=<%= f.getJsonFsm() %>> -->
-								</form>
-								
-								<form action="Delete" style="display:inline" method="post">
-									<input type="hidden" id="fsmDeleteButton" name="fsm" value="<%= f.getId() %>">
-									<input type="submit" value="Delete" class="buttonclass delete">
-								</form>
-								
-							</td>
-						</tr>
-						
-						<!-- <% } %> -->
+              <!-- <% 
+                List<JSONFsm> FSMs = (List<JSONFsm>) request.getAttribute("FSMs");
+              
+                for(JSONFsm f : FSMs){
+              System.out.println(f.getJsonFsm());
+              %> -->
+              
+              <tr>
+                <!-- <td><%= f.getUser().getUsername() %></td>
+                <td><%= f.getId() %></td> -->
+                 <td class="tableData usernameData">ALI</td>
+                <td class="tableData fsmnameData">Ali FSM</td> 
+                <td class="buttonData">
 
-					</table>
-            </div>
-      </div>
+                  
+                  <form action="Load" style="display:inline" method="post">
+                    <!-- <input type="hidden" id="<%= f.getId() + "fsmLoadButton" %>" name="fsm" value='<%= f.getLoadModel().getModel() %>'>
+                    <input type="button" value="Load Model" onclick="loadModel(<%= (f.getId())%>)" class="buttonclass run">
+                    <input type="hidden" id="<%= f.getId() + "fsmRunButton" %>" name="fsm" value=<%= f.getJsonFsm() %>> -->
+                    <input type="button" class="loadButtonModal">
+                    
+                  </form>
+                  
+                  <form  action="Delete" style="display:inline" method="post">
+                    <input type="hidden" id="fsmDeleteButton" name="fsm" value="<%= f.getId() %>">
+                    <input type="submit" value="" class="deleteButtonModal">
+                    <!-- <input type="submit" value="Delete" class="buttonclass delete"> -->
+                  </form>
+                  
+                </td>
+              </tr>
+              
+              <!-- <% } %> -->
+
+            </table>
+              </div>
+            <!-- </div> -->
             
+            <div type="button" class="closeButton btn btn-default" data-dismiss="modal"></div>
             
           </div>
-          <div class="modal-footer">
+         
+          <!-- <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal" onclick="">Close</button>
-          </div>
+          </div> -->
         </div>
         
       </div>
