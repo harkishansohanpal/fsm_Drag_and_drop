@@ -35,12 +35,13 @@ public class LoginController {
 	
 	@RequestMapping(value="/processLogin" , method=RequestMethod.POST)
 	public String processLogin(@RequestParam("username") String userName, @RequestParam("password") String userPassword, Model model){
-		
+		System.out.println("userName" + userName);
+		System.out.println("userPass" + userPassword);
 		//jfsmDAOObj.addSamples();
 		
 		List<User> userList = new ArrayList<>();
 		userList = userDaoObj.findAllUsers();
-		
+		System.out.println(userList);
 		boolean isFound = false;
 		int foundId = 0;
 		User foundUser = null;

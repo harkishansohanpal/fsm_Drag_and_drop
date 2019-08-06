@@ -93,7 +93,7 @@ public class FSM {
 	 * @return The state that is to be executed
 	 */
 	public State step(Event inputEvent, State fromState){
-		
+		System.out.println("1"+fromState);
 		//Check for halt state
 		for (State state : finalStates) {
 			if(fromState.equals(state))

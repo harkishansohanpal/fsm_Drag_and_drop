@@ -89,7 +89,7 @@ public class AdminController {
 			System.out.println(obstacle);
 			
 			State toState = fsm.step(obstacle, fromState);
-			
+			System.out.println("step"+toState);
 			if(toState == null){
 				System.out.println("No toState found for " + obstacle + " and " + fromState);
 				esc.myFinch.setLED(255, 0, 0);

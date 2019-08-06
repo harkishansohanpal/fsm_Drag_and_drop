@@ -343,7 +343,7 @@ function init() {
   var canvas = $(".canvas");
   var stateCanvasBody = $(".state-container-oncanvas");
   
-  if(stateData.length!=0 && eventData.length !=0){
+  if(stateData.length!=0){
 	  renderStateContainer(diagram, 1);
 	  drawLines();
 	  

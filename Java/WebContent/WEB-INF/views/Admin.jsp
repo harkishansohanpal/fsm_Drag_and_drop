@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@ page import="java.util.List" %>
+    <style>
+		<%@ include file="../../resources/css/formStyle.css" %>
+	</style>
     
 <%@ page import="com.fdmgroup.model.JSONFsm" %>
 <!DOCTYPE html>
@@ -82,6 +85,39 @@
         
       </div>
     </div>
+    <div class="modal fade" id="myModalNewUser" role="dialog">
+      <div class="modal-dialog">
+      
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="input-form">
+                    <h2>Add New Users</h2>
+                    <form action="AddUser" method="post">
+                       
+						<input type="text" name="user" placeholder="Username" /> 
+                        <input type="text" name="name" placeholder="Name" />
+                        <input type="password" name="pass" placeholder="Password" />
+						 <select name="type" placeholder="User Type">
+							<option value="User">User</option>
+							<option value="Admin">Admin</option>
+						  </select>
+						<input type="submit" class="buttonclass run" value="Add User" />
+						<a href="Cancel"> <button class="buttonclass delete" >Cancel</button></a>
+							              
+                    </form>
+                </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="">Close</button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
+    
     <div class="modal fade" id="myModal" role="dialog">
       <div class="modal-dialog">
       
@@ -151,8 +187,11 @@
             <h5>Behaviours</h5>
             <form action="Run" style="display:inline" method="post">
 				<input id="executejsonfsm" type="hidden" id="fsm" name="fsm">
-				<input type="submit" value="Run" class="buttonclass run">
+				<input type="submit" value="Execute" class="buttonclass run">
 			</form>
+			
+			<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModalNewUser" onclick="onTest()">Add New User</button>
+			
           </div>
           <div class="row events" style="position: relative;">
             <h5>Events</h5>
