@@ -28,6 +28,7 @@ public class JSONFsmDAO {
 	}
 	
 	public void addSamples(){
+		System.out.println("adding samples");
 		User u1 = new User();
 		u1.setUsername("DragonSlayer");
 		u1.setPassword("1234");
