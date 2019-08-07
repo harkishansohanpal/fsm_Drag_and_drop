@@ -2,9 +2,11 @@ package com.fdmgroup.controller;
 
 import java.util.List;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,18 +32,19 @@ public class AdminController {
 	private int kill = 1;
 	
 	@RequestMapping(value = "/Kill")
-	public String kill(Model model){
+	public void kill(Model model){
 		kill = 0;
-		
-		List<JSONFsm> Fsms =  jfsmDAOObj.getList();
-		model.addAttribute("FSMs", Fsms);
-		
-		return "Admin";
 	}
 	
 	@RequestMapping(value = "/Run", method = RequestMethod.POST)
-	public String run(Model model, @RequestParam("fsm") String s){
+	public void run(Model model, @RequestBody String s){
 		kill = 1;
+		System.out.println(s);
+
+		JSONObject json = new JSONObject(s);
+		JSONObject fsmJson = new JSONObject(json.getString("fsm"));
+		
+		s = fsmJson.toString();
 		System.out.println(s);
 		//Parse JSON string to fsm object
 		FSMtoCodeController fsm2c = new FSMtoCodeController();
@@ -107,10 +110,6 @@ public class AdminController {
 			
 		}
 		
-		List<JSONFsm> Fsms =  jfsmDAOObj.getList();
-		model.addAttribute("FSMs", Fsms);
-		
-		return "Admin";
 	}
 	
 	@RequestMapping(value = "/Delete", method = RequestMethod.POST)
@@ -141,7 +140,7 @@ public class AdminController {
 	@RequestMapping(value = "/AddUser")
 	public String addUser(Model model, @RequestParam("user") String user, @RequestParam("name") String name,
 			@RequestParam("pass") String pass, @RequestParam("type") String type){
-		
+		System.out.println(user);
 		User u = new User();
 		
 		u.setUsername(user);
@@ -153,7 +152,7 @@ public class AdminController {
 		
 		List<JSONFsm> Fsms =  jfsmDAOObj.getList();
 		model.addAttribute("FSMs", Fsms);
-		
+		System.out.println("Test");
 		return "Admin";
 		
 	}

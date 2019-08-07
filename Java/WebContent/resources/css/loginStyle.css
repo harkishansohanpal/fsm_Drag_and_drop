@@ -55,12 +55,15 @@ form {
 .buttonclass:hover{
 	cursor: pointer;
 }
+.buttonclass:focus{
+	outline:none;
+}
 
 .back {
 	/* padding-top:200px;*/
 	height: 100vh;
 	background: 100% 100%;
-	background-image: url("../images/login-page.png");
+	background-image: url('./resources/images/login-page.png');
 	width: 100%;
 	margin: 0px 0px;
 	background-repeat: no-repeat;
@@ -86,7 +89,7 @@ h2 {
 
 @font-face{
 	font-family:'heavy_data';
-	src: url('heavy_data.ttf');
+	src: url('./resources/css/heavy_data.ttf');
    }
 
 

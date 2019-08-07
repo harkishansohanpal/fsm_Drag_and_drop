@@ -26,6 +26,9 @@
     <title>DRAGON DROBOTICS</title>
 
     <link rel="stylesheet" href="resources/css/style.css" />
+    <link rel="stylesheet" href="resources/css/modalUserStyle.css" />
+    <link rel="stylesheet" href="resources/css/modalTestStyle.css" />
+    <link rel="stylesheet" href="resources/css/adminStyle.css" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -41,46 +44,52 @@
   <body>
     <div
       class="container-fluid"
-      style="position: absolute;bottom: 0px;top: 0px;left: 0px;right: 0px;"
+      style="position: absolute;bottom: 0px;top: 0px;left: 0px;right: 0px; padding: 0;"
     >
-    <nav class="navbar navbar-light bg-light" style="margin: 0;">
-      <a class="navbar-brand" href="#">
-        <img src="dragon.png" width="30" height="30" class="d-inline-block align-top" alt="">
-        Dragon Drobotics
-      </a>
-      <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModaltest" onclick="onTest()">Test</button>
-      <button id="stepButton" type="button" class="btn btn-info btn-lg" onclick="onStep()" >Step</button>
-      <button id="runButton" type="button" class="btn btn-info btn-lg" onclick="onRun()">Run</button>
-      <button id="killButton" type="button" class="btn btn-info btn-lg" onclick="onKill()">Stop</button>
-      <form method="post" id="fsm" action="Save">
-      	<input type="text" name="fsmName" placeholder="FSM Name" required /> 
-      </form>
-      <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="onTest()">Load</button>
-      <button type="button" class="btn btn-info btn-lg" onclick="window.location.href='Logout'">Logout</button>
-    </nav>
+    <div class="navbarCAdmin">
+        <div class="logoDivTopBar"></div>
+        <div class="inputDivTopBar">
+          <input type="text" id="fsmName" placeholder="FSM Name"/>
+        </div>
+        <div class="buttonsDiv">
+          <div style="width: 14%; height: 60px; margin-left: 5px; opacity: 0;" id="runButton" type="button" class="btn btn-info btn-lg" onclick="onRun()">Run</div>
+          <div style="width: 14%; height: 60px; margin-left: 15px; opacity: 0;" id="killButton" type="button" class="btn btn-info btn-lg" onclick="onKill()">Stop</div>
+          <div style="width: 14%; height: 60px; margin-left: 15px; opacity: 0;" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModaltest" onclick="onTest()">Test</div>
+          <div style="width: 14%; height: 60px; margin-left: 15px; opacity: 0;" id="stepButton" type="button" class="btn btn-info btn-lg" onclick="onStep()" >Step</div>
+          <div style="width: 14%; height: 60px; margin-left: 15px; opacity: 0;" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="onTest()">Load</div>
+          <div style="width: 17%; height: 60px; margin-left: 15px; opacity: 0;" type="button" class="btn btn-info btn-lg" onclick="window.location.href='Logout'">Logout</div>
+        </div>
+    </div>
     <div class="modal fade" id="myModaltest" role="dialog">
       <div class="modal-dialog">
       
         <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>
+        <div class="modal-content background" id="modalHeight">
           <div class="modal-body">
-            <button id="noObstTest" class="btn btn-info btn-lg buttontest" onclick="addToList('No Obstacle')" >No Obstacle</button>
-            <button id="ObstLeftTest" class="btn btn-info btn-lg buttontest" onclick="addToList('Obstacle Left')">Obstacle Left</button>
-            <button id="ObstRightTest" class="btn btn-info btn-lg buttontest" onclick="addToList('Obstacle Right')" >Obstacle Right</button>
-            <button id="ObstCenterTest" class="btn btn-info btn-lg buttontest" onclick="addToList('Obstacle Center')" >Obstacle Center</button>
-            <button id="LightTest" class="btn btn-info btn-lg buttontest" onclick="addToList('Light')">Light</button>
+            <div class="upperButtons">
+				<div class="noObs" onclick="addToList('No Obstacle')">&nbsp;
+				</div>
+				<div class="obsLeft" onclick="addToList('Obstacle Left')">&nbsp;
+				</div>
+				<div class="obsRight" onclick="addToList('Obstacle Right')">&nbsp;
+				</div>
+			</div>
+			<div class="lowerButtons">
+				<div class="obsCenter" onclick="addToList('Obstacle Center')">&nbsp;
+				</div>
+				<div class="light" onclick="addToList('Light')">&nbsp;
+				</div>
+			</div>
+			<ol id="addEventList" class="list">
+			</ol>
+			<div>
+				<div class="close" onclick="onClose()" data-dismiss="modal">
+				</div>
+			</div>
             
           </div>
-            <div class="modal-body">
-            <ol id="addEventList" style="height: 175px; border: 2px solid rgb(204, 181, 181);overflow: scroll;">
-            </ol>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="onClose()">Close</button>
-          </div>
+            
+          
         </div>
         
       </div>
@@ -89,29 +98,33 @@
       <div class="modal-dialog">
       
         <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>
-          <div class="input-form">
-                    <h2>Add New Users</h2>
-                    <form action="AddUser" method="post">
-                       
-						<input type="text" name="user" placeholder="Username" /> 
-                        <input type="text" name="name" placeholder="Name" />
-                        <input type="password" name="pass" placeholder="Password" />
-						 <select name="type" placeholder="User Type">
-							<option value="User">User</option>
-							<option value="Admin">Admin</option>
-						  </select>
-						<input type="submit" class="buttonclass run" value="Add User" />
-						<a href="Cancel"> <button class="buttonclass delete" >Cancel</button></a>
-							              
-                    </form>
-                </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="">Close</button>
-          </div>
+        <div class="modal-content userBackground" id="modalHeight">
+         <div class="modal-body">
+         <form action="AddUser" method="POST">
+         	<div class="inputText">
+	          <input type="text" class="fsmNewUser" id="newUsername" placeholder="Username" name="user" />
+	        </div>
+	        <div class="inputText">
+	          <input type="text" class="fsmNewUser" id="newName" placeholder="Name" name="name" />
+	        </div>
+	        <div class="inputText">
+	          <input type="text" class="fsmNewUser" id="newPassword" placeholder="Password" name="pass" />
+	        </div>
+	        <div class="inputText">
+	          <select name="type" placeholder="User Type" class="fsmNewUser" id="newUserType">
+				<option value="User">User</option>
+				<option value="Admin">Admin</option>
+			  </select>
+	        </div>
+	        <div id="userButtons">
+				<button type="submit" class="addNewUser">&nbsp;
+	            </button>
+	            <div class="cancelUser" onclick="" data-dismiss="modal">&nbsp;
+	            </div>
+         	</div>
+         	</form>
+         </div>
+
         </div>
         
       </div>
@@ -122,81 +135,88 @@
       <div class="modal-dialog">
       
         <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
+        <div class="modal-content" style="width: 100vh">
+          <!-- <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>
-          <div class="modal-body">
-          <div class="main-div">
-          <div class="tableUser">
-   				<table id="users">
-						<tr>
-							<th>Username</th>
-							<th>FSM ID</th>
-							<th>Actions</th>
-						</tr>
+          </div> -->
+          <div class="modal-body" id="modalLoadBackground">
+            <!-- <div class="main-div"> -->
+            <div class="tableUser">
+            <table id="users">
+              <!-- <tr>
+                <th>Username</th>
+                <th>FSM ID</th>
+                <th>Actions</th>
+              </tr> -->
 
-						<% 
-							List<JSONFsm> FSMs = (List<JSONFsm>) request.getAttribute("FSMs");
-						
-							for(JSONFsm f : FSMs){
-						System.out.println(f.getJsonFsm());
-						%>
-						
-						<tr>
-							<td><%= f.getUser().getUsername() %></td>
-							<td><%= f.getId() %></td>
-							<td>
-								<form action="Load" style="display:inline" method="post">
-									<input type="hidden" id="<%= f.getId() + "fsmLoadButton" %>" name="fsm" value='<%= f.getLoadModel().getModel() %>'>
-									<input type="button" value="Load Model" onclick="loadModel(<%= (f.getId())%>)" class="buttonclass run">
-									<input type="hidden" id="<%= f.getId() + "fsmRunButton" %>" name="fsm" value=<%= f.getJsonFsm() %>>
-								</form>
-								
-								<form action="Delete" style="display:inline" method="post">
-									<input type="hidden" id="fsmDeleteButton" name="fsm" value="<%= f.getId() %>">
-									<input type="submit" value="Delete" class="buttonclass delete">
-								</form>
-								
-							</td>
-						</tr>
-						
-						<% } %>
+              <% 
+                List<JSONFsm> FSMs = (List<JSONFsm>) request.getAttribute("FSMs");
+              
+                for(JSONFsm f : FSMs){
+              %>
+              
+              <tr>
+                <td class="tableData usernameData"><%= f.getUser().getUsername() %></td>
+                <td class="tableData fsmnameData"><%= f.getId() %></td>
+                
+               <!--   <td class="tableData usernameData">ALI</td>
+                <td class="tableData fsmnameData">Ali FSM</td>  -->
+                
+                <td class="buttonData">
+               
+                  <form action="Load" style="display:inline" method="post">
+                    <!-- <input type="hidden" id="<%= f.getId() + "fsmLoadButton" %>" name="fsm" value='<%= f.getLoadModel().getModel() %>'>
+                    <input type="button" value="Load Model" onclick="loadModel(<%= (f.getId())%>)" class="buttonclass run">
+                    <input type="hidden" id="<%= f.getId() + "fsmRunButton" %>" name="fsm" value=<%= f.getJsonFsm() %>> -->
+                    <input type="button" class="loadButtonModal">
+                  </form>
+                  
+                  <form  action="Delete" style="display:inline" method="post">
+                    <input type="hidden" id="fsmDeleteButton" name="fsm" value="<%= f.getId() %>">
+                    <input type="submit" value="" class="deleteButtonModal">
+                    <!-- <input type="submit" value="Delete" class="buttonclass delete"> -->
+                  </form>
+                  
+                </td>
+              </tr>
+              
+               <% } %>
 
-					</table>
-            </div>
-      </div>
+            </table>
+              </div>
+            <!-- </div> -->
             
+            <div type="button" class="closeButton btn btn-default" data-dismiss="modal"></div>
             
           </div>
-          <div class="modal-footer">
+         
+          <!-- <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal" onclick="">Close</button>
-          </div>
+          </div> -->
         </div>
         
       </div>
     </div>
-    <div class="row" style="height: 100%;position: relative; overflow:hidden;">
-        <div class="col-2" style="border-right: 2px solid black; min-width: 160px;">
-          <div class="row states" style="position: relative;">
-            <h5>States</h5>
-            <div class="state-container stateOuterDiv-menu">
-            </div>
-          </div>
-          <div class="row behaviours" style="position: relative;">
-            <h5>Behaviours</h5>
-            <form action="Run" style="display:inline" method="post">
-				<input id="executejsonfsm" type="hidden" id="fsm" name="fsm">
-				<input type="submit" value="Execute" class="buttonclass run">
-			</form>
-			
-			<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModalNewUser" onclick="onTest()">Add New User</button>
-			
-          </div>
-          <div class="row events" style="position: relative;">
-            <h5>Events</h5>
+    
+    
+   <div class="row" style="height: 80%;position: relative; overflow:hidden;">
+        <div class="col-2" style="min-width: 160px; height: 100%;">
+
+          
+          <div class="row buttonsLeft" style="position: relative;">
             
+            <!-- <form action="Run" style="display:inline" method="post">
+				<input id="executejsonfsm" type="hidden" id="fsm" name="fsm">
+				<input type="submit" value="Run" class="buttonclass run" style="width: 125px;">
+			</form> -->
+			
+			<button type="button" class="buttonclass addUser" style="width: 125px;" data-toggle="modal" data-target="#myModalNewUser" onclick="onTest()">Add New User</button>
+			<button type="button" onclick="execute()" class="buttonclass run" style="width: 125px;">Execute</button>
+			<button type="button" onclick="kill()" class="buttonclass kill" style="width: 125px;">Kill</button>
+			
+			
           </div>
+          
         </div>
 	    	<canvas id="theCanvas" width=3000, height=3000> </canvas>
         <div class="col-10 canvas"></div>

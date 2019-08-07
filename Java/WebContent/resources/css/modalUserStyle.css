@@ -1,0 +1,81 @@
+@font-face{
+  font-family:'heavy_data';
+  src: url('heavy_data.ttf');
+ }
+
+.userBackground{
+	background-image: url('../images/addNewUserBackground.png');
+	background-size: 100% 500px;
+}
+
+.inputText{
+	font-family: 'heavy_data';
+	color: #39ff14 !important;
+	background-color: transparent !important;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #39ff14;
+  opacity: 1;
+  font-family: 'heavy_data';
+  font-size: 20px;
+}
+
+.fsmNewUser{
+	background-color: black !important;
+	border: none;
+}
+
+#newUsername{
+	margin-top: 134px;
+	margin-left: 15px;
+	width: 435px;
+	height: 30px;
+}
+
+#newName{
+	margin-top: 20px;
+	margin-left: 15px;
+	width: 435px;
+	height: 30px;
+}
+
+#newPassword{
+	margin-top: 20px;
+	margin-left: 15px;
+	width: 435px;
+	height: 30px;
+}
+
+#newUserType{
+	margin-top: 20px;
+	margin-left: 15px;
+	width: 435px;
+	height: 30px;
+}
+
+.addNewUser{
+	margin-left: 66px;
+	float: left;
+	width: 25%;
+	height: 69px;
+	border-radius: 30px;
+	cursor: pointer;
+}
+
+.cancelUser{
+	margin-left: 91px;
+	float: left;
+	width: 25%;
+	height: 69px;
+	border-radius: 30px;
+	cursor: pointer;
+}
+
+#userButtons{
+	margin-top: 40px;
+}
+
+#modalHeight{
+	height: 500px !important;
+}
