@@ -1,0 +1,87 @@
+@font-face{
+  font-family:'heavy_data';
+  src: url('heavy_data.ttf');
+ }
+
+.background{
+	background-image: url('../images/modalTestBackground.png');
+	background-size: 100% 500px;
+}
+
+#modalHeight{
+	height: 500px !important;
+}
+
+.upperButtons{
+	margin-top: 60px;
+}
+
+.lowerButtons{
+	margin-bottom: 10px;
+}
+
+.noObs{
+	float: left;
+	margin-top: 0.5%;
+	margin-left: 15px;
+	padding-left: 4px;
+	padding-right: 3px;
+	width: 20%;
+	height: 69px;
+	border-radius: 30px;
+	cursor: pointer;
+}
+
+.obsLeft{
+	margin-left: 75px;
+	float: left;
+	width: 20%;
+	height: 69px;
+	border-radius: 30px;
+	cursor: pointer;
+}
+
+.obsRight{
+	margin-left: 78px;
+	float: left;
+	width: 20%;
+	height: 70px;
+	border-radius: 30px;
+	cursor: pointer;
+}
+
+.obsCenter{
+	float: left;
+	width: 20%;
+	height: 63px;
+	border-radius: 30px;
+	margin-left: -10px;
+	cursor: pointer;
+}
+
+.light{
+	float: left;
+	width: 20%;
+	height: 63px;
+	border-radius: 30px;
+	margin-left: 74px;
+	margin-bottom: 20px;
+	cursor: pointer;
+}
+
+.close{
+	border-radius: 30px;
+	width: 20%;
+	height: 63px;
+	margin-top: 13px;
+	margin-right: 23px;
+	cursor: pointer;
+}
+
+.list{
+	height: 170px;
+	width: 95%;
+	overflow: auto;
+	font-family: 'heavy_data';
+	color: #39ff14 !important;
+}

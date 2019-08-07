@@ -14,15 +14,14 @@
 <div class="back">
                 
 	    <form action="processLogin" method="POST">
-	      	
-	      	<h2> Login </h2>
 	       
-	       	<input class="txt" type="text" name="username" placeholder="Username"></br>
+	       	<input style="margin-top: 105px;" class="txt" type="text" name="username" placeholder="Username">
 	    
-		    <input class="txt" type="password" name="password" placeholder="Password"></br>
-		    <h4 style="color:red;"> ${ErrorInfo} </h4>
-	     
-			<div> <input class="buttonclass" type="submit" name="Submit" value="submit"></div>
+		    <!-- <input style="margin-top: 25px;" class="txt" type="password" name="password" placeholder="Password"> -->
+            <!-- <h4 style="color:red;"> ${ErrorInfo} </h4> -->
+            <input style="margin-top: 25px; -webkit-text-security: square;" class="txt" type="text" name="password" placeholder="Password">
+         
+			<button style="border: none;" class="buttonclass" type="submit" name="Submit" onSubmitForm=""></button>
 			
 	    </form>
 </div>

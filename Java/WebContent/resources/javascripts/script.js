@@ -10,6 +10,25 @@ var connectionIndex=0;
 
 //code for adding a new connection
 var addConnectionState = "not begin";
+
+
+function kill(){
+	  fetch("http://localhost:8088/FincFSM/Kill").then(function(msg){
+		  console.log("Success");
+	  });
+}
+
+function execute(){
+	var json = document.getElementById("executejsonfsm");
+	console.log(json.value);
+	fetch("http://localhost:8088/FincFSM/Run", {
+		method: 'post',
+		body:JSON.stringify({
+			   fsm : json.value
+			   }
+		     )});
+}
+
 function addConnection(data){
 	// when add connection is clicked
 	if(data == "start"){
@@ -249,24 +268,30 @@ function clickState(){
 }
 
 function save(){
-	  dummyDiagram = [[...stateData], [...eventData] , [...connections]];
-	  dummyConnections=[...connections];
-	  var string = JSON.stringify(transform(stateData, eventData));  
-	  var dummyString = "{diagram:" + JSON.stringify(dummyDiagram) + "}";
-	  var filename = document.getElementById("fsmName").value;
-	   
-	 // var string ='{"vertices":[{"name":"A","behaviors":["Forward"]},{"name":"B","behaviors":["Backward","Backward"]},{"name":"C","behaviors":[]}],"edges":[{"event":{"name":"An","input":"NoObstacle"},"fromState":"A","toState":"B"},{"event":{"name":"Cs","input":"light"},"fromState":"C","toState":"A"},{"event":{"name":"Cr","input":"ObstacleR"},"fromState":"C","toState":"B"}],"startState":"A","endStates":[]}';
-	  
-	   return fetch("http://localhost:8088/FincFSM/Save", {method:"post", body:JSON.stringify({
-		   filename:filename,
-		   fsm:string,
-		   diagram: dummyString
-		   }
-	     )}).then(function(msg) {
-	    	 alert("Saved succesfully");
-	    	 console.log(msg)
-	    	 });
-	  
+	
+		var fsmName = document.getElementById("fsmName").value;
+		if(fsmName.length > 0){
+		  dummyDiagram = [[...stateData], [...eventData] , [...connections]];
+		  dummyConnections=[...connections];
+		  var string = JSON.stringify(transform(stateData, eventData));  
+		  var dummyString = "{diagram:" + JSON.stringify(dummyDiagram) + "}";
+		  var filename = document.getElementById("fsmName").value;
+		   
+		 // var string ='{"vertices":[{"name":"A","behaviors":["Forward"]},{"name":"B","behaviors":["Backward","Backward"]},{"name":"C","behaviors":[]}],"edges":[{"event":{"name":"An","input":"NoObstacle"},"fromState":"A","toState":"B"},{"event":{"name":"Cs","input":"light"},"fromState":"C","toState":"A"},{"event":{"name":"Cr","input":"ObstacleR"},"fromState":"C","toState":"B"}],"startState":"A","endStates":[]}';
+		  
+		   return fetch("http://localhost:8088/FincFSM/Save", {method:"post", body:JSON.stringify({
+			   filename:filename,
+			   fsm:string,
+			   diagram: dummyString
+			   }
+		     )}).then(function(msg) {
+		    	 alert("Saved succesfully");
+		    	 console.log(msg)
+		    	 });
+		}
+		else{
+			alert("You forgot to enter the filename");
+		}
 	}
 
 function loadModel(e){
@@ -467,12 +492,27 @@ function init() {
             // var stateContainerId = $(this).attr("id");
             ////console.log(diagram);
               ////console.log(ui);
-              if (ui.helper.hasClass("behaviour")) {
+              if (ui.helper.hasClass("behaviour")) { 
+            	  
+            	  var beh = ui.helper["0"].innerHTML;
+            	  let time;
+            	  
+            	  switch(beh){
+            	  	case "Forward":
+            	  	case "Backward":
+            	  		time = 5;
+            	  		break;
+            	  	case "Spin":
+            	  		time = 180;
+            	  	
+            	  	default:
+            	  		time = 90;
+            	  }
                   var behaviour = {
                       _id: behaviourID++,
                       position: ui.helper.position(),
                       behaviourType:ui.helper["0"].innerHTML,
-					  time: 100, //default
+					  time: time //default
                   };
               }
               
