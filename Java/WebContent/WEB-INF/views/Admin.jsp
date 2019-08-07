@@ -157,19 +157,16 @@
               
               <tr>
                 <td class="tableData usernameData"><%= f.getUser().getUsername() %></td>
-                <td class="tableData fsmnameData"><%= f.getId() %></td>
+                <td class="tableData fsmnameData"><%= f.getFsmName() %></td>
                 
                <!--   <td class="tableData usernameData">ALI</td>
                 <td class="tableData fsmnameData">Ali FSM</td>  -->
                 
                 <td class="buttonData">
-               
-                  <form action="Load" style="display:inline" method="post">
-                    <!-- <input type="hidden" id="<%= f.getId() + "fsmLoadButton" %>" name="fsm" value='<%= f.getLoadModel().getModel() %>'>
-                    <input type="button" value="Load Model" onclick="loadModel(<%= (f.getId())%>)" class="buttonclass run">
-                    <input type="hidden" id="<%= f.getId() + "fsmRunButton" %>" name="fsm" value=<%= f.getJsonFsm() %>> -->
-                    <input type="button" class="loadButtonModal">
-                  </form>
+
+					<input id="<%= f.getId() + "fsmRunButton" %>" type="hidden" id="fsm" name="fsm" value="<%= f.getJsonFsm() %>">
+                    <input type="hidden" id="<%= f.getId() + "fsmLoadButton" %>" name="fsm" value='<%= f.getLoadModel().getModel() %>'>
+                    <input type="button" class="loadButtonModal" onclick='loadModel(<%= (f.getId())%>)'>
                   
                   <form  action="Delete" style="display:inline" method="post">
                     <input type="hidden" id="fsmDeleteButton" name="fsm" value="<%= f.getId() %>">
@@ -210,8 +207,10 @@
 				<input type="submit" value="Run" class="buttonclass run" style="width: 125px;">
 			</form> -->
 			
+			
+			
 			<button type="button" class="buttonclass addUser" style="width: 125px;" data-toggle="modal" data-target="#myModalNewUser" onclick="onTest()">Add New User</button>
-			<button type="button" onclick="execute()" class="buttonclass run" style="width: 125px;">Execute</button>
+			<button type="button" id="executejsonfsm" onclick="execute()" class="buttonclass run" style="width: 125px;">Execute</button>
 			<button type="button" onclick="kill()" class="buttonclass kill" style="width: 125px;">Kill</button>
 			
 			
