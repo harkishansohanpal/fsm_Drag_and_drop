@@ -43,10 +43,12 @@
 	
 	<bean id="jsonFsmDao" class="com.fdmgroup.dao.JSONFsmDAO">
 		<property name="con" ref="conDB"></property>
-	</bean>	
+	</bean>
 	
-		<bean id="loadModelDao" class="com.fdmgroup.dao.LoadModelDAO">
+	<bean id="loadModelDao" class="com.fdmgroup.dao.LoadModelDAO">
 		<property name="con" ref="conDB"></property>
 	</bean>	
+	
+	
 	
 </beans>

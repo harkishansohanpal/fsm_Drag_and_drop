@@ -18,9 +18,9 @@
 	       	<input style="margin-top: 105px;" class="txt" type="text" name="username" placeholder="Username">
 	    
 		    <!-- <input style="margin-top: 25px;" class="txt" type="password" name="password" placeholder="Password"> -->
-            <!-- <h4 style="color:red;"> ${ErrorInfo} </h4> -->
-            <input style="margin-top: 25px; -webkit-text-security: square;" class="txt" type="text" name="password" placeholder="Password">
-         
+            
+            <input style="margin-top: 25px; -webkit-text-security: square;" class="txt" type="text" autocomplete="off" name="password" placeholder="Password">
+         	<h4 style="color:red; font-family:heavy_data; margin-top:0px; margin-left: 45px;"> ${ErrorInfo} </h4>
 			<button style="border: none;" class="buttonclass" type="submit" name="Submit" onSubmitForm=""></button>
 			
 	    </form>
