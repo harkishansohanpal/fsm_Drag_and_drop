@@ -1,6 +1,5 @@
 var connections = [];
 var context =document.getElementById("theCanvas").getContext("2d");
-var diagram = null;
 var labelinput ="";
 var colorinput = "";
 var eventID=0;
@@ -127,7 +126,7 @@ function drawCircle(x,y,r, color,label){
 }
 //get the coordinates of a given state object
 function getLocation(i){
-	return diagram[0][i].position;
+	return stateData[i].position;
 }
 
 
@@ -148,13 +147,7 @@ function connectMultiplePairs(lst1, lst2, colors){
 	}
 }
 
-//get all locations
-function getAllLocation(){
-	for(var i=0; i<diagram.length;i++){
-		////console.log(i + " " + getLocation(i).left + " " + getLocation(i).top);
-	}
-	
-}
+
 
 //clears the canvas then draws all connections
 function drawLines(ui){
@@ -201,8 +194,8 @@ function drawLines(ui){
 					var id = null;
 				}
 				
-				var domainPosition = domain == id ? ui.position : diagram[0][domain].position; 
-				var targetPosition = target == id ? ui.position : diagram[0][target].position;
+				var domainPosition = domain == id ? ui.position : stateData[domain].position; 
+				var targetPosition = target == id ? ui.position : stateData[target].position;
 				
 				if(domain== target){
 					//draw a circle
@@ -361,15 +354,13 @@ $(init);
 
 function init() {
 
-  //diagram is the main array, we push data into it
-  diagram = [stateData, eventData];
   
   
   var canvas = $(".canvas");
   var stateCanvasBody = $(".state-container-oncanvas");
   
   if(stateData.length!=0){
-	  renderStateContainer(diagram, 1);
+	  renderStateContainer([stateData, eventData], 1);
 	  drawLines();
 	  
   }
@@ -415,37 +406,29 @@ function init() {
       }
 
       //push state to diagram array
-      diagram[0].push(state);
+      stateData.push(state);
 
       //call render function and pass diagram array and state-id
-      renderStateContainer(diagram, state._id);
+      renderStateContainer([stateData, eventData], state._id);
     }
   });
 
   
-  function renderStateContainer(diagram, _id) {
+  function renderStateContainer(constant, _id) {
     canvas.empty();
     //loop through diagram array
-    for (var d in diagram[0]) {
-      if(diagram[0][d] == null){
+    for (var d in stateData) {
+      if(stateData[d] == null){
       continue;
       }
-      var state = diagram[0][d];
+      var state = stateData[d];
       var stateHalt = state.halt ? "halt" : "";
       console.log(state + stateHalt)
       var html = "";
       
       ////console.log(state);      
       //if state.type is state then declare html and render
-      if (state.type == "state") {
-        ////console.log(state.behaviourArray);
-        var behaviourDiv;
-        if(state.behaviourArray.length>0){
-        behaviourDiv=renderBehaviour(state.behaviourArray);
-        }else{
-          behaviourDiv="";
-        }
-        ////console.log(behaviourDiv);
+      if (state != null && state.type == "state") {
 
         html = `<div class="stateOuterDiv state-container-title-oncanvas-forDeletion${state._id}">
                   <div class="state-container-oncanvas State-${state._id}">
@@ -453,7 +436,6 @@ function init() {
                         <h6 >State-${state._id} ${stateHalt}</h6>
                     </div>
                     <div class="state-container-body state-container-body-oncanvas ">     
-                    ${behaviourDiv}
                     </div>
                   </div>
                 </div>`;
@@ -476,13 +458,13 @@ function init() {
             ////console.log(ui);
             var id = getIdFromString(ui.helper[0].children[0].getAttribute("class") );
 			
-            for (var i in diagram[0]) {
-              if(diagram[0][i] == null){
+            for (var i in stateData) {
+              if(stateData[i] == null){
               continue;
               }
-              if (diagram[0][i]._id == id) {
-                diagram[0][i].position.top = ui.position.top;
-                diagram[0][i].position.left = ui.position.left;
+              if (stateData[i]._id == id) {
+                stateData[i].position.top = ui.position.top;
+                stateData[i].position.left = ui.position.left;
               }
             }
           },
@@ -519,30 +501,12 @@ function init() {
                       behaviourType:ui.helper["0"].innerHTML,
 					  time: time //default
                   };
+                  console.log(behaviour);
+                  var idNumber = getIdFromString($(this).children()[0].getAttribute("class"));
+                  renderSingleBehaviour(behaviour.behaviourType, behaviour._id, idNumber);
+                  stateData[idNumber].behaviourArray.push(behaviour);
+                  
               }
-              
-
-              //finds the index of the state that behaviour is to be addded into
-              var indexOfTheState = -1;
-              for(var i=0; i<diagram[0].length; i++){
-                if(diagram[0][i] == null){
-                  continue;
-                }
-                if($(this)["0"].attributes[1].value == diagram[0][i]._id){
-                  indexOfTheState = i;
-                }
-              };
-              diagram[0][indexOfTheState].behaviourArray.push(behaviour);
-              //diagram[0][$(this)["0"].attributes[1].value].behaviourArray.push(behaviour);
-               //console.log($(this)["0"].attributes);
-               var htmlBehaviour = `<div  style="color:black;" class="behaviour-oncanvas" data-behaviour="${ui.helper["0"].innerHTML}">${ui.helper["0"].innerHTML} 
-                                      <input style="width: 30px;" id="behaviourInput${behaviour._id}" type="number"/>
-                                    </div>`;
-               $(".state-container-body-oncanvas",this).append(htmlBehaviour);    
-                $(`#behaviourInput${behaviour._id}`).on("change", function(){
-                  behaviour.time = this.value;
-                })              
-               //$(this)["0"].childNodes[3].$(".state-container-body-oncanvas").append("htmlBehaviour");
           }
       })
       //adding the attribute state_id
@@ -556,7 +520,7 @@ function init() {
         if(clickCount%2 != 0){
 
           //change the border color to red when deleting 
-          $(this).css("background-image", "url(./Java/WebContent/resources/images/State2Focus.png)");
+          $(this).css("background-image", "url(./resources/images/State2Focus.png)");
           //create and add the delete button when clicked
           var htmlDeleteButton = `<h6 class="deleteButton"></h6>`;
           var stateIDToRemove = $(this)[0].attributes[1].value;
@@ -569,18 +533,18 @@ function init() {
             removeConnection("*",stateIDToRemove, "*");
 			  
 			  //first delete all classes associated to it
-            for(var i=0; i<diagram[0].length; i++){
-              if(diagram[0][i] == null){
+            for(var i=0; i<stateData.length; i++){
+              if(stateData[i] == null){
                 continue;
               }
-              if(diagram[0][i]._id == stateIDToRemove){
+              if(stateData[i]._id == stateIDToRemove){
                 //splice function finds the element at index i and then removes 1 element at/after that index
 				//can't actually remove as that would result in indices being messed up.
-                diagram[0][i] = null
+                stateData[i] = null
                 //have to render the diagram to reflect the changes on the canvas, the number -1 is given randomly as it is not used 
               }
             };
-            renderStateContainer(diagram, -1);
+            renderStateContainer(null, -1);
 			drawLines();
           }).attr("state", $(this));//REMOVABLE AFTER TEST 
     
@@ -591,11 +555,11 @@ function init() {
 	      $(".haltButton").click(function(){
 	         stateData[stateIDToHalt].halt = !stateData[stateIDToHalt].halt;
 	         console.log("halt called");
-	         renderStateContainer(diagram, 0);
+	         renderStateContainer(null, 0);
 	      })
 
         }else{
-          $(this).css("background-image", "url(./Java/WebContent/resources/css/State2.png)");
+          $(this).css("background-image", "url(./resources/css/State2.png)");
           $(".deleteButton").css({
             display: "none",
           })
@@ -607,30 +571,56 @@ function init() {
         }
       });
         canvas.append(dom);
+        // now we can render behaviours
+        
 
+        
+        
       } 
     }
-  }
-
-
-  //Render the behaviour
-  function renderBehaviour(behaviourArray){
-    var dom2="";
-    for( var b in behaviourArray){
-      var beh = behaviourArray[b];
-      var htmlBehaviour = `<div style="color:black;" class="behaviour-oncanvas data-behaviour=${beh.behaviourType}">${beh.behaviourType}
-                              <input style="width: 30px;" id="behaviourInput${beh._id}" type="number"/>                     
-                            </div>`;
-        dom2 += htmlBehaviour;
-        $(`#behaviourInput${beh._id}`).on("change", function(){
-          behaviour.time = this.value;
-        })
+    for(var d in stateData){
+    	if(stateData[d] != null && stateData[d].type == "state"){
+    		var behs = stateData[d].behaviourArray;
+    		for (var b in behs){
+    			var beh = behs[b];
+    			renderSingleBehaviour(beh.behaviourType, beh._id, d);
+		     
+    		}
+    	}
     }
-    
-    return dom2;
-      //stateCanvasBody.append(dom2);
   }
 
+
+
+// adds a single behaviour of the given type on the given state
+  function renderSingleBehaviour(type, id, state){
+      var htmlBehaviour = `<div style="color:black;" class="behaviour-oncanvas data-behaviour=${type}">${type}
+          <input style="width: 50px;" id="behaviourInput${id}" type="number"/>                     
+        </div>`;	  
+	  $(".State-"+state)[0].children[1].insertAdjacentHTML("beforeend", htmlBehaviour);
+	  // add the event listener
+	  $("#behaviourInput"+id)[0].addEventListener("change",function(e){
+		  var id = this[0];
+		  var state = this[1];
+		  var list = stateData[state]["behaviourArray"];
+		  for(var i in list){
+			  if(list[i]._id == id){
+				  list[i].time = e.target.value;
+				  break;
+			  }
+			  
+		  }
+	  }.bind([id, state]));
+	  // put in the time
+	  var list = stateData[state]["behaviourArray"];
+	  for(var i in list){
+		  if(list[i]._id == id){
+			  $("#behaviourInput"+id)[0].value = list[i].time;
+			  break;
+		  }
+		  
+	  }
+  }
   document.getElementsByClassName("canvas")[0].addEventListener("scroll", function(e){
 
     drawLines();
